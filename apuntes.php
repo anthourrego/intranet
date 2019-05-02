@@ -1,1 +1,0 @@
-http://docs.google.com/gview?url=http://201.236.254.67:6060/Dropbox/1.%20Documentos/2.E02.%20Sistema%20integrado%20de%20gestion/1.%20Sistemas%20de%20gestion/2.%20Documentos/E02.D009%20Contexto%20de%20la%20organizacion.xlsx&embedded=true
