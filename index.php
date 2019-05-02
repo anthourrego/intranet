@@ -37,7 +37,6 @@
       echo $lib->jqueryValidate();
       echo $lib->alertify();
       echo $lib->fontAwesome();
-      //echo $lib->intranet();
     ?>
 
     <style>
@@ -178,6 +177,7 @@
 
   <script type="text/javascript">
     $(function(){
+
       $("#formLogin").validate({
         rules: {
           nro_doc: "required",
