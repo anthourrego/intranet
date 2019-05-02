@@ -70,7 +70,7 @@
   
     <hr>
 
-    <table id="tablaUsuario" class="table table-bordered table-hover table-sm">
+    <table id="tablaUsuario" class="table table-bordered table-hover table-striped table-sm table-light">
       <thead>
         <tr class="text-center">
           <th>Fecha</th>
@@ -82,7 +82,7 @@
 
     <div id="personalACargo" class="mt-5 pt-3 border-top invisible">
       <h5 class="text-center">Persona a Cargo</h5>
-      <table id="tabla" class="table table-bordered table-hover table-sm mt-5 ">
+      <table id="tabla" class="table table-bordered table-hover table-striped table-sm table-light mt-5 ">
         <thead>
           <tr class="text-center">
             <th>Nombre</th>
@@ -106,7 +106,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <table id="tablaXUsuario" class="table table-bordered table-hover">
+          <table id="tablaXUsuario" class="table table-bordered table-striped table-hover table-sm">
             <thead>
               <tr class="text-center">
                 <th>Fecha</th>
