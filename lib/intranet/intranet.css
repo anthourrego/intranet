@@ -1,0 +1,395 @@
+/* Importancion de fuentes */
+@font-face {
+    font-family: 'Agency FB Bold';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Agency FB Bold'), local('AgencyFB-Bold'),
+        url(fonts/agency-fb-bold.woff) format('woff'),
+        url(fonts/agency-fb-bold.ttf) format('truetype');
+}
+
+body {
+  background: url('../../img/bg.png');
+  background-color: rgba(255,255,225,0);
+  background-repeat: no-repeat, repeat;
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+.bg-consumer{
+  background: rgb(24, 116, 193) !important;
+}
+
+.modal-cargando{
+  z-index: 7000 !important; 
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.box-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 150px;
+  height: 150px;
+  opacity: 1.5 !important;
+}
+
+.box-loading > div {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.box-loading img{
+  margin-top: 35px;
+}
+
+.loader {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid transparent;
+  border-top: 8px solid #0080c3;
+  border-bottom: 8px solid #0080c3;
+  border-radius: 100%;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-1 {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid #aca9aa;
+  border-radius: 100%;
+  animation: rotate 5s linear infinite;
+}
+
+.loader-2 {
+  width: calc(100% - 0px);
+  height: calc(100% - 0px);
+  border: 8px solid transparent;
+  border-top: 8px solid #0080c3;
+  border-bottom: 8px solid #0080c3;
+  border-radius: 100%;
+  animation: rotate 1s linear infinite reverse;
+}
+
+
+/* ================ Botones Mapa de Procesos intranet ================ */
+/* Estilos del mapa de procesos, botones y lista desplegables  */
+.mapademacroprocesos{
+  font-family: 'Agency FB Bold', arial;
+  font-size: 48px;
+}
+
+.columna-sig{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* Boton Orange */
+.btn-orange {
+  min-height: 74px;
+  width: 100%;
+  color: #fff;
+  background-color: #f79646;
+  border-color: #f79646;
+}
+
+.btn-orange:hover {
+  color: #fff;
+  background-color: #de8237;
+  border-color: #de8237;
+}
+
+.btn-orange:focus, .btn-orange.focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 115, 0, 0.5);
+}
+
+.btn-orange.disabled, .btn-orange:disabled {
+  color: #fff;
+  background-color: #f79646;
+  border-color: #f79646;
+}
+
+.btn-orange:not(:disabled):not(.disabled):active, .btn-orange:not(:disabled):not(.disabled).active,
+.show > .btn-orange.dropdown-toggle {
+  color: #fff;
+  background-color: #de8237;
+  border-color: #de8237;
+}
+
+.btn-orange:not(:disabled):not(.disabled):active:focus, .btn-orange:not(:disabled):not(.disabled).active:focus,
+.show > .btn-orange.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 115, 0, 0.5);
+}
+
+.dropdown-menu-orange{
+  border: 2px solid #f79646;
+  min-width: 100%;
+}
+
+.dropdown-menu-orange a:hover, .dropdown-menu-orange a:focus, .dropdown-menu-orange button:hover, .dropdown-menu-orange button:focus{
+  color: #16181b;
+  text-decoration: none;
+  background-color: #f6c59d;
+}
+
+.dropdown-menu-orange a.active, .dropdown-menu-orange a:active, .dropdown-menu-orange button.active, .dropdown-menu-orange button:active{
+  color: #fff;
+  text-decoration: none;
+  background-color: #f79646;
+}
+
+/* Botón Azul Claro */
+.btn-azulclaro {
+  min-height: 74px;
+  width: 100%;
+  color: #fff;
+  background-color: #4bacc6;
+  border-color: #4bacc6;
+}
+
+.btn-azulclaro:hover {
+  color: #fff;
+  background-color: #2090af;
+  border-color: #2090af;
+}
+
+.btn-azulclaro:focus, .btn-azulclaro.focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 200, 255, 0.5);
+}
+
+.btn-azulclaro.disabled, .btn-azulclaro:disabled {
+  color: #fff;
+  background-color: #4bacc6;
+  border-color: #4bacc6;
+}
+
+.btn-azulclaro:not(:disabled):not(.disabled):active, .btn-azulclaro:not(:disabled):not(.disabled).active,
+.show > .btn-azulclaro.dropdown-toggle {
+  color: #fff;
+  background-color: #2090af;
+  border-color: #2090af;
+}
+
+.btn-azulclaro:not(:disabled):not(.disabled):active:focus, .btn-azulclaro:not(:disabled):not(.disabled).active:focus,
+.show > .btn-azulclaro.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 200, 255, 0.5);
+}
+
+.dropdown-menu-azulclaro{
+  border: 2px solid #4bacc6;
+  min-width: 100%;
+}
+
+.dropdown-menu-azulclaro a:hover, .dropdown-menu-azulclaro a:focus, .dropdown-menu-azulclaro button:hover, .dropdown-menu-azulclaro button:focus{
+  color: #16181b;
+  text-decoration: none;
+  background-color: #97bcc6;
+}
+
+.dropdown-menu-azulclaro a.active, .dropdown-menu-azulclaro a:active, .dropdown-menu-azulclaro button.active, .dropdown-menu-azulclaro button:active{
+  color: #fff;
+  text-decoration: none;
+  background-color: #4bacc6;
+}
+
+/* Bonton Morado */
+.btn-morado {
+  min-height: 74px;
+  width: 100%;
+  color: #fff;
+  background-color: #8064a2;
+  border-color: #8064a2;
+}
+
+.btn-morado:hover {
+  color: #fff;
+  background-color: #734ea0;
+  border-color: #734ea0;
+}
+
+.btn-morado:focus, .btn-morado.focus {
+  box-shadow: 0 0 0 0.2rem rgba(140, 100, 187, 0.5);
+}
+
+.btn-morado.disabled, .btn- morado:disabled {
+  color: #fff;
+  background-color: #8064a2;
+  border-color: #8064a2;
+}
+
+.btn-morado:not(:disabled):not(.disabled):active, .btn- morado:not(:disabled):not(.disabled).active,
+.show > .btn-morado.dropdown-toggle {
+  color: #fff;
+  background-color: #734ea0;
+  border-color: #734ea0;
+}
+
+.btn-morado:not(:disabled):not(.disabled):active:focus, .btn- morado:not(:disabled):not(.disabled).active:focus,
+.show > .btn-morado.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(140, 100, 187, 0.5);
+}
+
+.dropdown-menu-morado{
+  border: 2px solid #8064a2;
+  min-width: 100%;
+}
+
+.dropdown-menu-morado a:hover, .dropdown-menu-morado a:focus, .dropdown-menu-morado button:hover, .dropdown-menu-morado button:focus{
+  color: #16181b;
+  text-decoration: none;
+  background-color: #b1a8bc;
+}
+
+.dropdown-menu-morado a.active, .dropdown-menu-morado a:active, .dropdown-menu-morado button.active, .dropdown-menu-morado button:active{
+  color: #fff;
+  text-decoration: none;
+  background-color: #8064a2;
+}
+
+.open > .dropdown-menu-sig {
+  -webkit-transform: scale(1, 1);
+  transform: scale(1, 1);
+  opacity:1;
+}
+
+.dropdown-menu-sig {
+  opacity:.3;
+  -webkit-transform-origin: top;
+  transform-origin: top;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-transform: scale(1, 0);
+  transition: all 0.3s linear;
+  -webkit-transition: all 0.3s linear;
+}
+
+@keyframes rotate {
+  0%{transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+/* Ancho de pantalla */
+.w-25 {
+  width: 25% !important;
+}
+
+.w-50 {
+  width: 50% !important;
+}
+
+.w-60{
+  width: 60% !important; 
+}
+
+.w-75 {
+  width: 75% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+
+@media (min-width: 576px) {
+  .w-sm-25 {
+    width: 25% !important;
+  }
+
+  .w-sm-50 {
+    width: 50% !important;
+  }
+
+  .w-sm-60 {
+    width: 60% !important;
+  }
+
+  .w-sm-75 {
+    width: 75% !important;
+  }
+
+  .w-sm-100 {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-25 {
+    width: 25% !important;
+  }
+
+  .w-md-50 {
+    width: 50% !important;
+  }
+
+  .w-md-60 {
+    width: 60% !important;
+  }
+
+  .w-md-75 {
+    width: 75% !important;
+  }
+
+  .w-md-100 {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .w-lg-25 {
+    width: 25% !important;
+  }
+
+  .w-lg-50 {
+    width: 50% !important;
+  }
+
+  .w-lg-60 {
+    width: 60% !important;
+  }
+
+  .w-lg-75 {
+    width: 75% !important;
+  }
+
+  .w-lg-100 {
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .w-xl-25 {
+    width: 25% !important;
+  }
+
+  .w-xl-50 {
+    width: 50% !important;
+  }
+
+  .w-xl-60 {
+    width: 60% !important;
+  }
+
+  .w-xl-75 {
+    width: 75% !important;
+  }
+
+  .w-xl-100 {
+    width: 100% !important;
+  }
+}
+
+/* Fin ancho pantalla */
+
+/* Efecto de iconos para SIG */
+.iconos-sig a{
+  color: rgb(98, 98, 98);
+}
+
+.iconos-sig a:hover{
+  text-decoration: none;
+  color: rgb(0, 130, 199);
+  transition: 1s color;
+}
