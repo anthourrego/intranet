@@ -40,7 +40,7 @@
   <div class="container mt-5">
     <div class="row mapademacroprocesos">
       <div class="col-lg-2 col-xl-3 ocultar-xs ocultar-sm ocultar-md">
-        <img src="<?= $ruta_raiz; ?>/img/mapa/01.jpg" width="100%" style="display: block; margin: auto;">
+        <img src="<?= $ruta_raiz; ?>/img/mapa/01.png" width="100%" style="display: block; margin: auto;">
       </div>
       <div class="col-12 col-lg-8 col-xl-6">
         <div class="row mb-4">
@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="col-lg-2 col-xl-3 ocultar-xs ocultar-sm ocultar-md">
-        <img src="<?= $ruta_raiz; ?>/img/mapa/02.jpg" width="100%" style="display: block; margin: auto;">
+        <img src="<?= $ruta_raiz; ?>/img/mapa/02.png" width="100%" style="display: block; margin: auto;">
       </div>
     </div>
   </div>
