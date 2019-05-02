@@ -17,11 +17,6 @@
   $usuario = $session->get("usuario");
   $lib = new Libreria;
 
-  /*$modulos = new Modulo();
-
-  $config=array('mod_tipo'=>'intranet','retorno'=>'mod_nombre');
-
-  $permisos=$modulos->lista($config);*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -111,30 +106,6 @@
           </button>
         </div>
         <div class="modal-body">
-          <form id="formBiometricoUsuario2">
-            <input type="hidden" id="formIdUsuario">
-            <div class="form-row mb-3">
-              <div class="col-5">
-                <div class="input-group date" id="inicioBiometricoUsu2" data-target-input="nearest">
-                  <input type="text" id="formInicioUsuario2" class="form-control datetimepicker-input" data-target="#inicioBiometricoUsu2"/>
-                  <div class="input-group-append" data-target="#inicioBiometricoUsu2" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-5">
-                <div class="input-group date" id="finalBiomatricoUsu2" data-target-input="nearest">
-                  <input type="text" id="formFinalUsuario2" class="form-control datetimepicker-input" data-target="#finalBiomatricoUsu2"/>
-                  <div class="input-group-append" data-target="#finalBiomatricoUsu2" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-2 text-center">
-                <button class="btn btn-info" type="submit"><i class="fas fa-search"></i> Consultar</button>
-              </div>
-            </div>
-          </form>
           <table id="tablaXUsuario" class="table table-bordered table-hover">
             <thead>
               <tr class="text-center">
@@ -206,33 +177,6 @@
       marcacionUsuario($("#formInicioUsuario").val(), $("#formFinalUsuario").val());
       
     });
-
-    //Formulario por usuario a cargo
-    $('#inicioBiometricoUsu2').datetimepicker({
-      format: 'L',
-      defaultDate: new Date(),
-      maxDate: new Date()
-    });
-
-    $('#finalBiomatricoUsu2').datetimepicker({
-      format: 'L',
-      defaultDate: new Date(),
-      maxDate: new Date()
-    });
-
-    $("#inicioBiometricoUsu2").on("change.datetimepicker", function (e) {
-      $('#finalBiomatricoUsu2').datetimepicker('minDate', e.date);
-    });
-    $("#finalBiomatricoUsu2").on("change.datetimepicker", function (e) {
-      $('#inicioBiometricoUsu2').datetimepicker('maxDate', e.date);
-    });
-
-    $("#formBiometricoUsuario2").submit(function(event){
-      event.preventDefault();
-      top.$("#cargando").modal("show");
-      cargarBiometricoUsuarios($("#formIdUsuario").val(), $("#formInicioUsuario2").val(), $("#formFinalUsuario2").val());
-      
-    });
   });
 
   function cargarTabla(){
@@ -300,27 +244,14 @@
     });
   }
 
-  function cargarBiometricoUsuarios(id, fecha_inicio = moment().format("DD/MM/YYYY"), fecha_final = moment().format("DD/MM/YYYY")){
-    $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php',
-      type: 'POST',
-      dataType: 'html',
-      data: {accion: 'marcacionUsuario', idUsuario: id, inicio: fecha_inicio, final: fecha_final},
-      success: function(data){
-        $("#tablaXUsuario").dataTable().fnDestroy();
-        $("#contenidoTablaBiometricoUsuario").html(data);
-        definirdataTable("#tablaXUsuario");
-        setTimeout(function() {
-         top.$("#cargando").modal("hide");
-        }, 1000);
-      },
-      error: function(){
-        alertify.error("No se han cargado los datos.");
-      }
-    });
-  }
+  function biometricoUsuario(id, nombre = 'Usuario', fecha_inicio = moment().format("DD/MM/YYYY"), fecha_final = moment().format("DD/MM/YYYY")){
+    if ($("#formInicioUsuario").val() != "" && $("#formFinalUsuario").val() != "") {
+      fecha_inicio = $("#formInicioUsuario").val();
+      fecha_final = $("#formFinalUsuario").val();
+    }
 
-  function biometricoUsuario(id, fecha_inicio = moment().format("DD/MM/YYYY"), fecha_final = moment().format("DD/MM/YYYY")){
+    $("#tituloModalBiometricoUsuario").html(nombre);
+
     $.ajax({
       url: '<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php',
       type: 'POST',
