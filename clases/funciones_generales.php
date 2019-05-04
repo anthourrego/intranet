@@ -78,11 +78,11 @@
     //Se trae la ip de donde esta ingresando
     $ip = obtenerIp();
     if ($ip == '201.236.254.67') {
-      return "http://192.168.1.141/ceg/pantallas/intranet/";
+      return "http://192.168.1.141/ceg_desarrollo/pantallas/intranet/";
     }else if($ip == "::1"){
-      return "http://192.168.1.141/ceg/pantallas/intranet/";
+      return "http://192.168.1.141/ceg_desarrollo/pantallas/intranet/";
     }else{
-      return "http://201.236.254.67:141/ceg/pantallas/intranet/";
+      return "http://201.236.254.67:141/ceg_desarrollo/pantallas/intranet/";
     }
   }
 
@@ -90,11 +90,11 @@
     //Se trae la ip de donde esta ingresando
     $ip = obtenerIp();
     if ($ip == '201.236.254.67') {
-      return "http://192.168.1.141/ceg/";
+      return "http://192.168.1.141/ceg_desarrollo/";
     }else if($ip == "::1"){
-      return "http://192.168.1.141/ceg/";
+      return "http://192.168.1.141/ceg_desarrollo/";
     }else{
-      return "http://201.236.254.67:141/ceg/";
+      return "http://201.236.254.67:141/ceg_desarrollo/";
     }
   }
 

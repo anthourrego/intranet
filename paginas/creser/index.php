@@ -12,7 +12,6 @@
 
   include_once($ruta_raiz . 'clases/librerias.php');
   include_once($ruta_raiz . 'clases/sessionActiva.php');
-  include_once($ruta_raiz . 'clases/Conectar.php');
 
   $session = new Session();
 
@@ -35,12 +34,8 @@
   ?>
 </head>
 <body>
-  <div class="container-fluid mt-3">
-    <a class="btn btn-secondary link" href="<?php echo RUTA_RAIZ ?>paginas/gestion_humana"><i class="fas fa-arrow-left"></i> Atrás</a>
-    <hr>
-  </div>
 	<div class="container mt-5">
-    <table id="tabla" class="table table-bordered table-hover table-sm">
+    <table id="tabla" class="table table-bordered bg-light table-hover table-sm">
       <thead>
         <tr>
           <th class="text-center">Nombre</th>
@@ -63,7 +58,7 @@
   function cargarTabla(){
     $.ajax({
       type: "POST",
-      url: "<?php echo $ruta_raiz; ?>ajax/usuarios",
+      url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
       data: {accion: "listaUsuarioCreser", id: <?php echo $usuario['id']; ?>},
       success: function(data){
         $("#contenido").empty();
@@ -78,17 +73,10 @@
   }
 
   function encuesta(id, idCompetencia){
-    var atributo;
-    if (idCompetencia == "1") {
-      idCompetencia = 2;
-      atributo = 10;
-    }else if(idCompetencia == "2"){
-      idCompetencia = 3;
-      atributo = 10;
-    }
+    var atributo = 10;
     //window.location.href = 'encuesta?et_id=' + idCompetencia + '&id_usu='+id;
     top.$("#cargando").modal("show");
-    window.location.href = 'encuesta/creser_view?et_id=' + idCompetencia + '&filtro_atr=' + atributo + '|' + id;
+    window.location.href = 'encuesta.php?et_id=' + idCompetencia + '&filtro_atr=' + atributo + '|' + id;
   }
 </script>
 </html>

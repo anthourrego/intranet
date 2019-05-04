@@ -50,11 +50,11 @@
           <h4 class="mt-2">Reglamento Interno de Trabajo</h4>
         </a>
       </div>
-      <!--<div class="col-3 text-center mt-4 iconos-sig">
+      <div class="col-3 text-center mt-4 iconos-sig">
         <a class="text-decoration-none link" href="<?php echo RUTA_RAIZ; ?>paginas/creser/">
           <img src="http://consumerelectronicsgroup.com/creser/img/logo.png" class="w-100">
         </a>
-      </div>-->
+      </div>
       <div class="col-10 col-md-3 text-center mt-4 iconos-sig">
         <a target="_blank" class="text-decoration-none archivos" id="higiene_seguridad_industrial" href="">
           <i class="fas fa-bookmark fa-7x"></i>

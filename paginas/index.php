@@ -39,6 +39,12 @@
   <!-- Contenido -->
     <div class="container">
       <br>
+      <div class="row">
+        <div class="col-12">
+          <img src="../img/banner.gif" class="w-100 mb-3 rounded">
+        </div>
+      </div>
+
       <?php
       if (obtenerIp() == '201.236.254.67') {
       ?>
