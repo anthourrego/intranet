@@ -69,6 +69,7 @@
     <table id="tabla" class="table table-bordered table-hover table-striped table-sm table-light mt-5 ">
       <thead>
         <tr class="text-center">
+          <th>Departamento</th>
           <th>Nombre</th>
           <th>Fecha</th>
           <th>Hora</th>
