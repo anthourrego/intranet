@@ -255,12 +255,14 @@
     function validarSession(){
       $.ajax({
         type: 'POST',
-        url: "<?php echo $ruta_raiz ?>ajax/usuarios",
+        url: "<?php echo $ruta_raiz ?>ajax/usuarios.php",
         data: {accion: "sessionActiva"},
         success: function(data){
           if (data == 0) {
             localStorage.removeItem("url");
             $("#cerrarSession").modal("show");
+          }else{
+            console.log("Session activa.");
           }
         },
         error: function(data){

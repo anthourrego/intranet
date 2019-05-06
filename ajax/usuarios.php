@@ -12,9 +12,7 @@
   }
 
   header("Access-Control-Allow-Origin: *");
-  require_once($ruta_raiz . "clases/Conectar.php");
   require_once($ruta_raiz . "clases/Session.php");
-  require_once($ruta_raiz . "clases/funciones_generales.php");
 
   function sessionActiva(){
     $session = new Session();
