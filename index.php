@@ -137,9 +137,12 @@
     <div class="container-fluid">
       <div class="row no-gutter">
         <div class="d-none d-md-flex col-md-6" style="padding-left: 0px; padding-left: 0px;">
-          <video class="w-100" autoplay="autoplay" loop="loop" id="video" preload="auto" volume="50"/>
+          <a href="http://consumerelectronicsgroup.com/mandino/" target="_blank">
+            <img class="w-100 vh-100" src="img/index_mandino.gif">
+          </a>
+          <!--<video class="w-100" autoplay="autoplay" loop="loop" id="video" preload="auto" volume="50"/>
             <source src="videos/login.mp4" type="video/mp4" />
-          </video>
+          </video>-->
         </div>
         <div class="col-md-6">
           <div class="login d-flex align-items-center py-5">

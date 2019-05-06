@@ -46,7 +46,7 @@
       </div>
 
       <?php
-      if (obtenerIp() == '201.236.254.67') {
+      /*if (obtenerIp() == '201.236.254.67') {
       ?>
         <div class="row">
           <div class="col-12 text-center">
@@ -58,7 +58,7 @@
         </div>
         <hr>
       <?php
-      }
+      }*/
       ?>
       <div class="row mb-5">
         <div class="col-12 bg-white border border-secondary rounded">
