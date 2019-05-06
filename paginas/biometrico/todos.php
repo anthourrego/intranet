@@ -38,13 +38,14 @@
 </head>
 <body>
   <div class="container mt-5">
-    <div class="mb-4 d-flex justify-content-end" id="botones"></div>
+    <div class="mb-4 d-flex justify-content-end" id="botones">
+    </div>
     
     <hr>
 
     <form id="formBiometricoUsuario">
       <div class="form-row mb-3">
-        <div class="col-5">
+        <div class="col-6">
           <div class="input-group date" id="inicioBiometricoUsu" data-target-input="nearest">
             <input type="text" id="formInicioUsuario" class="form-control datetimepicker-input" data-target="#inicioBiometricoUsu"/>
             <div class="input-group-append" data-target="#inicioBiometricoUsu" data-toggle="datetimepicker">
@@ -52,7 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-6">
           <div class="input-group date" id="finalBiomatricoUsu" data-target-input="nearest">
             <input type="text" id="formFinalUsuario" class="form-control datetimepicker-input" data-target="#finalBiomatricoUsu"/>
             <div class="input-group-append" data-target="#finalBiomatricoUsu" data-toggle="datetimepicker">
@@ -60,39 +61,21 @@
             </div>
           </div>
         </div>
-        <div class="col-2 text-center">
-          <button class="btn btn-info" type="submit"><i class="fas fa-search"></i> Consultar</button>
-        </div>
       </div>
     </form>
   
     <hr>
 
-    <table id="tablaUsuario" class="table table-bordered table-hover table-striped table-sm table-light">
+    <table id="tabla" class="table table-bordered table-hover table-striped table-sm table-light mt-5 ">
       <thead>
         <tr class="text-center">
+          <th>Nombre</th>
           <th>Fecha</th>
           <th>Hora</th>
         </tr>
       </thead>
-      <tbody id="marcacionUsuario"></tbody>
+      <tbody id="contenido"></tbody>
     </table>
-
-    <div id="personalACargo" class="mt-5 pt-3 border-top invisible">
-      <h5 class="text-center">Persona a Cargo</h5>
-      <table id="tabla" class="table table-bordered table-hover table-striped table-sm table-light mt-5 ">
-        <thead>
-          <tr class="text-center">
-            <th>Nombre</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-          </tr>
-        </thead>
-        <tbody id="contenido">
-
-        </tbody>
-      </table>
-    </div>
   </div>
   <div class="modal fade" id="modalBiometricoUsuario" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -126,10 +109,24 @@
 ?> 
 <script type="text/javascript">
   $(function(){
-    //Esto se debe pasar al validar si tiene el permiso
+    //Validamos que tenga el permiso
+    $.ajax({
+      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "biometrico_todos"},
+      success: function(data){
+        if (data.length == 0) {
+          window.location.href = "index.php";
+        }
+      },
+      error: function(){
+        window.location.href = "index.php";
+      }
+    });
+
 
     cargarTabla();
-    marcacionUsuario();
 
     $.ajax({
       url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
@@ -138,32 +135,12 @@
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "biometrico_sincronizar"},
       success: function(data){
         if (data.length != 0) {
-          $("#botones").append('<button class="btn btn-success mr-2" id="sincronizar"><i class="fas fa-sync-alt"></i> Sincronizar</button>');
-          $("#sincronizar").on("click", function(){
-            top.$("#cargando").modal("show");
-            sincronizar();
-          });
+          $("#botones").append('<button class="btn btn-success" id="sincronizar"><i class="fas fa-sync-alt"></i> Sincronizar</button>');
         }
-      },
-      error: function(){
-        alertify.error('No ha validado el permiso');
-      }
-    });
-
-    $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
-      type: 'POST',
-      dataType: 'json',
-      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "biometrico_todos"},
-      success: function(data){
-        if (data.length != 0) {
-          $("#botones").append('<button class="btn btn-primary mr-2" id="btn-todos"><i class="fas fa-users"></i> Todos</button>');
-
-          $('#btn-todos').on("click", function(){
-            window.location.href = "todos.php";
-          });
-        }
-        
+        $("#sincronizar").on("click", function(){
+          top.$("#cargando").modal("show");
+          sincronizar();
+        });
       },
       error: function(){
         alertify.error('No ha validado el permiso');
@@ -190,51 +167,21 @@
     $("#finalBiomatricoUsu").on("change.datetimepicker", function (e) {
       $('#inicioBiometricoUsu').datetimepicker('maxDate', e.date);
     });
-
-    $("#formBiometricoUsuario").submit(function(event){
-      event.preventDefault();
-      top.$("#cargando").modal("show");
-      marcacionUsuario($("#formInicioUsuario").val(), $("#formFinalUsuario").val());
-      
-    });
   });
 
   function cargarTabla(){
     $.ajax({
       type: "POST",
       url: "<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php",
-      data: {accion: "listaUsuario", id: <?php echo $usuario['id']; ?>},
+      data: {accion: "listaTodos"},
       success: function(data){
-        if (data != "No") {
-          $("#personalACargo").removeClass("invisible");
-          $("#contenido").empty();
-          $("#contenido").html(data);
-          // =======================  Data tables ==================================
-          definirdataTable("#tabla");
-        }
+        $("#contenido").empty();
+        $("#contenido").html(data);
+        // =======================  Data tables ==================================
+        definirdataTable("#tabla");
       },
       error: function(){
         alertify.error("No se ha podido traer la lista");
-      }
-    });
-  }
-
-  function marcacionUsuario(fecha_inicio = moment().format("DD/MM/YYYY"), fecha_final = moment().format("DD/MM/YYYY")){
-    $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php',
-      type: 'POST',
-      dataType: 'html',
-      data: {accion: 'marcacionUsuario', idUsuario: <?php echo($usuario['id_geminus']); ?>, inicio: fecha_inicio, final: fecha_final},
-      success: function(data){
-        $("#tablaUsuario").dataTable().fnDestroy();
-        $("#marcacionUsuario").html(data);
-        definirdataTable("#tablaUsuario");
-        setTimeout(function() {
-         top.$("#cargando").modal("hide");
-        }, 1000);
-      },
-      error: function(){
-        alertify.error("No se han cargado los datos.");
       }
     });
   }
