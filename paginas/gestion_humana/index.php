@@ -16,7 +16,6 @@
   $session = new Session();
 
   $usuario = $session->get("usuario");
-  $ruta_documentos = array();
 
   $lib = new Libreria;
 ?>
@@ -65,6 +64,13 @@
         <a class="text-decoration-none" href="<?php echo RUTA_RAIZ; ?>paginas/biometrico/">
           <i class="fas fa-fingerprint fa-7x"></i>
           <h4 class="mt-2">Biometrico</h4>
+        </a>
+      </div>
+
+      <div class="col-10 col-md-3 text-center mt-4 iconos-sig">
+        <a class="text-decoration-none" href="<?php echo RUTA_RAIZ; ?>paginas/gestion_humana/solicitud_permisos.php">
+          <i class="fas fa-clipboard-list fa-7x"></i>
+          <h4 class="mt-2">Solicitud de permisos</h4>
         </a>
       </div>
     </div>
