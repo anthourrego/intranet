@@ -36,7 +36,7 @@
 </head>
 <body>
 	<div class="container mt-5">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="contenido">
       <div class="col-10 col-md-3 text-center mt-4 iconos-sig">
         <a class="text-decoration-none archivos" href="<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/certificado_laboral.php?doc=<?php echo($usuario['cedula']) ?>">
           <i class="fas fa-certificate fa-7x"></i>
@@ -89,6 +89,28 @@
       top.$('#cargando').modal("show");
       $('#modalArchivosTitulo').html($("h4", this).text());
       $("#contenidoArchivos").attr("src", $(this).attr("href"));
+    });
+
+    $.ajax({
+      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_porteria"},
+      success: function(data){
+        console.log(data);
+        if (data.length != 0) {
+          $("#contenido").append(`<div class="col-10 col-md-3 text-center mt-4 iconos-sig">
+                                    <a class="text-decoration-none" href="<?php echo(RUTA_RAIZ); ?>paginas/gestion_humana/porteria.php">
+                                      <i class="fas fa-user-shield fa-7x"></i>
+                                      <h4 class="mt-2">Porteria</h4>
+                                    </a>
+                                  </div>`);
+        }
+        
+      },
+      error: function(){
+        alertify.error('No ha validado el permiso');
+      }
     });
 
     $.ajax({

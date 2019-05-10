@@ -203,16 +203,37 @@
               </ol>
             </div>
             <div class="tab-pane fade" id="pills-nuestra-cultura" role="tabpanel" aria-labelledby="pills-nuestra-cultura-tab">
-              <h3>Principios</h3>
-              <p><strong>Trabajo en Equipo:</strong> Implica trabajar en colaboración con otros, formar parte de un grupo, trabajar juntos, como opuesto a hacerlo  en  forma individual o competitiva. Para que esta competencia sea efectiva, el profesional debe mostrar un interés genuino por los otros. Esta competencia se considera siempre que la persona forme parte de un grupo de gente que funciona como equipo.</p>
-
-              <p><strong>Orientación al servicio:</strong> Capacidad de todas las personas de la organización para satisfacer las necesidades del cliente (interno y externo) el cual implica esforzarse por conocer las necesidades y propender por resolver los problemas del cliente.</p>
-
-              <p><strong>Efectividad:</strong> Capacidad de lograr los objetivos y metas programadas con los recursos disponibles y en un tiempo determinado.  Se refiere al grado de avance y/o cumplimiento de una determinada variable respecto a la programación prevista.</p>
-
-              <p><strong>Orientación al Logro:</strong> Es el compromiso con la excelencia en la tarea, el sentido de pertenencia hacia la organización y hacia los clientes. Se fundamenta en un impulso hacia el auto desarrollo que se basa en una visión proactiva de la gestión y del negocio. Implica entusiasmo, energía, alegría, flexibilidad, actitud positiva e identificación con el trabajo. </p>
-
-              <p><strong>Flexibilidad y Adaptabilidad:</strong> Habilidad de adaptar, redefinir, reinterpretar o tomar una nueva táctica para llegar a la meta. Se demuestra cuando las respuestas a un problema sugieren un uso inusual de las mismas.   Es la capacidad de encontrar nuevos niveles de equilibrio -continuar siendo productivo- ante cambios de largo plazo en el ambiente. </p>
+              <div class="text-center">
+                <img class="w-50" src="../img/creser/01.png">
+              </div>
+              <div class="row mt-4">
+                <div class="col-3 text-center">
+                  <img class="w-75" src="../img/creser/03.png">
+                </div>
+                <div class="col-3 text-center">
+                  <img class="w-75" src="../img/creser/04.png">
+                </div>
+                <div class="col-3 text-center">
+                  <img class="w-75" src="../img/creser/05.png">
+                </div>
+                <div class="col-3 text-center">
+                  <img class="w-75" src="../img/creser/06.png">
+                </div>
+              </div>
+              <div class="text-center mt-5">
+                <img class="w-25" src="../img/creser/02.png">
+              </div>
+              <div class="row mt-4">
+                <div class="col-4 text-center">
+                  <img class="w-75" src="../img/creser/07.png">
+                </div>
+                <div class="col-4 text-center">
+                  <img class="w-75" src="../img/creser/08.png">
+                </div>
+                <div class="col-4 text-center">
+                  <img class="w-75" src="../img/creser/09.png">
+                </div>
+              </div>
               <hr>
               <h3>Valores</h3>
               <p><strong>Honestidad:</strong> Actuar coherentemente con el bien del interés general, actuar de manera clara y sincera en cada actividad de la empresa, de tal manera que siempre se manifieste su conformidad o inconformidad con lo encomendado.</p>
