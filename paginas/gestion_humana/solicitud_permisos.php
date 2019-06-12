@@ -40,14 +40,13 @@
 </head>
 <body>
 	<div class="container mt-5 rounded pt-3 pb-5" style="background: rgba(255,255,255,0.6)">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between" id="botones">
       <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-primary" onclick="tablaUsuario()">Activos</button>
         <button type="button" class="btn btn-secondary" onclick="tablaUsuario1(4)">Rechazados</button>
         <button type="button" class="btn btn-info" onclick="tablaUsuario1(5)">Finalizados</button>
         <button type="button" class="btn btn-danger" onclick="tablaUsuario1(2)">Anulados</button>
       </div>
-      <button class="btn btn-success mr-2" id="btn-todos"><i class="fas fa-users"></i> Todos</button>
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_solicitarPermiso"><i class="fas fa-plus"></i> Solicitar Permiso</button>
     </div>
     <hr>
@@ -323,6 +322,24 @@
       }
     });
 
+    $.ajax({
+      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_todos"},
+      success: function(data){
+        if (data.length != 0) {
+          $("#botones").append('<button class="btn btn-success mr-2" id="btn-todos"><i class="fas fa-users"></i> Todos</button>');
+          $('#btn-todos').on("click", function(){
+            window.location.href = "solicitud_permisos_todos.php";
+          });
+        }
+      },
+      error: function(){
+        alertify.error('No ha validado el permiso');
+      }
+    });
+
     // Rango de fechas 
     $('#inicioPermiso').datetimepicker({
       format: 'L',
@@ -348,10 +365,6 @@
     });
     $("#finalPermiso").on("change.datetimepicker", function (e) {
       $('#inicioPermiso').datetimepicker('maxDate', e.date);
-    });
-
-    $('#btn-todos').on("click", function(){
-      window.location.href = "solicitud_permisos_todos.php";
     });
 
     //Formulario crear curso

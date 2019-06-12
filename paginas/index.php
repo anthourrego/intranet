@@ -41,7 +41,9 @@
       <br>
       <div class="row">
         <div class="col-12">
+        <a href="http://consumerelectronicsgroup.com/mandino/" target="_blank">
           <img src="../img/banner.gif" class="w-100 mb-3 rounded">
+        </a>
         </div>
       </div>
 
@@ -203,6 +205,7 @@
               </ol>
             </div>
             <div class="tab-pane fade" id="pills-nuestra-cultura" role="tabpanel" aria-labelledby="pills-nuestra-cultura-tab">
+              <h3>Competencias</h3>
               <div class="text-center">
                 <img class="w-50" src="../img/creser/01.png">
               </div>

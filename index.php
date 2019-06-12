@@ -133,15 +133,13 @@
 
     </style>
   </head>
-  <body class="text-center">
-    <div class="container-fluid">
+  <body>
+    <div class="container-fluid position-absolute">
       <div class="row no-gutter">
         <div class="d-none d-md-flex col-md-6" style="padding-left: 0px; padding-left: 0px;">
-          <a href="http://consumerelectronicsgroup.com/mandino/" target="_blank">
-            <img class="w-100 vh-100" src="img/index_mandino.gif">
-          </a>
+          <img class="w-100 vh-100" src="img/index.gif">
           <!--<video class="w-100" autoplay="autoplay" loop="loop" id="video" preload="auto" volume="50"/>
-            <source src="videos/login.mp4" type="video/mp4" />
+            <source src="videos/login2.mp4" type="video/mp4" />
           </video>-->
         </div>
         <div class="col-md-6">
@@ -168,7 +166,7 @@
                     <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Ingresar <i class="fas fa-sign-in-alt"></i></button>
 
                   </form>
-                  <p class="mt-5 mb-3 text-muted">&copy;Consumer Electronics Group S.A.S</p>
+                  <p class="mt-5 mb-3 text-muted text-center">&copy;Consumer Electronics Group S.A.S</p>
                 </div>
               </div>
             </div>

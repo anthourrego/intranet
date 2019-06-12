@@ -125,6 +125,21 @@
 <script type="text/javascript">
   $(function(){
     cargarTablaUsuarios();
+
+    $.ajax({
+      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_todos"},
+      success: function(data){
+        if (data.length == 0) {
+          window.location.href = "index.php";
+        }
+      },
+      error: function(){
+        window.location.href = "index.php";
+      }
+    });
   });
 
 
