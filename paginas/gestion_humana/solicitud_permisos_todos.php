@@ -25,7 +25,7 @@
   <?php  
     echo $lib->metaTagsRequired();
   ?>
-	<title>Consumer Electronocs Group S.A.S</title>
+	<title>Consumer Electronics Group S.A.S</title>
   <?php  
     echo $lib->jquery();
     echo $lib->bootstrap();
@@ -40,7 +40,7 @@
 </head>
 <body>
 	<div class="container mt-5 rounded pt-3 pb-5" style="background: rgba(255,255,255,0.6)">
-    <h5 class="text-center">Persona a Cargo</h5>
+    <h5 class="text-center">Autorización de Permisos TH</h5>
     <table id="tabla" class="table table-bordered table-hover table-striped table-sm mt-5 ">
       <thead>
         <tr class="text-center">

@@ -47,6 +47,7 @@
         <button type="button" class="btn btn-info" onclick="tablaUsuario1(5)">Finalizados</button>
         <button type="button" class="btn btn-danger" onclick="tablaUsuario1(2)">Anulados</button>
       </div>
+      
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_solicitarPermiso"><i class="fas fa-plus"></i> Solicitar Permiso</button>
     </div>
     <hr>
@@ -321,6 +322,22 @@
         $("input[name='reposicion']").attr('disabled', 'true');
       }
     });
+
+     $.ajax({
+      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_registros"},
+      success: function(data){
+        if (data.length != 0) {
+          $("#botones").append('<a class="btn btn-info" href="solicitud_permisos_registro"><i class="fas fa-book-open"></i> Registro</a>');
+        }
+      },
+      error: function(){
+        alertify.error('No ha validado el permiso');
+      }
+    });
+
 
     $.ajax({
       url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
