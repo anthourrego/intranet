@@ -41,8 +41,8 @@
       <br>
       <div class="row">
         <div class="col-12">
-        <a href="http://consumerelectronicsgroup.com/mandino/" target="_blank">
-          <img src="../img/banner.gif" class="w-100 mb-3 rounded">
+        <a href="<?php echo RUTA_RAIZ; ?>paginas/creser/">
+          <img src="../img/banner1.gif" class="w-100 mb-3 rounded">
         </a>
         </div>
       </div>

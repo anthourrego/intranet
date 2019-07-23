@@ -137,7 +137,7 @@
     <div class="container-fluid position-absolute">
       <div class="row no-gutter">
         <div class="d-none d-md-flex col-md-6" style="padding-left: 0px; padding-left: 0px;">
-          <img class="w-100 vh-100" src="img/index.gif">
+          <img class="w-100 vh-100" src="img/index2.gif">
           <!--<video class="w-100" autoplay="autoplay" loop="loop" id="video" preload="auto" volume="50"/>
             <source src="videos/login2.mp4" type="video/mp4" />
           </video>-->

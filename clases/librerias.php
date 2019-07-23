@@ -154,6 +154,23 @@
       return $this->cadena_libreria;
     }
 
+    public function fullCalendar(){
+      $this->cadena_libreria = '
+      <!-- Full Calendar -->
+      <link href="' . $this->ruta_libreria . 'fullcalendar/core/main.css" rel="stylesheet" />
+      <link href="' . $this->ruta_libreria . 'fullcalendar/daygrid/main.css" rel="stylesheet" />
+      <link href="' . $this->ruta_libreria . 'fullcalendar/timegrid/main.css" rel="stylesheet" />
+      <script src="' . $this->ruta_libreria . 'fullcalendar/core/main.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/core/locales-all.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/interaction/main.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/daygrid/main.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/timegrid/main.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/resource-common/main.min.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/resource-daygrid/main.min.js"></script>
+      <script src="' . $this->ruta_libreria . 'fullcalendar/resource-timegrid/main.min.js"></script>';
+      return $this->cadena_libreria;
+    }
+
     public function cambioPantalla(){
       $this->cadena_libreria = '
       <!-- Modal Archivos -->

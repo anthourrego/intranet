@@ -73,6 +73,13 @@
           <h4 class="mt-2">Solicitud de permisos</h4>
         </a>
       </div>
+
+      <div class="col-10 col-md-3 text-center mt-4 iconos-sig">
+        <a class="text-decoration-none" href="<?php echo RUTA_RAIZ; ?>paginas/gestion_humana/sala_juntas.php">
+          <i class="fas fa-door-open fa-7x"></i>
+          <h4 class="mt-2">Sala de Juntas</h4>
+        </a>
+      </div>
     </div>
   </div>
 
