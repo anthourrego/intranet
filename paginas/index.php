@@ -123,19 +123,19 @@
                     </div>
                     <div class="tab-pane fade" id="list-2" role="tabpanel" aria-labelledby="list-2-list">
                       <p>
-                        <strong>CONSUMER ELECTRONICS GROUP S.A.S.</strong> fue constituida el 21 de diciembre de 2.012, con el objetivo principal de ensamblar televisores, bajo la licencia de Hyundai Corporation; Los planes presentes y futuros incluyen ensamblar para el mercado nacional e internacional.
+                        <strong>CONSUMER ELECTRONICS GROUP S.A.S.</strong> fue constituida el 21 de diciembre de 2012, con el objetivo principal de ensamblar televisores, bajo la licencia de Hyundai Corporation. Los planes presentes y futuros incluyen ensamblar para el mercado nacional e internacional.
                       </p>
 
                       <p>
                         Somos distribuidores autorizados para Colombia y Latinoamérica de productos electrónicos y electrodomésticos para el hogar y el entretenimiento marca HYUNDAI.
                       </p>
 
-                      <p> 
-                      <strong>CONSUMER ELECTRONICS GROUP S.A.S</strong> surgió como una propuesta visionaria de una familia de la región que ha ido creciendo y se comenzó a fortalecer en el 2.016, consolidándose en el mercado nacional, proyectada a exportar el ensamble de televisores de alta calidad a mercados latinoamericanos aprovechando los tratados de comercio con algunos de estos países.
+                      <p>
+                      <strong>CONSUMER ELECTRONICS GROUP S.A.S</strong> surgió como una propuesta visionaria de una familia de la región que ha ido creciendo y se comenzó a fortalecer en el 2016, consolidándose en el mercado nacional, proyectada a exportar el ensamble de televisores de alta calidad a mercados latinoamericanos aprovechando los tratados de comercio con algunos de estos países.
                       </p>
 
                       <p>
-                        Contamos con una planta de fabricación y centro de distribución con una localización estratégica en el corregimiento de cerritos a tan solo dos kilómetros de Pereira y conexión con las principales ciudades y de mayor crecimiento en el país.
+                        Contamos con una planta de fabricación y centro de distribución con una localización estratégica en el corregimiento de Cerritos a tan solo dos kilómetros de Pereira y conexión con las principales ciudades y de mayor crecimiento en el país.
                       </p>
 
                       <p>
@@ -149,10 +149,10 @@
                       <ul>
                         <li>Eje-cafetero y Antioquia</li>
                         <li>Centro-Oriente</li>
-                        <li>Pacifico</li>
+                        <li>Pacífico</li>
                         <li>Llanos</li>
                         <li>Caribe</li>
-                        <li>Centro-sur Amazonía</li>
+                        <li>Centro-sur Amazonia</li>
                       </ul>
 
                       <p>
@@ -161,10 +161,10 @@
                     </div>
                     <div class="tab-pane fade" id="list-3" role="tabpanel" aria-labelledby="list-3-list">
                       <p>
-                        “La declaratoria de los valores y principios definidos  van a ser trasmitidos a toda la Empresa y a la comunidad en general, a través del siguiente credo”:
+                        La declaratoria de los valores y principios definidos  van a ser trasmitidos a toda la Empresa y a la comunidad en general, a través del siguiente credo:
                       </p>
                       <h5 class="font-weight-bold font-italic text-center">
-                        Somos un equipo comprometido que cuenta con una excelente vocación de servicio y resultados, y actúa con transparencia y oportunidad; logra altos estándares de cumplimiento, y promulga el respeto entre todos y el entorno que lo rodea.
+                        "Somos un equipo comprometido que cuenta con una excelente vocación de servicio y resultados. Actuamos con transparencia y oportunidad. Logramos altos estándares de cumplimiento y promulgamos el respeto entre todos y el entorno que nos rodea".
                       </h5>
 
                     </div>

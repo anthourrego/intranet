@@ -35,11 +35,12 @@
 </head>
 <body>
 	<div class="container mt-5">
-    <div class="mb-4 d-flex justify-content-end" id="botones"></div>
     <table id="tabla" class="table table-bordered bg-light table-hover table-sm">
       <thead>
         <tr>
-          <th class="text-center">Nombre</th>
+          <th class="text-center">Área</th>
+          <th class="text-center">Usuarios</th>
+          <th class="text-center">Inactivos</th>
         </tr>
       </thead>
       <tbody id="contenido">
@@ -54,31 +55,25 @@
 <script type="text/javascript">
   $(function(){
     cargarTabla();
-
-    $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
-      type: 'POST',
-      dataType: 'json',
-      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "registros_creser"},
-      success: function(data){
-        if (data.length != 0) {
-          $("#botones").append('<a href="registros" class="btn btn-success mb-3"><i class="fas fa-list"></i> Reportes</a>');
-        }
-      },
-      error: function(){
-        alertify.error('No ha validado el permiso');
-      }
-    });
   });
 
   function cargarTabla(){
     $.ajax({
       type: "POST",
       url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
-      data: {accion: "listaUsuarioCreser", id: <?php echo $usuario['id']; ?>},
+      dataType: 'json',
+      data: {accion: "areas"},
       success: function(data){
         $("#contenido").empty();
-        $("#contenido").html(data);
+        for (let i = 0; i < data.cantidad_registros; i++) {
+          $("#contenido").append(`
+            <tr onClick="redireccionar(${data[i].dep_id})">
+              <td>${data[i].dep_tag}</td>
+              <td class="text-center">${data[i].usuarios_activos}/${data[i].usuarios_evaluados}</td>
+              <td class="text-center">${data[i].usuarios_evaluados_inactivos}</td>
+            </tr>
+          `);
+        }
         // =======================  Data tables ==================================
         definirdataTable("#tabla");
       },
@@ -88,15 +83,8 @@
     });
   }
 
-  function encuesta(id, idCompetencia){
-    if (idCompetencia == 2) {
-      var atributo = 10;      
-    } else {
-      var atributo = 31;
-    }
-    //window.location.href = 'encuesta?et_id=' + idCompetencia + '&id_usu='+id;
-    top.$("#cargando").modal("show");
-    window.location.href = 'encuesta.php?et_id=' + idCompetencia + '&filtro_atr=' + atributo + '|' + id;
+  function redireccionar(idArea){
+    window.location = "areas?idArea="+idArea
   }
 </script>
 </html>

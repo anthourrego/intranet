@@ -14,11 +14,11 @@
   define("RUTA_RAIZ","/intranet_desarrollo/"); 
 
   if (obtenerIp() == '201.236.254.67') {
-    define("RUTA_ALMACENAMIENTO","http://192.168.1.141/ceg/almacenamiento/"); 
+    define("RUTA_ALMACENAMIENTO","http://192.168.1.141/ceg_anthony/almacenamiento/"); 
   }else if(obtenerIp() == "::1"){
-    define("RUTA_ALMACENAMIENTO","http://192.168.1.141/ceg/almacenamiento/"); 
+    define("RUTA_ALMACENAMIENTO","http://192.168.1.141/ceg_anthony/almacenamiento/"); 
   }else{
-    define("RUTA_ALMACENAMIENTO","http://201.236.254.67:141/ceg/almacenamiento/"); 
+    define("RUTA_ALMACENAMIENTO","http://201.236.254.67:141/ceg_anthony/almacenamiento/"); 
   }
 
   //Zona Horaria
@@ -78,11 +78,11 @@
     //Se trae la ip de donde esta ingresando
     $ip = obtenerIp();
     if ($ip == '201.236.254.67') {
-      return "http://192.168.1.141/ceg_desarrollo/pantallas/intranet/";
+      return "http://192.168.1.141/ceg_anthony/pantallas/intranet/";
     }else if($ip == "::1"){
-      return "http://192.168.1.141/ceg_desarrollo/pantallas/intranet/";
+      return "http://192.168.1.141/ceg_anthony/pantallas/intranet/";
     }else{
-      return "http://192.168.1.141/ceg_desarrollo/pantallas/intranet/";
+      return "http://192.168.1.141/ceg_anthony/pantallas/intranet/";
     }
   }
 
@@ -90,11 +90,11 @@
     //Se trae la ip de donde esta ingresando
     $ip = obtenerIp();
     if ($ip == '201.236.254.67') {
-      return "http://192.168.1.141/ceg_desarrollo/";
+      return "http://192.168.1.141/ceg_anthony/";
     }else if($ip == "::1"){
-      return "http://192.168.1.141/ceg_desarrollo/";
+      return "http://192.168.1.141/ceg_anthony/";
     }else{
-      return "http://192.168.1.141/ceg_desarrollo/";
+      return "http://192.168.1.141/ceg_anthony/";
     }
   }
 

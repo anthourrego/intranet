@@ -30,12 +30,12 @@
     echo $lib->bootstrap();
     echo $lib->fontAwesome();
     echo $lib->datatables();
+    echo $lib->alertify();
     echo $lib->intranet();
   ?>
 </head>
 <body>
 	<div class="container mt-5">
-    <div class="mb-4 d-flex justify-content-end" id="botones"></div>
     <table id="tabla" class="table table-bordered bg-light table-hover table-sm">
       <thead>
         <tr>
@@ -54,31 +54,38 @@
 <script type="text/javascript">
   $(function(){
     cargarTabla();
-
-    $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
-      type: 'POST',
-      dataType: 'json',
-      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "registros_creser"},
-      success: function(data){
-        if (data.length != 0) {
-          $("#botones").append('<a href="registros" class="btn btn-success mb-3"><i class="fas fa-list"></i> Reportes</a>');
-        }
-      },
-      error: function(){
-        alertify.error('No ha validado el permiso');
-      }
-    });
   });
 
   function cargarTabla(){
     $.ajax({
       type: "POST",
       url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
-      data: {accion: "listaUsuarioCreser", id: <?php echo $usuario['id']; ?>},
+      dataType: 'json',
+      data: {accion: "PersonasAreas", idDep: <?php echo($_GET['idArea']); ?>},
       success: function(data){
         $("#contenido").empty();
-        $("#contenido").html(data);
+        for (let i = 0; i < data.cantidad_registros; i++) {
+
+          if(data[i].fun_estado == 0 && data[i].ea_fk != null){
+            $("#contenido").append(`
+              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})" class="alert-warning">
+                <td>${data[i].fun_nombre_completo}</td>
+              </tr>
+            `);
+          }else if(data[i].fun_estado == 1 && data[i].ea_fk != null){
+            $("#contenido").append(`
+              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})" class="alert-success">
+                <td>${data[i].fun_nombre_completo}</td>
+              </tr>
+            `);
+          }else if(data[i].fun_estado == 1){
+            $("#contenido").append(`
+              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})">
+                <td>${data[i].fun_nombre_completo}</td>
+              </tr>
+            `);
+          }
+        }
         // =======================  Data tables ==================================
         definirdataTable("#tabla");
       },
@@ -89,14 +96,18 @@
   }
 
   function encuesta(id, idCompetencia){
-    if (idCompetencia == 2) {
-      var atributo = 10;      
-    } else {
-      var atributo = 31;
+    if(idCompetencia != null){
+      if (idCompetencia == 2) {
+        var atributo = 10;      
+      } else {
+        var atributo = 31;
+      }
+      //window.location.href = 'encuesta?et_id=' + idCompetencia + '&id_usu='+id;
+      top.$("#cargando").modal("show");
+      window.location.href = 'encuesta.php?et_id=' + idCompetencia + '&filtro_atr=' + atributo + '|' + id;
+    }else{
+      alertify.error("Debes de definir los atributos de creser.");
     }
-    //window.location.href = 'encuesta?et_id=' + idCompetencia + '&id_usu='+id;
-    top.$("#cargando").modal("show");
-    window.location.href = 'encuesta.php?et_id=' + idCompetencia + '&filtro_atr=' + atributo + '|' + id;
   }
 </script>
 </html>
