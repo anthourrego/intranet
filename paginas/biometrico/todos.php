@@ -39,6 +39,7 @@
 <body>
   <div class="container mt-5">
     <div class="mb-4 d-flex justify-content-end" id="botones">
+      <button class="btn btn-success" id="sincronizar"><i class="fas fa-sync-alt"></i> Sincronizar</button>
     </div>
     
     <hr>
@@ -110,6 +111,12 @@
 ?> 
 <script type="text/javascript">
   $(function(){
+    cargarTabla();
+    $("#sincronizar").on("click", function(){
+      top.$("#cargando").modal("show");
+      sincronizar();
+    });
+
     //Validamos que tenga el permiso
     $.ajax({
       url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
@@ -125,30 +132,7 @@
         window.location.href = "index.php";
       }
     });
-
-
-    cargarTabla();
-
-    $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
-      type: 'POST',
-      dataType: 'json',
-      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "biometrico_sincronizar"},
-      success: function(data){
-        if (data.length != 0) {
-          $("#botones").append('<button class="btn btn-success" id="sincronizar"><i class="fas fa-sync-alt"></i> Sincronizar</button>');
-        }
-        $("#sincronizar").on("click", function(){
-          top.$("#cargando").modal("show");
-          sincronizar();
-        });
-      },
-      error: function(){
-        alertify.error('No ha validado el permiso');
-      }
-    });
     
-
     // Rango de fecha de usuario 
     $('#inicioBiometricoUsu').datetimepicker({
       format: 'L',

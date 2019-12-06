@@ -38,7 +38,9 @@
 </head>
 <body>
   <div class="container mt-5">
-    <div class="mb-4 d-flex justify-content-end" id="botones"></div>
+    <div class="mb-4 d-flex justify-content-end" id="botones">
+      <button class="btn btn-success mr-2" id="sincronizar"><i class="fas fa-sync-alt"></i> Sincronizar</button>
+    </div>
     
     <hr>
 
@@ -131,23 +133,9 @@
     cargarTabla();
     marcacionUsuario();
 
-    $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
-      type: 'POST',
-      dataType: 'json',
-      data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "biometrico_sincronizar"},
-      success: function(data){
-        if (data.length != 0) {
-          $("#botones").append('<button class="btn btn-success mr-2" id="sincronizar"><i class="fas fa-sync-alt"></i> Sincronizar</button>');
-          $("#sincronizar").on("click", function(){
-            top.$("#cargando").modal("show");
-            sincronizar();
-          });
-        }
-      },
-      error: function(){
-        alertify.error('No ha validado el permiso');
-      }
+    $("#sincronizar").on("click", function(){
+      top.$("#cargando").modal("show");
+      sincronizar();
     });
 
     $.ajax({
