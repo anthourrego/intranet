@@ -74,14 +74,17 @@
           alertify.error("No se han cargado los usuarios.");
         }
       });
-      
 
       $('#input-search').on('keyup', function() {
+        cont = 0;
         var rex = new RegExp($(this).val(), 'i');
         $('.searchable-container .items').hide();
         $('.searchable-container .items').filter(function() {
           return rex.test($(this).text());
+          cont++;
         }).show();
+
+        console.log(cont);
       });
     });
   </script>

@@ -51,7 +51,7 @@
       </div>
       <div class="col-3 text-center mt-4 iconos-sig">
         <a class="text-decoration-none link" href="<?php echo RUTA_RAIZ; ?>paginas/creser/">
-          <img src="http://consumerelectronicsgroup.com/creser/img/logo.png" class="w-100">
+          <img src="<?php echo RUTA_RAIZ; ?>img/creser.png" class="w-100">
         </a>
       </div>
       <div class="col-10 col-md-3 text-center mt-4 iconos-sig">

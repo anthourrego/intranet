@@ -66,9 +66,9 @@
     //Se trae la ip de donde esta ingresando
     $ip = obtenerIp();
     if ($ip == '201.236.254.67') {
-      return "http://192.168.1.221/";
+      return "http://192.168.1.198/";
     }else if($ip == "::1"){
-      return "http://192.168.1.221/";
+      return "http://192.168.1.198/";
     }else{
       return "http://201.236.254.67:6060/";
     }

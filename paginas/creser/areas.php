@@ -40,6 +40,8 @@
       <thead>
         <tr>
           <th class="text-center">Nombre</th>
+          <th class="text-center">Estado</th>
+          <th class="text-center">Cantidad</th>
         </tr>
       </thead>
       <tbody id="contenido">
@@ -63,6 +65,7 @@
       dataType: 'json',
       data: {accion: "PersonasAreas", idDep: <?php echo($_GET['idArea']); ?>},
       success: function(data){
+        console.log(data);
         $("#contenido").empty();
         for (let i = 0; i < data.cantidad_registros; i++) {
 
@@ -70,18 +73,24 @@
             $("#contenido").append(`
               <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})" class="alert-warning">
                 <td>${data[i].fun_nombre_completo}</td>
+                <td>Realizado retirado</td>
+                <td>${data[i].cantidad}</td>
               </tr>
             `);
           }else if(data[i].fun_estado == 1 && data[i].ea_fk != null){
             $("#contenido").append(`
               <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})" class="alert-success">
                 <td>${data[i].fun_nombre_completo}</td>
+                <td>Realizado</td>
+                <td>${data[i].cantidad}</td>
               </tr>
             `);
           }else if(data[i].fun_estado == 1){
             $("#contenido").append(`
               <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})">
                 <td>${data[i].fun_nombre_completo}</td>
+                <td>No realizado</td>
+                <td>${data[i].cantidad}</td>
               </tr>
             `);
           }
