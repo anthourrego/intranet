@@ -63,7 +63,23 @@
 		
 	</div>
 		
-	
+
+
+	<div class="modal" tabindex="-1" role="dialog" id="modal_visualizar_compra_funcionario" >
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<iframe class="w-100" id="contenido_visualizar_compra_funcionario" style="width:100%;height: 80vh; border: 0px;"></iframe>
+	      </div>
+	    </div>
+	  </div>
+	</div>	
 	
 </body>
 </html>		
@@ -89,6 +105,8 @@
 					datatable.clear();
 			   		datatable.rows.add(obj);
 			   		datatable.draw();
+			   		
+			   		$('[data-toggle="tooltip"]').tooltip();
 				}	
 			});	
 
@@ -101,6 +119,7 @@
 	    $('#tabla_solicitudes_funcionario').DataTable( {
 	        columns: [
 				{ title: "Acciones" },
+				{ title: "Estado" },
 				{ title: "Fecha" },
             	{ title: "Funcionario" },
             	{ title: "Detalle de Compra" }       	
@@ -125,6 +144,33 @@
 	 	$(".excel_btn").html('Excel <i class="far fa-file-excel"></i>');
 
 		iniciar_consulta();
+		
+		
+		
+		
+		$(document).on('click','.ver_detalle_compra',function(){
+			var funco_id=$(this).attr('funco_id');
+			
+			top.$("#cargando").modal("show");
+			var enlace='compra_detalle.php?funco_id='+funco_id;
+			$('#modal_visualizar_compra_funcionario').modal('show');
+			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);				
+			
+		});
+		
+		
+
+		$('[data-toggle="tooltip"]').tooltip();
+		
+		
+		$(document).on('click','.btn_revisar_precio',function(){
+			var funco_id=$(this).attr('funco_id');
+			top.$("#cargando").modal("show");
+			var enlace='compra_revisar_precio.php?funco_id='+funco_id;
+			$('#modal_visualizar_compra_funcionario').modal('show');
+			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);					
+		});
+
 		
 	});
 </script>
