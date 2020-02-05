@@ -201,11 +201,13 @@
            top.$("#cargando").modal("hide");
           }, 1000);
 
-          $("#contenidoArchivos").on("load",function(){
-            $("#modalArchivos").modal("show");
-            setTimeout(function() {
-              top.$("#cargando").modal("hide");
-            }, 1000);
+          $(".archivos").on("click", function(){
+            $("#contenidoArchivos").on("load",function(){
+              $("#modalArchivos").modal("show");
+              setTimeout(function() {
+                top.$("#cargando").modal("hide");
+              }, 1000);
+            });
           });
 
           /*$(".link").on("click", function(event){
