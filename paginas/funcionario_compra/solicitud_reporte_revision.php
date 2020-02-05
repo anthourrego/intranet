@@ -41,6 +41,7 @@
     echo $lib->intranet();
 	echo $lib->cambioPantalla();
 	echo $lib->datatables();
+	echo $lib->alertify();		
   ?>
 </head>
 <body>

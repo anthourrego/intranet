@@ -33,7 +33,7 @@
     echo $lib->alertify();
     echo $lib->fontAwesome();
     echo $lib->intranet();
-	echo $lib->jqueryValidate();	
+	echo $lib->jqueryValidate();
   ?>
 </head>
 <body>
@@ -103,7 +103,12 @@
 					data: formData,
 					success:function(datos){
 						if(datos.exito==1){
-							alert('Solicitud de compra registrada satisfactoriamente');
+							
+							parent.alertify.success('Revision de precios Satisfactoria!'); 
+							parent.$('#modal_visualizar_compra_funcionario').modal('hide');
+							setTimeout(function(){
+								parent.iniciar_consulta();
+							}, 500);
 						}	
 					}	
 				});		
