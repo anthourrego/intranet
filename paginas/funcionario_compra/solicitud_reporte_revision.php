@@ -180,5 +180,13 @@
 			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);					
 		});
 		
+		$(document).on('click','.btn_asignar_serial',function(){
+			var funco_id=$(this).attr('funco_id');
+			top.$("#cargando").modal("show");
+			var enlace='compra_asignar_serial.php?funco_id='+funco_id;
+			$('#modal_visualizar_compra_funcionario').modal('show');
+			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);					
+		});		
+		
 	});
 </script>
