@@ -171,7 +171,14 @@
 			$('#modal_visualizar_compra_funcionario').modal('show');
 			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);					
 		});
-
+		
+		$(document).on('click','.btn_revisar_capacidad',function(){
+			var funco_id=$(this).attr('funco_id');
+			top.$("#cargando").modal("show");
+			var enlace='compra_revisar_capacidad.php?funco_id='+funco_id;
+			$('#modal_visualizar_compra_funcionario').modal('show');
+			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);					
+		});
 		
 	});
 </script>
