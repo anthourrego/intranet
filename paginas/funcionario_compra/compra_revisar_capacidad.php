@@ -18,6 +18,11 @@
 	$funco_id=@$_REQUEST['funco_id'];   
 	
 	$titulo_pantalla='Revisar Capacidad de Compra';
+	
+	
+	
+	$usuario = $session->get("usuario");	
+	$fun_id=$usuario['id'];	
 
 ?>
 <!DOCTYPE html>
@@ -43,9 +48,16 @@
 		
 	</div>	
 	<div>
+		<strong>Observaci&oacute;n:</strong>
+		<br>
+		<textarea class="form-control" id="funco_paso_observacion" name="funco_paso_observacion"></textarea>
+	</div>
+	<div>
+		<br>
 		<button type="button" id="submit_form_revisar_capacidad" name="submit_form_revisar_capacidad" class="btn btn-primary float float-right" name="action">Enviar <i class="fas fa-arrow-right" style="font-size: 18px;"></i></button>	
 		<input type="hidden" name="ejecutar_accion" id="ejecutar_accion" value="funcionario_compra_revisar_capacidad_update" />
 		<input type="hidden" name="funco_id" id="funco_id" value="<?php echo($funco_id); ?>"/>
+		<input type="hidden" name="fun_id" id="fun_id" value="<?php echo($fun_id); ?>" />		
 	</div>
 	</form>
 </body>
