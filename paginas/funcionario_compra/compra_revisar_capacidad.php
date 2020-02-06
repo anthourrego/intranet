@@ -38,13 +38,13 @@
 </head>
 <body>
 	<h3><?php echo($titulo_pantalla); ?></h3>
-	<form id="form_revisar_precio">
+	<form id="form_revisar_capacidad">
 	<div id="contenido_compra_detalle">
 		
 	</div>	
 	<div>
-		<button type="button" id="submit_form_revisar_precio" name="submit_form_revisar_precio" class="btn btn-primary float float-right" name="action">Enviar <i class="fas fa-arrow-right" style="font-size: 18px;"></i></button>	
-		<input type="hidden" name="ejecutar_accion" id="ejecutar_accion" value="funcionario_compra_revisar_precio_update" />
+		<button type="button" id="submit_form_revisar_capacidad" name="submit_form_revisar_capacidad" class="btn btn-primary float float-right" name="action">Enviar <i class="fas fa-arrow-right" style="font-size: 18px;"></i></button>	
+		<input type="hidden" name="ejecutar_accion" id="ejecutar_accion" value="funcionario_compra_revisar_capacidad_update" />
 		<input type="hidden" name="funco_id" id="funco_id" value="<?php echo($funco_id); ?>"/>
 	</div>
 	</form>
@@ -113,11 +113,11 @@
 		
 		
 		//SUBMIT FORM
-		$("#form_revisar_precio").validate();
-		$('#submit_form_revisar_precio').click(function(){
+		$("#form_revisar_capacidad").validate();
+		$('#submit_form_revisar_capacidad').click(function(){
 	
-			if($("#form_revisar_precio").valid()){
-				var formData = new FormData(document.getElementById("form_revisar_precio"));	
+			if($("#form_revisar_capacidad").valid()){
+				var formData = new FormData(document.getElementById("form_revisar_capacidad"));	
 				$.ajax({
 					type:'POST',
 					dataType: 'json',
@@ -129,7 +129,7 @@
 					success:function(datos){
 						if(datos.exito==1){
 							
-							parent.alertify.success('Revision de precios Satisfactoria!'); 
+							parent.alertify.success('Revision de capacidad de endeudamiento Satisfactoria!'); 
 							parent.$('#modal_visualizar_compra_funcionario').modal('hide');
 							setTimeout(function(){
 								parent.iniciar_consulta();

@@ -36,6 +36,7 @@
     echo $lib->intranet();
 	echo $lib->cambioPantalla();
 	echo $lib->jqueryValidate();
+	echo $lib->alertify();
   ?>
 </head>
 <body>
@@ -525,8 +526,12 @@
 					processData: false,					
 					data: formData,
 					success:function(datos){
-						if(datos.exito==1){
-							alert('Solicitud de compra registrada satisfactoriamente');
+						if(datos.exito==1){							
+							alertify.success('Solicitud de compra registrada satisfactoriamente!'); 
+							
+							setTimeout(function(){
+								window.location.reload();
+							}, 1000);							
 						}	
 					}	
 				});		
