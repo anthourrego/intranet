@@ -40,7 +40,7 @@
 	echo $lib->jqueryValidate();
   ?>
   <style>
-  	.columna_credito{
+  	.contenedor_direccion_despacho{
   		display:none;
   	}
   </style>
