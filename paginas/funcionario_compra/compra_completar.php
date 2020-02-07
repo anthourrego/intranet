@@ -39,6 +39,12 @@
     echo $lib->intranet();
 	echo $lib->jqueryValidate();
   ?>
+  <style>
+  	.columna_credito{
+  		display:none;
+  	}
+  </style>
+  
 </head>
 <body>
 	<h3><?php echo($titulo_pantalla); ?></h3>
@@ -46,11 +52,6 @@
 	<div id="contenido_compra_detalle">
 		
 	</div>	
-	<div>
-		<strong>Observaci&oacute;n Despacho:</strong>
-		<br>
-		<textarea class="form-control" id="funco_paso_observacion" name="funco_paso_observacion"></textarea>
-	</div>
 	<div>
 		<br>
 		<button type="button" id="submit_form_revisar_precio" name="submit_form_revisar_precio" class="btn btn-primary float float-right" name="action">Enviar <i class="fas fa-arrow-right" style="font-size: 18px;"></i></button>	
