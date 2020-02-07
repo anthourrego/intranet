@@ -43,6 +43,9 @@
   	.contenedor_direccion_despacho{
   		display:none;
   	}
+  	.lista_autocompletar_ciudad_fk{
+  		cursor:pointer;
+  	}
   </style>
   
 </head>
@@ -82,8 +85,6 @@
 			}	
 		});
 		
-		
-		
 		$(document).on('click','.funco_det_forma_pago',function(){
 			var funco_det_id=$(this).attr('funco_det_id');
 			var total=$(this).attr('total');
@@ -92,24 +93,17 @@
 			if(forma_pago=='credito'){
 				$('#funco_det_anticipo_'+funco_det_id).attr('readonly',false);
 				$('#funco_det_cuotas_'+funco_det_id).attr('readonly',false);
-				
 			}else{
-
 				$('#funco_det_anticipo_'+funco_det_id).attr('readonly',true);
 				$('#funco_det_anticipo_'+funco_det_id).val(total);
 				$('#funco_det_cuotas_'+funco_det_id).attr('readonly',true);
-				$('#funco_det_cuotas_'+funco_det_id).val(1);
-				
+				$('#funco_det_cuotas_'+funco_det_id).val(1);				
 			}
-
-			
 		});
-		
 		
 		//SUBMIT FORM
 		$("#form_completar_pedido").validate();
 		$('#submit_form_completar_pedido').click(function(){
-	
 			if($("#form_completar_pedido").valid()){
 				var formData = new FormData(document.getElementById("form_completar_pedido"));	
 				$.ajax({
@@ -132,8 +126,77 @@
 					}	
 				});		
 			}	
+		});
+		
+		
+
+		$(document).on('click','.misma_direccion_despacho_factura',function(){
+
+			var misma_direccion_despacho_factura=parseInt($(this).val());
+
+			if(misma_direccion_despacho_factura){
+				$('.contenedor_direccion_despacho').fadeOut();
+			}else{
+				$('.contenedor_direccion_despacho').fadeIn("slow");
+			}
+		});
+		
+		
+		
+		//AUTOCOMPLETAR CIUDAD
+
+		$(document).on('keyup','.autocompletar_ciudad_fk',function(){
+			var ciu_descripcion=$(this).val();
+			var key=$(this).attr('key');
 			
-		});		
+			
+			if(ciu_descripcion && ciu_descripcion!='' && ciu_descripcion.length>=3){
+				
+				$.ajax({
+					type:'POST',
+					dataType: 'json',
+					url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
+					async:false,
+					data:{
+						ejecutar_accion:'funcionario_compra_autocompletar_ciudad_fk',
+						ciu_descripcion:ciu_descripcion,
+						key:key
+					},
+					success:function(retorno){
+						$('#lista_autocompletar_ciudad_fk_'+key).remove();
+						$('#autocompletar_ciudad_fk_'+key).after(retorno.ul);
+					}	
+				});				
+					
+			}
+			
+		});	
+		
+		$(document).on('click','.autocompletar_ciudad_fk_item',function(){
+			var ciudad_fk=$(this).attr('ciudad_fk');
+			var ciu_descripcion=$(this).text();
+			var key=$(this).attr('key');
+			
+			$('#lista_autocompletar_ciudad_fk_'+key).remove();
+			$('#autocompletar_ciudad_fk_'+key).hide();
+			$('#autocompletar_ciudad_fk_'+key).val('');
+			
+			var seleccionado=`
+				<span>${ciu_descripcion} <i class="fas fa-times autocompletar_ciudad_fk_seleccionado_quitar" key="${key}"></i></span>
+			`;
+			$('#autocompletar_ciudad_fk_'+key).after(seleccionado);
+			$('#ciudad_fk_'+key).val(ciudad_fk);
+		});
+		
+		$(document).on('click','.autocompletar_ciudad_fk_seleccionado_quitar',function(){
+			var key=$(this).attr('key');
+			$(this).parent('span').remove();
+			$('#ciudad_fk_'+key).val('');
+			$('#autocompletar_ciudad_fk_'+key).show();
+		});	
+		
+		
+		//FIN AUTOCOMPLETAR CIUDAD		
 		
 			
 	});
