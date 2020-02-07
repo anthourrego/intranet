@@ -104,7 +104,7 @@
 				<a href="solicitud_reporte_revision.php" style="text-decoration:none;">
 				<div class="card text-white bg-primary text-center" style="max-width: 18rem;">
 				  <div class="card-body">
-				    <h5 class="card-title">Solicitud Funcionarios</h5>
+				    <h5 class="card-title">Solicitud de Funcionarios</h5>
 				    <p class="card-text">
 				    	<i class="fas fa-tasks" style="font-size:100px;"></i>
 				    </p>
