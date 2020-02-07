@@ -103,8 +103,40 @@
 		
 		//SUBMIT FORM
 		$("#form_completar_pedido").validate();
-		$('#submit_form_completar_pedido').click(function(){
-			if($("#form_completar_pedido").valid()){
+		$('#submit_form_completar_pedido').click(function(){	
+			
+			var continuar_submit=1;
+			var misma_direccion_despacho_factura=parseInt($('.misma_direccion_despacho_factura:checked').val());
+			
+			$('.funco_det_cuotas').each(function(){
+				if(!$(this).val() || $(this).val()=='' || $(this).val()=='0' || $(this).val()==0){
+					alertify.alert('Atencion', 'Debe ingresar una cuota valida para continuar!');
+					continuar_submit=0;
+					return false;
+				}
+			});					
+			
+			if(!misma_direccion_despacho_factura || misma_direccion_despacho_factura==0){
+
+				$('.funco_det_dir_direccion').each(function(){
+					if(!$(this).val() && $(this).val()==''){
+						alertify.alert('Atencion', 'Debe completar todas las direcciones de despacho para continuar!');
+						continuar_submit=0;
+						return false;
+					}
+				});				
+
+				$('.ciudad_fk').each(function(){
+					if(!$(this).val() && $(this).val()==''){
+						alertify.alert('Atencion', 'Debe completar todas las ciudades de despacho para continuar!');
+						continuar_submit=0;
+						return false;
+					}
+				});					
+			}
+
+			
+			if($("#form_completar_pedido").valid() && continuar_submit){
 				var formData = new FormData(document.getElementById("form_completar_pedido"));	
 				$.ajax({
 					type:'POST',
