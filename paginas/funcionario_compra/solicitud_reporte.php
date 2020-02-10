@@ -121,7 +121,7 @@
 				{ title: "Acciones" },
 				{ title: "Estado" },
 				{ title: "Fecha" },
-            	{ title: "Detalle de Compra" }       	
+            	{ title: "Ver" }       	
 	        ],
 	        ordering: false,
 	        dom: 'Bfrtip',
@@ -156,6 +156,16 @@
 			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);				
 			
 		});
+		
+		$(document).on('click','.ver_compra_timeline',function(){
+			var funco_id=$(this).attr('funco_id');
+			
+			top.$("#cargando").modal("show");
+			var enlace='compra_timeline.php?funco_id='+funco_id;
+			$('#modal_visualizar_compra_funcionario').modal('show');
+			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);				
+			
+		});		
 		
 		
 
