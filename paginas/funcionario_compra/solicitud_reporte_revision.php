@@ -20,7 +20,11 @@
   $usuario = $session->get("usuario");
   
   $car_nombre=$usuario['car_nombre'];
-  $dep_nombre=$usuario['dep_nombre'];  
+  $dep_nombre=$usuario['dep_nombre']; 
+  $historico=0;
+  if(@$_REQUEST['historico']){
+  	$historico=1;
+  } 
   
   
   $ruta_documentos = array();
@@ -96,7 +100,8 @@
 				data: {
 					ejecutar_accion:'data_solicitud_reporte_revision',
 					car_nombre:'<?php echo($car_nombre); ?>',
-					dep_nombre:'<?php echo($dep_nombre); ?>'
+					dep_nombre:'<?php echo($dep_nombre); ?>',
+					historico:<?php echo($historico); ?>
 				},
 				success:function(data){
 					top.$("#cargando").modal("hide");

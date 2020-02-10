@@ -25,7 +25,7 @@
   
   
   //habilita boton solicitus funcionario segun cargo o dep
-  $ver_btn_solicitudes_funcionario=0;
+  $ver_btns_admin=0;
   
   $car_nombre=$usuario['car_nombre'];
   $dep_nombre=$usuario['dep_nombre'];
@@ -39,7 +39,7 @@
   );
   
   if( in_array($car_nombre, $cargos_involucrados) || in_array($dep_nombre, $dependencias_involucradas)){
-  	$ver_btn_solicitudes_funcionario=1;
+  	$ver_btns_admin=1;
   }
   
   
@@ -100,7 +100,7 @@
 		<br>		
 		<div class="row">
 			<div class="col-6">
-				<?php if($ver_btn_solicitudes_funcionario){ ?>
+				<?php if($ver_btns_admin){ ?>
 				<a href="solicitud_reporte_revision.php" style="text-decoration:none;">
 				<div class="card text-white bg-primary text-center" style="max-width: 18rem;">
 				  <div class="card-body">
@@ -114,7 +114,18 @@
 				<?php } ?>
 			</div>			
 			<div class="col-6">
-
+				<?php if($ver_btns_admin){ ?>
+				<a href="solicitud_reporte_revision.php?historico=1" style="text-decoration:none;">
+				<div class="card text-white bg-primary text-center" style="max-width: 18rem;">
+				  <div class="card-body">
+				    <h5 class="card-title">Solicitudes Procesadas</h5>
+				    <p class="card-text">
+				    	<i class="fas fa-calendar-check" style="font-size:100px;"></i>
+				    </p>
+				  </div>
+				</div>
+				</a>
+				<?php } ?>
 			</div>			
 		</div>		
 	</div>
