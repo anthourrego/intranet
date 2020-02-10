@@ -149,7 +149,7 @@
 					success:function(datos){
 						if(datos.exito==1){
 							
-							parent.alertify.success('Revision de precios Satisfactoria!'); 
+							parent.alertify.success('Pedido realizado Satisfactoriamente!'); 
 							parent.$('#modal_visualizar_compra_funcionario').modal('hide');
 							setTimeout(function(){
 								parent.iniciar_consulta();
