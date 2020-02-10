@@ -68,6 +68,24 @@
 
 
 <script>
+	function parse_moneda_entero(entero){
+		var parse=new Intl.NumberFormat().format(entero);
+		return(parse);		
+	}
+
+	function calcular_valor_cuota(funco_det_id){
+		var valor_cuota=0;
+		if(funco_det_id){
+			var total=$('#funco_det_total_'+funco_det_id).val();
+			var anticipo=$('#funco_det_anticipo_'+funco_det_id).val();
+			var cuotas=$('#funco_det_cuotas_'+funco_det_id).val();
+			valor_cuota=total-anticipo;
+			valor_cuota=valor_cuota/cuotas;
+		}
+		valor_cuota='$'+parse_moneda_entero(valor_cuota);
+		$('#valor_cuota_'+funco_det_id).html(valor_cuota);
+	}
+	
 	$(document).ready(function(){
 		
 		$.ajax({
@@ -99,6 +117,8 @@
 				$('#funco_det_cuotas_'+funco_det_id).attr('readonly',true);
 				$('#funco_det_cuotas_'+funco_det_id).val(1);				
 			}
+			
+			calcular_valor_cuota(funco_det_id);
 		});
 		
 		//SUBMIT FORM
@@ -226,9 +246,18 @@
 			$('#ciudad_fk_'+key).val('');
 			$('#autocompletar_ciudad_fk_'+key).show();
 		});	
-		
-		
 		//FIN AUTOCOMPLETAR CIUDAD		
+		
+		
+		$(document).on('keyup','.funco_det_anticipo',function(){
+			var funco_det_id=$(this).attr('funco_det_id');			
+			calcular_valor_cuota(funco_det_id);
+		});
+		$(document).on('keyup','.funco_det_cuotas',function(){
+			var funco_det_id=$(this).attr('funco_det_id');
+			calcular_valor_cuota(funco_det_id);
+		});		
+		 
 		
 			
 	});
