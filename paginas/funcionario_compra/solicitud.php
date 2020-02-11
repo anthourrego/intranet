@@ -218,16 +218,18 @@
 						<br>
 						<br>
 						<div class="form-group">
-							<span class="float float-right" style="font-weight:bold;">Pago de Contado?</span>
+							<span class="float float-right" style="font-weight:bold;">Pago de Contado?*</span>
 							<br>
 							<div class="custom-control custom-radio custom-control-inline float float-right">
-							  <input type="radio" id="funco_det_forma_pago1" name="funco_det_forma_pago" class="custom-control-input" value="contado">
+							  <input type="radio" id="funco_det_forma_pago1" name="funco_det_forma_pago" class="custom-control-input" value="contado" required>
 							  <label class="custom-control-label" for="funco_det_forma_pago1">Si</label>
 							</div>	
 							<div class="custom-control custom-radio custom-control-inline float float-right">
-							  <input type="radio" id="funco_det_forma_pago0" name="funco_det_forma_pago" class="custom-control-input" value="credito" checked>
+							  <input type="radio" id="funco_det_forma_pago0" name="funco_det_forma_pago" class="custom-control-input" value="credito" required>
 							  <label class="custom-control-label" for="funco_det_forma_pago0">No</label>
-							</div>							
+							</div>	
+							<br>		
+							<label for="funco_det_forma_pago" class="error float float-right" style="display:none;color:red;">Campo obligatorio.</label>				
 						</div>	
 					</div>
 				</div>
