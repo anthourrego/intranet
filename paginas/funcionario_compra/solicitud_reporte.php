@@ -86,7 +86,7 @@
 </html>		
 <script>
 	function iniciar_consulta(){
-		//top.$("#cargando").modal("show");
+		top.$("#cargando").modal("show");
 		setTimeout(function(){	
 					
 			$.ajax({
@@ -98,7 +98,7 @@
 					fun_id:'<?php echo($fun_id); ?>'
 				},
 				success:function(data){
-					top.$("#cargando").modal("hide");
+					top.cerrarCargando();
 					var obj = JSON.parse(data.data);
 					var datatable = $( '#tabla_solicitudes_funcionario' ).DataTable();
 									
@@ -145,8 +145,6 @@
 		iniciar_consulta();
 		
 		
-		
-		
 		$(document).on('click','.ver_detalle_compra',function(){
 			var funco_id=$(this).attr('funco_id');
 			
@@ -180,6 +178,28 @@
 			$("#contenido_visualizar_compra_funcionario").attr("src", enlace);					
 		});
 		
+
+		$(document).on('click','.btn_anular_pedido',function(){
+			var funco_id=$(this).attr('funco_id');
+			top.$("#cargando").modal("show");
+			
+			$.ajax({
+				type:'POST',
+				dataType: 'json',
+				url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",			
+				data: {
+					ejecutar_accion:'funcionario_compra_anular_pedido',
+					fun_id:'<?php echo($fun_id); ?>',
+					funco_id:funco_id
+				},
+				success:function(data){
+					top.cerrarCargando();
+					iniciar_consulta();
+				}	
+			});	
+
+				
+		});
 
 		
 	});
