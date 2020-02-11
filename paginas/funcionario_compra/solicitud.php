@@ -276,7 +276,7 @@
 						funco_factura_ciudad_fk=retorno.CIUDAD;
 						funco_factura_ciudad_text=retorno.CIUDAD_DESCRIPCION;
 						funco_factura_nombre=retorno.NOMBRE;
-						funco_factura_direccion=retorno.DIRECCION;
+						
 						funco_factura_email=retorno.EMAIL;
 						
 						var cadena_telefono='';
@@ -287,6 +287,16 @@
 							cadena_telefono+=retorno.CELULAR;
 						}
 						funco_factura_telefono=cadena_telefono;
+						
+						
+						var cadena_direccion='';
+						if(retorno.DIRECCION && retorno.DIRECCION!=''){
+							cadena_direccion+=retorno.DIRECCION+' ';
+						}
+						if(retorno.BARRIO && retorno.BARRIO!=''){
+							cadena_direccion+=retorno.BARRIO;
+						}						
+						funco_factura_direccion=cadena_direccion;
 						
 					}
 				}	
