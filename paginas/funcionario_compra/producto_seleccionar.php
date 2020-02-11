@@ -127,7 +127,7 @@
 </head>
 <body>
     <div>
-    	<input type="search" id="input-search" value="" class="form-control" placeholder="Buscar Referencia">
+    	<input type="text" id="input-search" value="" class="form-control" placeholder="Buscar Referencia">
     </div>
     <br>
 	<div class="html_productos">
@@ -138,49 +138,37 @@
 <script>
 
 	function productos_disponibles_funcionario_compra(){
-		$.ajax({
-			type:'POST',
-			dataType: 'json',
-			url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
-			async:false,
-			data:{
-				ejecutar_accion:'productos_disponibles_funcionario_compra',
-				linea:'<?php echo($tipo_linea); ?>'
-			},
-			success:function(retorno){
-				$('.html_productos').html(retorno.html_productos);
-				
-				
-				top.cerrarCargando();
-			}	
-		});			
+		var referencia= $('#input-search').val();
+		
+		if( (!referencia) ||  (referencia!='' && referencia.length>=3)){
+	
+			$.ajax({
+				type:'POST',
+				dataType: 'json',
+				url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
+				async:false,
+				data:{
+					ejecutar_accion:'productos_disponibles_funcionario_compra',
+					linea:'<?php echo($tipo_linea); ?>',
+					referencia:referencia
+				},
+				success:function(retorno){
+					$('.html_productos').html(retorno.html_productos);
+					
+					
+					top.cerrarCargando();
+				}	
+			});	
+			
+		}
+		
+		
 	}
 
 	$(document).ready(function(){
 
 	    $('#input-search').on('keyup', function() {
-	        var rex = new RegExp($(this).val(), 'i');
-	        var rexPul = new RegExp($("#pulgadas").val(), 'i');
-	        var cont = 0;
-	        $('.searchable-container .items').hide();
-	        $('#resp').hide();
-	
-	        $('.searchable-container .items').filter(function() {
-	            if (rex.test($(this).find(".referencia").text()) == true && rexPul.test($(this).find(".pulgadas").text())) {
-	                cont++;
-	            }
-	
-	            if (rexPul.test($(this).find(".pulgadas").text())) {
-	                return rex.test($(this).find(".referencia").text());
-	            } else {
-	                return false
-	            }
-	
-	        }).show();
-	
-	        if (cont == 0) {
-	            $('#resp').show();
-	        }
+	        productos_disponibles_funcionario_compra();
 	    });
 	    
 	    
