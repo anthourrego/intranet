@@ -29,13 +29,15 @@
   
   $car_nombre=$usuario['car_nombre'];
   $dep_nombre=$usuario['dep_nombre'];
+
   
   $cargos_involucrados=array(
   	'coordinador_de_nomina_y_seguridad_social',  //german
   	'analista_comercial' //juliana
   );
   $dependencias_involucradas=array(
-  	'inventario'
+  	'inventario',
+  	'despachos'
   );
   
   if( in_array($car_nombre, $cargos_involucrados) || in_array($dep_nombre, $dependencias_involucradas)){
