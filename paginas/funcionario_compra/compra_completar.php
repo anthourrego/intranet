@@ -250,10 +250,25 @@
 		
 		
 		$(document).on('keyup','.funco_det_anticipo',function(){
+			var funco_det_anticipo=parseInt($(this).val());
+			if(funco_det_anticipo<0){
+				$(this).val('');
+				$(this).keyup(); 
+			}				
+			
 			var funco_det_id=$(this).attr('funco_det_id');			
 			calcular_valor_cuota(funco_det_id);
 		});
 		$(document).on('keyup','.funco_det_cuotas',function(){
+			var funco_det_cuotas=parseInt($(this).val());
+			if(funco_det_cuotas>12){
+				$(this).val(12);
+				$(this).keyup(); 
+			}
+			if(funco_det_cuotas<1){
+				$(this).val(1);
+				$(this).keyup(); 
+			}			
 			var funco_det_id=$(this).attr('funco_det_id');
 			calcular_valor_cuota(funco_det_id);
 		});		

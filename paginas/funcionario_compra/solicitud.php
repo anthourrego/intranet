@@ -213,7 +213,24 @@
 						</div>
 					</div>
 				</div>				
-				
+				<div class="row">
+					<div class="col-md-12"> 
+						<br>
+						<br>
+						<div class="form-group">
+							<span class="float float-right" style="font-weight:bold;">Pago de Contado?</span>
+							<br>
+							<div class="custom-control custom-radio custom-control-inline float float-right">
+							  <input type="radio" id="funco_det_forma_pago1" name="funco_det_forma_pago" class="custom-control-input" value="contado">
+							  <label class="custom-control-label" for="funco_det_forma_pago1">Si</label>
+							</div>	
+							<div class="custom-control custom-radio custom-control-inline float float-right">
+							  <input type="radio" id="funco_det_forma_pago0" name="funco_det_forma_pago" class="custom-control-input" value="credito" checked>
+							  <label class="custom-control-label" for="funco_det_forma_pago0">No</label>
+							</div>							
+						</div>	
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-sm-12">
 						<br>
