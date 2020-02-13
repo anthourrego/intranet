@@ -103,6 +103,7 @@
     top.$('#cargando').modal("show");
     $('#modalArchivosTitulo').html("Certificado ");
     $("#contenidoArchivos").attr("src", '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/certificado_laboral.php?id=' + id);
+    modalArchivos();
   }
 
 </script>

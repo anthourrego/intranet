@@ -113,6 +113,7 @@
           top.$('#cargando').modal("show");
           $('#modalArchivosTitulo').html($(this).text());
           $("#contenidoArchivos").attr("src", $(this).attr("href"));
+          modalArchivos();
         });
       },
       error: function(){

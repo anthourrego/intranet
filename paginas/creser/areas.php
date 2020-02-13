@@ -63,34 +63,44 @@
       type: "POST",
       url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
       dataType: 'json',
-      data: {accion: "PersonasAreas", idDep: <?php echo($_GET['idArea']); ?>},
+      data: {
+        accion: "PersonasAreas", 
+        idDep: <?php echo($_GET['idArea']); ?>, 
+        periodo: <?php echo($_GET['idPeriodo']); ?> 
+      },
       success: function(data){
-        console.log(data);
         $("#contenido").empty();
         for (let i = 0; i < data.cantidad_registros; i++) {
-
-          if(data[i].fun_estado == 0 && data[i].ea_fk != null){
+          if(data[i].competencia_creser == 0){
             $("#contenido").append(`
-              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})" class="alert-warning">
+              <tr class="alert-danger">
+                <td>${data[i].fun_nombre_completo}</td>
+                <td>Sin definir competencia</td>
+                <td>${data[i].cantidad_intentos}</td>
+              </tr>
+            `);
+          }else if(data[i].estado_reg == 2 && data[i].cantidad_intentos > 0){
+            $("#contenido").append(`
+              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].competencia_creser})" class="alert-warning">
                 <td>${data[i].fun_nombre_completo}</td>
                 <td>Realizado retirado</td>
-                <td>${data[i].cantidad}</td>
+                <td>${data[i].cantidad_intentos}</td>
               </tr>
             `);
-          }else if(data[i].fun_estado == 1 && data[i].ea_fk != null){
+          }else if(data[i].estado_reg == 1 && data[i].cantidad_intentos > 0){
             $("#contenido").append(`
-              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})" class="alert-success">
+              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].competencia_creser})" class="alert-success">
                 <td>${data[i].fun_nombre_completo}</td>
                 <td>Realizado</td>
-                <td>${data[i].cantidad}</td>
+                <td>${data[i].cantidad_intentos}</td>
               </tr>
             `);
-          }else if(data[i].fun_estado == 1){
+          }else{
             $("#contenido").append(`
-              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].fun_atr_valor})">
+              <tr onclick="encuesta(${data[i].fun_id}, ${data[i].competencia_creser})">
                 <td>${data[i].fun_nombre_completo}</td>
                 <td>No realizado</td>
-                <td>${data[i].cantidad}</td>
+                <td>${data[i].cantidad_intentos}</td>
               </tr>
             `);
           }
@@ -99,7 +109,7 @@
         definirdataTable("#tabla");
       },
       error: function(){
-        alert("No se ha podido traer la lista");
+        alertify.error("No se ha podido traer la lista");
       }
     });
   }

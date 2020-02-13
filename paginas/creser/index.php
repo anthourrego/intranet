@@ -40,11 +40,10 @@
       <thead>
         <tr>
           <th class="text-center">Nombre</th>
+          <th class="text-center">Cantidad</th>
         </tr>
       </thead>
-      <tbody id="contenido">
-
-      </tbody>
+      <tbody id="contenido"></tbody>
     </table>
   </div>
 </body>

@@ -120,7 +120,7 @@
       $this->cadena_libreria = '
       <!-- Intranet -->
       <link rel="stylesheet" href="' . $this->ruta_libreria . 'intranet/intranet.css"/>
-      <script type="text/javascript" src="' . $this->ruta_libreria . 'intranet/intranet.js"></script>';
+      <script type="text/javascript" src="' . $this->ruta_libreria . 'intranet/intranet.js?2"></script>';
       return $this->cadena_libreria;
     }
 
@@ -201,7 +201,8 @@
            top.$("#cargando").modal("hide");
           }, 1000);
 
-          $(".archivos").on("click", function(){
+          $(".archivos").on("click", function(event){
+            event.preventDefault();
             $("#contenidoArchivos").on("load",function(){
               $("#modalArchivos").modal("show");
               setTimeout(function() {
@@ -209,6 +210,8 @@
               }, 1000);
             });
           });
+
+          
 
           /*$(".link").on("click", function(event){
             top.$("#cargando").modal("show");
