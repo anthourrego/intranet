@@ -171,6 +171,13 @@
       return $this->cadena_libreria;
     }
 
+    public function echarts(){
+      $this->cadena_libreria = '
+      <!-- Full Calendar -->
+      <script src="' . $this->ruta_libreria . 'echarts/echarts.js"></script>';
+      return $this->cadena_libreria;
+    }
+
     public function cambioPantalla(){
       $this->cadena_libreria = '
       <!-- Modal Archivos -->
