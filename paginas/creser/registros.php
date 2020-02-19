@@ -33,6 +33,7 @@
     echo $lib->fontAwesome();
     echo $lib->fontAwesome4();
     echo $lib->datatables();
+    echo $lib->echarts();
     echo $lib->intranet();
   ?>
 </head>
@@ -49,15 +50,24 @@
     <table id="tabla" class="table table-bordered bg-light table-hover table-sm">
       <thead>
         <tr>
-          <th class="text-center">Área</th>
+          <th class="text-center w-50">Área</th>
           <th class="text-center">Usuarios</th>
-          <th class="text-center">Inactivos</th>
+          <th class="text-center">Completados</th>
         </tr>
       </thead>
       <tbody id="contenido">
 
       </tbody>
     </table>
+
+    <div id="graficos" class="row w-100 d-none mt-5">
+			<div class="col-6">
+				<div id="grafico_barras_general" style="width: 100%;height:400px;"></div>
+			</div>
+      <div class="col-6">
+				<div id="grafico_barras_lideres" style="width: 100%;height:400px;"></div>
+			</div>
+		</div>
   </div>
 
 
@@ -219,16 +229,31 @@
               $("#contenido").append(`
                 <tr onClick="redireccionar(${data.msj[i].dep_id}, ${ultimoPeriodo})">
                   <td>${data.msj[i].dep_tag}</td>
-                  <td class="text-center">${data.msj[i].usuarios_total}/${data.msj[i].usuarios_realizado}</td>
-                  <td class="text-center">${data.msj[i].usuarios_realizado_inactivo}</td>
+                  <td class="text-center">${data.msj[i].usuarios_total}</td>
+                  <td class="text-center">${data.msj[i].usuarios_realizado}</td>
                 </tr>
               `);
             }
           }
-          // =======================  Data tables ==================================
+
+          datos = ["ORIENTACION AL SERVICIO", "TRABAJO EN EQUIPO", "EFECTIVIDAD", "INNOVACION Y GESTION DEL CAMBIO"]
+          valores = [((data.msj.orientacion_al_servicio*100)/data.msj.orientacion_al_servicio_total).toFixed(2), ((data.msj.trabajo_en_equipo*100)/data.msj.trabajo_en_equipo_total).toFixed(2), ((data.msj.efectividad*100)/data.msj.efectividad_total).toFixed(2), ((data.msj.innovacion_y_gestion_del_cambio*100)/data.msj.innovacion_y_gestion_del_cambio_total).toFixed(2)];
+          
+          if (data.msj.cont_general > 0) {
+            $("#graficos").removeClass("d-none");
+            graficos("Desempeño", datos, valores, data.msj.cont_general, "grafico_barras_general");
+            
+            if (data.msj.cont_lideres > 0) {
+              datos_lider = ["DESARROLLO DE SI MISMO Y DE OTROS", "TOMA DE DECISIONES ESTRATEGICAS ", "ORIENTACION AL LOGRO"];
+              valores_lider = [((data.msj.desarrollo_de_si_mismo_y_de_otros*100)/data.msj.desarrollo_de_si_mismo_y_de_otros_total).toFixed(2), ((data.msj.toma_de_decisiones_estrategicas*100)/data.msj.toma_de_decisiones_estrategicas_total).toFixed(2), ((data.msj.orientacion_al_logro*100)/data.msj.orientacion_al_logro_total).toFixed(2)];
+              
+              graficos("Lideres", datos_lider, valores_lider, data.msj.cont_lideres, "grafico_barras_lideres");
+            }
+          }
         }else{  
           alertify.error(data.msj);
         }
+        // =======================  Data tables ==================================
         definirdataTable("#tabla");
       },
       error: function(){
@@ -400,6 +425,7 @@
           }
           ultimoPeriodo = data[i].cp_id;
         }
+
         cargarTabla(ultimoPeriodo);
       },
       error: function(){
@@ -410,6 +436,89 @@
 
   function redireccionar(idArea, periodo){
     window.location = "areas?idArea="+idArea+"&idPeriodo="+periodo
+  }
+
+  function graficos(titulo, datos, valores, cantidad, idGrafico){
+    require.config({
+      paths: {
+        echarts: '<?php echo($ruta_raiz); ?>lib/echarts'
+      }
+    });
+    require(['echarts','echarts/chart/bar'],// require the specific chart type        
+      
+    function (ec) {
+      var myChart = ec.init(document.getElementById(idGrafico));
+
+      var option = {
+        title : {
+          text: titulo,
+          subtext: "Personas " + cantidad,
+          x:'center'
+        },
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {            
+              type : 'shadow' 
+          },   
+          formatter: "{b} : {c}%"                 
+        },
+        calculable : true,
+        xAxis : [
+          {
+            nameTextStyle:{
+              color: '#000000',
+              fontWeight:'bold'
+            },
+            nameLocation:'end',      
+            name:'',                        
+            type : 'category',
+            axisLabel:{
+              rotate:18,
+              textStyle:{
+                fontSize:9
+              }
+            },                        
+            data : datos
+          }
+        ],
+        yAxis : [
+          { 
+            nameTextStyle:{
+              color: '#000000',
+              fontWeight:'bold'
+            },
+            nameLocation:'end',
+            name:'%',                        
+            type : 'value'
+          }
+        ],
+        series : [
+          {
+            type:"bar",
+            //barWidth: 30,
+            itemStyle: {
+              normal: {
+                color: function(params) {
+                  if(params.dataIndex % 2 == 0){ //es par
+                    return('#007bff');
+                  }else{
+                    return('#17a2b8');
+                  }        
+                },
+                label: {
+                  show: true,
+                  position: 'top',
+                  formatter: '{c}%'
+                }
+              }
+            },                                
+            data: valores
+          }                             
+        ]
+      };
+      myChart.setOption(option);
+    } //fin function ec
+    );
   }
 </script>
 </html>
