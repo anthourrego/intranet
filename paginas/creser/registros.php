@@ -47,27 +47,50 @@
       </div>
       <button class="btn btn-primary" data-toggle="modal" data-target="#modalPeriodos"><i class="fas fa-chalkboard-teacher"></i> Periodos</button> 
     </div>
-    <table id="tabla" class="table table-bordered bg-light table-hover table-sm">
-      <thead>
-        <tr>
-          <th class="text-center w-50">Área</th>
-          <th class="text-center">Usuarios</th>
-          <th class="text-center">Completados</th>
-        </tr>
-      </thead>
-      <tbody id="contenido">
 
-      </tbody>
-    </table>
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-registro-tab" data-toggle="tab" href="#nav-registro" role="tab" aria-controls="nav-registro" aria-selected="true">Registro</a>
+        <a class="nav-item nav-link" id="nav-proyecto-tab" data-toggle="tab" href="#nav-proyecto" role="tab" aria-controls="nav-proyecto" aria-selected="false">Proyectos</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active pt-4 pb-5" id="nav-registro" role="tabpanel" aria-labelledby="nav-registro-tab">
+        
+        <table id="tabla" class="table table-bordered bg-light table-hover table-sm ">
+          <thead>
+            <tr>
+              <th class="text-center w-50">Área</th>
+              <th class="text-center">Usuarios</th>
+              <th class="text-center">Completados</th>
+            </tr>
+          </thead>
+          <tbody id="contenido"></tbody>
+        </table>
 
-    <div id="graficos" class="row w-100 d-none mt-5">
-			<div class="col-6">
-				<div id="grafico_barras_general" style="width: 100%;height:400px;"></div>
-			</div>
-      <div class="col-6">
-				<div id="grafico_barras_lideres" style="width: 100%;height:400px;"></div>
-			</div>
-		</div>
+        <div id="graficos" class="row w-100 d-none mt-5">
+          <div class="col-6">
+            <div id="grafico_barras_general" style="width: 100%;height:400px;"></div>
+          </div>
+          <div class="col-6">
+            <div id="grafico_barras_lideres" style="width: 100%;height:400px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade pt-4 pb-5" id="nav-proyecto" role="tabpanel" aria-labelledby="nav-proyecto-tab">
+        <table id="tabla-proyecto" class="table table-bordered bg-light table-hover table-sm ">
+          <thead>
+            <tr>
+              <th class="text-center">Área</th>
+              <th class="text-center">Usuarios</th>
+              <th class="text-center w-25">Formación</th>
+              <th class="text-center w-25">Proyecto</th>
+            </tr>
+          </thead>
+          <tbody id="contenido-proyecto"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
 
@@ -206,6 +229,7 @@
     //Al cambiar el select cambia los datos de las tabla de las áreas
     $("#select_periodos").on("change", function(){
       cargarTabla($(this).val());
+      cargarProyectosyFormacion($(this).val());
     });
   });
 
@@ -220,7 +244,6 @@
         periodo: ultimoPeriodo 
       },
       success: function(data){
-        console.log(data);
         $("#tabla").dataTable().fnDestroy();
         if(data.success == true){
           $("#contenido").empty();
@@ -235,7 +258,7 @@
               `);
             }
           }
-
+          $("#graficos").addClass("d-none");
           datos = ["ORIENTACION AL SERVICIO", "TRABAJO EN EQUIPO", "EFECTIVIDAD", "INNOVACION Y GESTION DEL CAMBIO"]
           valores = [((data.msj.orientacion_al_servicio*100)/data.msj.orientacion_al_servicio_total).toFixed(2), ((data.msj.trabajo_en_equipo*100)/data.msj.trabajo_en_equipo_total).toFixed(2), ((data.msj.efectividad*100)/data.msj.efectividad_total).toFixed(2), ((data.msj.innovacion_y_gestion_del_cambio*100)/data.msj.innovacion_y_gestion_del_cambio_total).toFixed(2)];
           
@@ -264,6 +287,43 @@
       }
     });
   }
+
+  function cargarProyectosyFormacion(idPeridodo){
+    $.ajax({
+      type: "POST",
+      url: '<?php echo(direccionIPRuta()); ?>ajax/usuarios.php',
+      dataType: 'json',
+      data: {
+        accion: "registroProyectoyFormacion",
+        periodo: idPeridodo
+      },
+      success: function(data){
+        $("#tabla-proyecto").dataTable().fnDestroy();
+        $("#contenido-proyecto").empty();
+        if (data.success == true) {
+          for (let i = 0; i < data.msj.cantidad_registros; i++) {
+            $("#contenido-proyecto").append(`
+              <tr>
+                <td>${data.msj[i].area}</td>
+                <td>${data.msj[i].nombre_completo}</td>
+                <td>${data.msj[i].formacion}</td>
+                <td>${data.msj[i].proyecto}</td>
+              </tr>
+            `);
+          }
+        }else{
+          alertify.error(data.msj);
+        }
+
+        // =======================  Data tables ==================================
+        definirdataTable("#tabla-proyecto");
+      },
+      error: function(){
+        alert("No se ha podido cargar la lista de formacion.");
+      }
+    });
+  }
+
 
   function cargarTablaPeriodos(){
     $.ajax({
@@ -427,6 +487,7 @@
         }
 
         cargarTabla(ultimoPeriodo);
+        cargarProyectosyFormacion(ultimoPeriodo);
       },
       error: function(){
         alertify.error("No se ha podido cargar la lista");
