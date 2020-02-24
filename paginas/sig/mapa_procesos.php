@@ -118,6 +118,9 @@
       },
       error: function(){
         alertify.error("No se ha cargado el mapa de procesos.");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     });
 

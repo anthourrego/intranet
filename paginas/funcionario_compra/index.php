@@ -131,6 +131,11 @@
 			</div>			
 		</div>		
 	</div>
+	<script>
+		$(function(){
+			cerrarCargando();
+		})
+	</script>
 </body>
 </html>	
 		

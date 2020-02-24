@@ -125,6 +125,7 @@
 <script type="text/javascript">
   $(function(){
     cargarTablaUsuarios();
+    cerrarCargando();
 
     $.ajax({
       url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',

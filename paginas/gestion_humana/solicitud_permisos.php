@@ -312,6 +312,7 @@
   $(function(){
     tablaUsuario();
     cargarTablaUsuarios();
+    cerrarCargando();
 
     $("input[name='motivo_permiso']").on("click", function(){
       if ($(this).val() == 4) {

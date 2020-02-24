@@ -89,6 +89,10 @@
 </body>
 </html>		
 <script>
+	$(function(){
+		cerrarCargando();
+	});
+
 	function iniciar_consulta(){
 		//top.$("#cargando").modal("show");
 		setTimeout(function(){	

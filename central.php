@@ -103,6 +103,12 @@
             <span>Nosotros</span>
           </a>
         </li>
+        <!--</li><li class="nav-item">
+          <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/funcionario_compra/">
+            <i class="fas fa-store"></i>
+            <span>Compra Producto</span>
+          </a>
+        </li>-->
         
 
         <!-- Divider -->
@@ -240,10 +246,6 @@
       }else{
         $("#object-contenido").attr("data", localStorage.url);
       }
-
-      setTimeout(function() {
-        $("#cargando").modal("hide");
-      }, 1000);
 
       /*$(".link").on("click", function(event){
         $("#cargando").modal("show");

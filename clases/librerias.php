@@ -204,10 +204,6 @@
             window.location.href="' . RUTA_RAIZ . 'central";
           }
 
-          setTimeout(function() {
-           top.$("#cargando").modal("hide");
-          }, 1000);
-
           $(".archivos").on("click", function(event){
             event.preventDefault();
             $("#contenidoArchivos").on("load",function(){
@@ -217,8 +213,6 @@
               }, 1000);
             });
           });
-
-          
 
           /*$(".link").on("click", function(event){
             top.$("#cargando").modal("show");

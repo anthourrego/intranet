@@ -72,6 +72,9 @@
         },
         error: function(){
           alertify.error("No se han cargado los usuarios.");
+        },
+        complete: function(){
+          cerrarCargando();
         }
       });
 

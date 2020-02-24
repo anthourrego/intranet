@@ -132,6 +132,7 @@
 
     cargarTabla();
     marcacionUsuario();
+    cerrarCargando();
 
     $("#sincronizar").on("click", function(){
       top.$("#cargando").modal("show");

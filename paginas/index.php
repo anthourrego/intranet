@@ -344,7 +344,6 @@
         alertify.error("Error al traer los daots de politicas.");
       }
     });
-    
 
     $(".archivos").on("click", function(event){
       event.preventDefault();
@@ -352,6 +351,8 @@
       $('#modalArchivosTitulo').html($("h4", this).text());
       $("#contenidoArchivos").attr("src", $(this).attr("href"));
     });
+
+    cerrarCargando();
   });
 </script>
 </html>

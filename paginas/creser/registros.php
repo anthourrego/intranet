@@ -320,6 +320,9 @@
       },
       error: function(){
         alert("No se ha podido cargar la lista de formacion.");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     });
   }
@@ -338,6 +341,11 @@
           for (let i = 0; i < data.cantidad_registros; i++) {
             peridoInicio = moment(data[i].cp_fecha_inicio).format('L');
             periodoFinal = moment(data[i].cp_fecha_fin).format("L");
+
+            final = `<td>
+                      <button id="btnEditarPeriodo${data[i].cp_id}" onClick="editarPeriodo(${data[i].cp_id})" class="btn btn-success"><i class="far fa-edit"></i> Editar</button>
+                      <button id="btnGuardarPeriodo${data[i].cp_id}" onClick="actualizarPeriodo(${data[i].cp_id})" disabled class="btn btn-primary btnGuardarPeriodo"><i class="far fa-save"></i> Guardar</button>
+                    </td>`
             $("#contenidoPeriodos").append(`
               <tr class="text-center">
                 <td>${data[i].cp_id}</td>
@@ -358,10 +366,7 @@
                 <td>
                   <textarea disabled class="form-control" id="peridoDescripcion${data[i].cp_id}" name="peridoDescripcion${data[i].cp_id}" cols="30" rows="1">${data[i].cp_descripcion}</textarea>
                 </td>
-                <td>
-                  <button id="btnEditarPeriodo${data[i].cp_id}" onClick="editarPeriodo(${data[i].cp_id})" class="btn btn-success"><i class="far fa-edit"></i> Editar</button>
-                  <button id="btnGuardarPeriodo${data[i].cp_id}" onClick="actualizarPeriodo(${data[i].cp_id})" disabled class="btn btn-primary btnGuardarPeriodo"><i class="far fa-save"></i> Guardar</button>
-                </td>
+                ${final}
               </tr>
             `);
           }
@@ -380,7 +385,7 @@
         definirdataTable("#tablaPeriodos");
       },
       error: function(){
-        alert("No se ha podido cargar la lista de periodos.");
+        alertity.error("No se ha podido cargar la lista de periodos.");
       }
     });
   }

@@ -124,11 +124,12 @@
             graficos("Lideres", datos_lider, valores_lider, data.cont_lideres, "grafico_barras_lideres");
           }
         }
-
-
       },
       error: function(){
         alertify.error("No se ha podido traer la lista");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     });
   }

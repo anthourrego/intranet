@@ -76,6 +76,7 @@
       url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
       data: {accion: "listaUsuarioCreser", id: <?php echo $usuario['id']; ?>},
       success: function(data){
+        $("#tabla").dataTable().fnDestroy();
         $("#contenido").empty();
         $("#contenido").html(data);
         // =======================  Data tables ==================================
@@ -83,6 +84,9 @@
       },
       error: function(){
         alert("No se ha podido traer la lista");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     });
   }

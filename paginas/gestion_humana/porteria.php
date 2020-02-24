@@ -39,12 +39,17 @@
   ?>
 </head>
 <body>
-	<div class="container mt-5 rounded pt-3 pb-5" style="background: rgba(255,255,255,0.6);">
+	<div class="container mt-5 rounded pt-3 pb-5 border" style="background: rgba(255,255,255,0.6);">
     <h2 class="text-center">Permisos aprobados</h2>
     <hr>
-    <table id="tablaUsuario" class="table table-bordered table-hover table-striped table-sm">
+    <div class="d-flex justify-content-end mb-4">
+      <button id="sinc-permisos" class="btn btn-success" data-toggle='tooltip' data-placement='top' title='Sincronizar'>
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+    <table id="tablaPermisos" class="table table-bordered table-hover table-striped table-sm">
       <thead class="text-center">
-        <tr>
+        <tr>  
           <th>Funcionario</th>
           <th>Fecha Inicio</th>
           <th>Hora Inicio</th>
@@ -52,13 +57,11 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="contenidoUsuario">
-        
-      </tbody>
+      <tbody id="contenidoPermisos"></tbody>
     </table>
   </div>
 
-  <div class="modal fade" tabindex="-2" style="z-index: 1600;" id="modal-observaciones" role="dialog">
+  <div class="modal fade" tabindex="-2" id="modal-observaciones" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -96,6 +99,12 @@
 ?>
 <script type="text/javascript">
   $(function(){
+    //botón para sincronizar
+    $("#sinc-permisos").on("click", function(){
+      tablaPermiso(); 
+    });
+
+    //Se valida el permiso de acceso a la pagina
     $.ajax({
       url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
       type: 'POST',
@@ -105,33 +114,22 @@
         if (data.length != 1) {
           window.location.href="index.php";
         }
-        
       },
       error: function(){
         alertify.error('No ha validado el permiso');
       }
     });
 
-
-    tablaUsuario();
-
-    $("input[name='motivo_permiso']").on("click", function(){
-      if ($(this).val() == 4) {
-        $("#selectPersonal").removeClass('d-none');
-        $("input[name='reposicion']").removeAttr('disabled');
-      }else{
-        $("#selectPersonal").addClass('d-none');
-        $("input[name='reposicion']").attr('disabled', 'true');
-      }
-    });
-
-    // Rango de fechas 
+    // Se define el tipo de hora que se muestra en el input
     $('#HoraLlegada').datetimepicker({
       format: 'h:mm a',
       defaultDate: new Date()
     });
 
-    //Formulario crear curso
+    //Cargamos la tabla de permisos
+    tablaPermiso();
+
+    //Validamos el formulario
     $("#formHoraLlegada").validate({
       debug: true,
       rules: {
@@ -152,6 +150,7 @@
       }
     });
 
+    //Lo que se ejecuta al enviar los datos del formulario
     $("#formHoraLlegada").submit(function(event){
       event.preventDefault();
       if($("#formHoraLlegada").valid()){
@@ -165,20 +164,17 @@
           data: new FormData(this),
           success: function(data){
             if (data == "Ok") {
-              setTimeout(function() {
-                tablaUsuario();
-                $("#modal-observaciones").modal("hide");
-                top.$("#cargando").modal("hide");
-              }, 1000);
+              tablaPermiso();
+              $("#modal-observaciones").modal("hide");
             }else{
               alertify.error(data);
             }
           },
           error: function(){
-            setTimeout(function() {
-              top.$("#cargando").modal("hide");
-            }, 1000);
             alertify.error("No se ha podido enviar el formulario.");
+          },
+          complete: function(){
+            cerrarCargando();
           }
         });
       }
@@ -190,23 +186,41 @@
     $("#idSolicitudPermiso").val(id);
   }
 
-  function tablaUsuario(){
+  function tablaPermiso(){
+    top.$("#cargando").modal("show");
     $.ajax({
       url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
-      dataType: 'HTML',
+      dataType: 'json',
       data: {accion: 'listaUsuarioPorteria'},
       success: function(data){
-        $("#tablaUsuario").dataTable().fnDestroy();
-        $("#contenidoUsuario").empty();
-        $("#contenidoUsuario").html(data);
+        $("#tablaPermisos").dataTable().fnDestroy();
+        $("#contenidoPermisos").empty();
+        
+        for (let i = 0; i < data.msj.cantidad_registros; i++) {
+          $("#contenidoPermisos").append(`
+            <tr>
+              <td>${data.msj[i].fun_nombre_completo}</td>
+              <td>${data.msj[i].sp_fecha_inicio}</td>
+              <td>${moment(data.msj[i].sp_hora_inicio, "HH:mm:ss").format("hh:mm A")}</td>
+              <td>${data.msj[i].sp_fecha_fin}</td>
+              <td class='d-flex justify-content-center'>
+                <button class='btn btn-secondary' onClick='finalizarPermiso(${data.msj[i].sp_id})' data-toggle='tooltip' data-placement='top' title='Finalizar'><i class='far fa-paper-plane'></i></button>
+              </td>
+            </tr>
+          `);
+        }
+
         // =======================  Data tables ==================================
-        definirdataTable("#tablaUsuario");
+        definirdataTable("#tablaPermisos");
 
         $('[data-toggle="tooltip"]').tooltip();
       },
       error: function(){
         alertify.error("No se ha cargado la tabla");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     }); 
   }

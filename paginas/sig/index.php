@@ -122,6 +122,9 @@
       },
       error: function(){
         alertify.error("Error al traer los daots de politicas.");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     });
 

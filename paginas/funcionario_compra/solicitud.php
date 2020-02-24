@@ -265,6 +265,10 @@
 </body>
 </html>
 <script>
+	$(function(){
+		cerrarCargando();
+	});
+
 	var funco_factura_nit=0;
 	var funco_factura_ciudad_fk='';
 	var funco_factura_ciudad_text='';

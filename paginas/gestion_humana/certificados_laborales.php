@@ -80,6 +80,9 @@
       },
       error: function(){
         alertify.error("No se ha podido traer la lista");
+      },
+      complete: function(){
+        cerrarCargando();
       }
     });
 

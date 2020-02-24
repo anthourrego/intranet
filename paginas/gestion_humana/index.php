@@ -153,6 +153,8 @@
         alertify.error("No se ha podido cargar.");
       }
     });
+
+    cerrarCargando();
   });
 </script>
 </html>

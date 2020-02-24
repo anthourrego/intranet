@@ -93,7 +93,7 @@
 ?>
 <script>
   $(function(){
-
+    cerrarCargando();
 
     var calendarEl = document.getElementById('calendar');
 

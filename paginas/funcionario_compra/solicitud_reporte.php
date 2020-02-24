@@ -34,14 +34,14 @@
   
   <?php  
   	echo $lib->metaTagsRequired();
-    echo $lib->jquery();
-    echo $lib->bootstrap();
-    echo $lib->alertify();
-    echo $lib->fontAwesome();
-    echo $lib->intranet();
-	echo $lib->cambioPantalla();
-	echo $lib->datatables();
-	echo $lib->alertify();		
+			echo $lib->jquery();
+			echo $lib->bootstrap();
+			echo $lib->alertify();
+			echo $lib->fontAwesome();
+			echo $lib->intranet();
+			echo $lib->cambioPantalla();
+			echo $lib->datatables();
+			echo $lib->alertify();		
   ?>
 </head>
 <body>
@@ -85,6 +85,10 @@
 </body>
 </html>		
 <script>
+	$(function(){
+		cerrarCargando();
+	});
+
 	function iniciar_consulta(){
 		top.$("#cargando").modal("show");
 		setTimeout(function(){	

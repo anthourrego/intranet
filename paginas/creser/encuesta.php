@@ -39,4 +39,9 @@
 <?php  
   echo $lib->cambioPantalla();
 ?>
+<script>
+  $(function(){
+    cerrarCargando();
+  });
+</script>
 </html>

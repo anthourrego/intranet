@@ -83,7 +83,7 @@
 ?>
 <script type="text/javascript">
   $(function(){
-
+    cerrarCargando();
     $(".motivo").on("click", function(){
       $.ajax({
         url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php",
@@ -191,26 +191,5 @@
       }
     });
   });
-
-
-  function cargarTablaUsuarios(){
-    $.ajax({
-      type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php",
-      data: {accion: "listaUsuarioTodos"},
-      success: function(data){
-        if (data != "No") {
-          $("#personalACargo").removeClass("invisible");
-          $("#contenido").empty();
-          $("#contenido").html(data);
-          // =======================  Data tables ==================================
-          definirdataTable("#tabla");
-        }
-      },
-      error: function(){
-        alertify.error("No se ha podido traer la lista");
-      }
-    });
-  }
 </script>
 </html>
