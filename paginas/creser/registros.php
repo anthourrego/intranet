@@ -68,15 +68,39 @@
           <tbody id="contenido"></tbody>
         </table>
 
-        <div id="graficos" class="row w-100 d-none mt-5">
-          <div class="col-6">
-            <div id="grafico_barras_general" style="width: 100%;height:400px;"></div>
+        <div id="graficos" class="row mb-5 d-none">
+          <div id="pie_general" class="col-6 d-none mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div id="grafico_pie_general" style="width: 100%;height:400px;"></div>
+              </div>
+            </div>
           </div>
-          <div class="col-6">
-            <div id="grafico_barras_lideres" style="width: 100%;height:400px;"></div>
+          <div id="pie_lideres" class="col-6 d-none mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div id="grafico_pie_lideres" style="width: 100%;height:400px;"></div>
+              </div>
+            </div>
+          </div>
+          <div id="barras_general" class="col-6 d-none mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div id="grafico_barras_general" style="width: 100%;height:400px;"></div>
+              </div>
+            </div>
+          </div>
+          <div id="barras_lideres" class="col-6 d-none mt-5">
+            <div class="card">
+              <div class="card-body">
+                <div id="grafico_barras_lideres" style="width: 100%;height:400px;"></div>
+              </div>
+            </div>
           </div>
         </div>
+        
       </div>
+
       <div class="tab-pane fade pt-4 pb-5" id="nav-proyecto" role="tabpanel" aria-labelledby="nav-proyecto-tab">
         <table id="tabla-proyecto" class="table table-bordered bg-light table-hover table-sm ">
           <thead>
@@ -246,8 +270,11 @@
       success: function(data){
         $("#tabla").dataTable().fnDestroy();
         if(data.success == true){
+          console.log(data.msj);
+          var total_usuarios = 0;
           $("#contenido").empty();
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
+            total_usuarios += data.msj[i].usuarios_total 
             if(data.msj[i].usuarios_total > 0){
               $("#contenido").append(`
                 <tr onClick="redireccionar(${data.msj[i].dep_id}, ${ultimoPeriodo})">
@@ -258,19 +285,43 @@
               `);
             }
           }
-          $("#graficos").addClass("d-none");
-          datos = ["ORIENTACION AL SERVICIO", "TRABAJO EN EQUIPO", "EFECTIVIDAD", "INNOVACION Y GESTION DEL CAMBIO"]
-          valores = [((data.msj.orientacion_al_servicio*100)/data.msj.orientacion_al_servicio_total).toFixed(2), ((data.msj.trabajo_en_equipo*100)/data.msj.trabajo_en_equipo_total).toFixed(2), ((data.msj.efectividad*100)/data.msj.efectividad_total).toFixed(2), ((data.msj.innovacion_y_gestion_del_cambio*100)/data.msj.innovacion_y_gestion_del_cambio_total).toFixed(2)];
           
-          if (data.msj.cont_general > 0) {
+          $("#graficos").addClass("d-none");
+
+          if (total_usuarios > 0) {
             $("#graficos").removeClass("d-none");
-            graficos("Desempeño", datos, valores, data.msj.cont_general, "grafico_barras_general");
+            $("#pie_general").removeClass("d-none");
+
+            datos_pie = ["Pendientes", "Completados"];
+            valores_pie_general = [{value: (total_usuarios - data.msj.cont_general), name: 'Pendientes'}, {value: data.msj.cont_general, name: 'Completados'}];
             
-            if (data.msj.cont_lideres > 0) {
-              datos_lider = ["DESARROLLO DE SI MISMO Y DE OTROS", "TOMA DE DECISIONES ESTRATEGICAS ", "ORIENTACION AL LOGRO"];
-              valores_lider = [((data.msj.desarrollo_de_si_mismo_y_de_otros*100)/data.msj.desarrollo_de_si_mismo_y_de_otros_total).toFixed(2), ((data.msj.toma_de_decisiones_estrategicas*100)/data.msj.toma_de_decisiones_estrategicas_total).toFixed(2), ((data.msj.orientacion_al_logro*100)/data.msj.orientacion_al_logro_total).toFixed(2)];
+            torta("grafico_pie_general", "General", "Personas " + total_usuarios, datos_pie, valores_pie_general);
+
+            if(data.msj.cont_lideres_total > 0){
+              $("#pie_lideres").removeClass("d-none");
+              valores_pie_lideres = [{value: (data.msj.cont_lideres_total - data.msj.cont_lideres), name: 'Pendientes'}, {value: data.msj.cont_lideres, name: 'Completados'}]
+            
+              torta("grafico_pie_lideres", "Lideres", "Personas " + data.msj.cont_lideres_total, datos_pie, valores_pie_lideres)
+            }
+            
+            if (data.msj.cont_general > 0) {
+              $("#barras_general").removeClass("d-none");
+              datos = ["ORIENTACION AL SERVICIO", "TRABAJO EN EQUIPO", "EFECTIVIDAD", "INNOVACION Y GESTION DEL CAMBIO"]
+              datos_pie = ["Faltan", "Completados"];
+              valores_pie = [{value: (total_usuarios - data.msj.cont_general), name: 'Faltan'}, {value: data.msj.cont_general, name: 'Completados'}]
+              valores = [((data.msj.orientacion_al_servicio*100)/data.msj.orientacion_al_servicio_total).toFixed(2), ((data.msj.trabajo_en_equipo*100)/data.msj.trabajo_en_equipo_total).toFixed(2), ((data.msj.efectividad*100)/data.msj.efectividad_total).toFixed(2), ((data.msj.innovacion_y_gestion_del_cambio*100)/data.msj.innovacion_y_gestion_del_cambio_total).toFixed(2)];
               
-              graficos("Lideres", datos_lider, valores_lider, data.msj.cont_lideres, "grafico_barras_lideres");
+              graficos("Desempeño", datos, valores, data.msj.cont_general, "grafico_barras_general");
+              
+              if (data.msj.cont_lideres > 0) {
+                $("#barras_lideres").removeClass("d-none");
+
+                $("#graficos_general").addClass("d-flex");
+                datos_lider = ["DESARROLLO DE SI MISMO Y DE OTROS", "TOMA DE DECISIONES ESTRATEGICAS ", "ORIENTACION AL LOGRO"];
+                valores_lider = [((data.msj.desarrollo_de_si_mismo_y_de_otros*100)/data.msj.desarrollo_de_si_mismo_y_de_otros_total).toFixed(2), ((data.msj.toma_de_decisiones_estrategicas*100)/data.msj.toma_de_decisiones_estrategicas_total).toFixed(2), ((data.msj.orientacion_al_logro*100)/data.msj.orientacion_al_logro_total).toFixed(2)];
+                
+                graficos("Lideres", datos_lider, valores_lider, data.msj.cont_lideres, "grafico_barras_lideres");
+              }
             }
           }
         }else{  
@@ -341,11 +392,16 @@
           for (let i = 0; i < data.cantidad_registros; i++) {
             peridoInicio = moment(data[i].cp_fecha_inicio).format('L');
             periodoFinal = moment(data[i].cp_fecha_fin).format("L");
+            
+            if (i == data.cantidad_registros-1) {
+              final = `<td>
+                        <button id="btnEditarPeriodo${data[i].cp_id}" onClick="editarPeriodo(${data[i].cp_id})" class="btn btn-success"><i class="far fa-edit"></i> Editar</button>
+                        <button id="btnGuardarPeriodo${data[i].cp_id}" onClick="actualizarPeriodo(${data[i].cp_id})" disabled class="btn btn-primary btnGuardarPeriodo"><i class="far fa-save"></i> Guardar</button>
+                      </td>`
+            }else{
+              final = `<td></td>`
+            }
 
-            final = `<td>
-                      <button id="btnEditarPeriodo${data[i].cp_id}" onClick="editarPeriodo(${data[i].cp_id})" class="btn btn-success"><i class="far fa-edit"></i> Editar</button>
-                      <button id="btnGuardarPeriodo${data[i].cp_id}" onClick="actualizarPeriodo(${data[i].cp_id})" disabled class="btn btn-primary btnGuardarPeriodo"><i class="far fa-save"></i> Guardar</button>
-                    </td>`
             $("#contenidoPeriodos").append(`
               <tr class="text-center">
                 <td>${data[i].cp_id}</td>
@@ -504,16 +560,49 @@
     window.location = "areas?idArea="+idArea+"&idPeriodo="+periodo
   }
 
+  function torta(id, titulo, subtitulo, datos, valores){
+    var myChart = echarts.init(document.getElementById(id));
+    option = {
+      title: {
+        text: titulo,
+        subtext: subtitulo,
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b} : {c} ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: datos
+      },
+      series: [
+        {
+          name: titulo,
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: valores,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+  }
+
   function graficos(titulo, datos, valores, cantidad, idGrafico){
-    require.config({
-      paths: {
-        echarts: '<?php echo($ruta_raiz); ?>lib/echarts'
-      }
-    });
-    require(['echarts','echarts/chart/bar'],// require the specific chart type        
-      
-    function (ec) {
-      var myChart = ec.init(document.getElementById(idGrafico));
+   
+      var myChart = echarts.init(document.getElementById(idGrafico));
 
       var option = {
         title : {
@@ -583,8 +672,6 @@
         ]
       };
       myChart.setOption(option);
-    } //fin function ec
-    );
   }
 </script>
 </html>
