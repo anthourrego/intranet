@@ -174,7 +174,7 @@
     public function echarts(){
       $this->cadena_libreria = '
       <!-- Full Calendar -->
-      <script src="' . $this->ruta_libreria . 'echarts/echarts.js"></script>';
+      <script src="' . $this->ruta_libreria . 'echarts/echarts.js?1"></script>';
       return $this->cadena_libreria;
     }
 
