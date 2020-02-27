@@ -74,6 +74,7 @@
       <thead class="text-center">
         <tr>
           <th>Fecha Creación</th>
+          <th>Autorización</th>
           <th>Motivo</th>
           <th>Reposicion</th>
           <th>Fecha Inicio</th>
@@ -269,6 +270,7 @@
             <thead>
               <tr class="text-center">
                 <th>Fecha Creación</th>
+                <th>Autorización</th>
                 <th>Motivo</th>
                 <th>Reposicion</th>
                 <th>Fecha Inicio</th>
@@ -286,6 +288,7 @@
             <thead class="text-center">
               <tr>
                 <th>Fecha Creación</th>
+                <th>Autorización</th>
                 <th>Motivo</th>
                 <th>Reposicion</th>
                 <th>Fecha Inicio</th>
