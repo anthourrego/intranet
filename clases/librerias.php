@@ -75,18 +75,8 @@
     public function datatables(){
       $this->cadena_libreria = '
   <!-- Data Tables -->
-  <link rel="stylesheet" href="'. $this->ruta_libreria .'dataTables/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="'. $this->ruta_libreria .'dataTables/css/buttons.bootstrap4.min.css">
-  <script src="'. $this->ruta_libreria .'dataTables/js/jquery.dataTables.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/dataTables.buttons.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/buttons.bootstrap4.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/jszip.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/pdfmake.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/vfs_fonts.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/buttons.html5.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/buttons.print.min.js" charset="utf-8"></script>
-  <script src="'. $this->ruta_libreria .'dataTables/js/buttons.colVis.min.js" charset="utf-8"></script>';
+  <link rel="stylesheet" href="'. $this->ruta_libreria .'dataTables/datatables.min.css">  
+  <script src="'. $this->ruta_libreria .'dataTables/datatables.min.js" charset="utf-8"></script>';
       return($this->cadena_libreria); 
     }
 
