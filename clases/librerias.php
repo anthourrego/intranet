@@ -93,7 +93,7 @@
     public function fontAwesome(){
       $this->cadena_libreria = '
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="'. $this->ruta_libreria .'fontawesome-free-5.7.2-web/css/all.css"/>';
+  <link rel="stylesheet" href="'. $this->ruta_libreria .'fontawesome/css/all.css"/>';
       return($this->cadena_libreria); 
     }
 
