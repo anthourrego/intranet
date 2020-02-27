@@ -59,9 +59,16 @@
     public function alertify(){
       $this->cadena_libreria = '
   <!-- Alertify - Tema de Bootstrap -->
-  <link rel="stylesheet" href="'. $this->ruta_libreria .'alertifyjs/css/alertify.min.css"/>
-  <link rel="stylesheet" href="'. $this->ruta_libreria .'alertifyjs/css/themes/bootstrap.min.css"/>
-  <script type="text/javascript" src="'. $this->ruta_libreria .'alertifyjs/alertify.min.js"></script>';
+  <link rel="stylesheet" href="'. $this->ruta_libreria .'alertifyjs/css/alertify.min.css?1"/>
+  <link rel="stylesheet" href="'. $this->ruta_libreria .'alertifyjs/css/themes/bootstrap.min.css?1"/>
+  <script type="text/javascript" src="'. $this->ruta_libreria .'alertifyjs/alertify.min.js?1"></script>
+  <script type="text/javascript">
+    //override defaults
+    alertify.defaults.transition = "slide";
+    alertify.defaults.theme.ok = "btn btn-primary";
+    alertify.defaults.theme.cancel = "btn btn-danger";
+    alertify.defaults.theme.input = "form-control";
+  </script>';
       return($this->cadena_libreria);
     }
 
