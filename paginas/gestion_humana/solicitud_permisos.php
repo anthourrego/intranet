@@ -51,7 +51,7 @@
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_solicitarPermiso"><i class="fas fa-plus"></i> Solicitar Permiso</button>
     </div>
     <hr>
-    <table id="tablaUsuario" class="table table-bordered table-hover table-striped table-sm">
+    <table id="tablaUsuario" class="table table-bordered table-hover table-striped table-sm w-100">
       <thead class="text-center">
         <tr>
           <th>Fecha Creación</th>
@@ -70,7 +70,7 @@
       </tbody>
     </table>
 
-    <table id="tablaUsuario1" class="table table-bordered table-hover table-striped table-sm">
+    <table id="tablaUsuario1" class="table table-bordered table-hover table-striped table-sm w-100">
       <thead class="text-center">
         <tr>
           <th>Fecha Creación</th>
@@ -92,7 +92,7 @@
 
     <div id="personalACargo" class="mt-5 pt-3 border-top invisible">
       <h5 class="text-center">Persona a Cargo</h5>
-      <table id="tabla" class="table table-bordered table-hover table-striped table-sm mt-5 ">
+      <table id="tabla" class="table table-bordered table-hover table-striped table-sm mt-5 w-100">
         <thead>
           <tr class="text-center">
             <th>Nombre</th>
