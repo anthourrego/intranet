@@ -44,7 +44,6 @@
 
         <!-- Sidebar -->
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
-
         <li class="nav-item no-arrow d-none d-md-block">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <img class="img-profile rounded-circle" src="<?php if($usuario['foto'] != "" OR NULL){echo RUTA_ALMACENAMIENTO . $usuario['foto']; }else{ echo RUTA_ALMACENAMIENTO . "foto-usuario/0.png"; }?>">
@@ -67,7 +66,7 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
-        
+          
         <!-- Nav Item - Dashboard -->
         <!-- Nav Item - Pages Collapse Menu -->
         
@@ -101,6 +100,12 @@
           <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/nosotros.php">
             <i class="fas fa-fw fa-list"></i>
             <span>Nosotros</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/jobs/">
+            <i class="fas fa-sitemap"></i>
+            <span>Job's</span>
           </a>
         </li>
         <!--</li><li class="nav-item">
@@ -241,10 +246,10 @@
         $(this).addClass("active");
       });
 
-      if (localStorage.url == null) {
+      if (localStorage.url<?php echo(PROYECTO) ?> == null) {
         $("#object-contenido").attr("data", "paginas/");
       }else{
-        $("#object-contenido").attr("data", localStorage.url);
+        $("#object-contenido").attr("data", localStorage.url<?php echo(PROYECTO) ?>);
       }
 
       /*$(".link").on("click", function(event){
@@ -262,10 +267,8 @@
         data: {accion: "sessionActiva"},
         success: function(data){
           if (data == 0) {
-            localStorage.removeItem("url");
+            localStorage.removeItem("url<?php echo(PROYECTO) ?>");
             $("#cerrarSession").modal("show");
-          }else{
-            console.log("Session activa.");
           }
         },
         error: function(data){
@@ -275,7 +278,7 @@
     }
 
     function cerrarSesion(){
-      localStorage.removeItem("url");
+      localStorage.removeItem("url<?php echo(PROYECTO) ?>");
       window.location.href='<?php echo $ruta_raiz ?>clases/sessionCerrar';
     }
   </script>

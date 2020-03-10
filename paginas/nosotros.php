@@ -35,40 +35,66 @@
       </div>
     </div>
     <div class="searchable-container">
-      <div id="cards" class="row justify-content-center justify-content-lg-start">
-        <!--<div class="col-10 col-sm-12 col-md-10 col-lg-6 col-xl-4 items">
-          <div class="card mt-3 border-left-primary shadow">
-            <div class="row no-gutters align-items-center">
-              <div class="col-12 col-sm-4">
-                <img src="http://192.168.1.60/intranet1/img/usuarios/0.png" class="card-img w-100" alt="...">
-              </div>
-              <div class="col-12 col-sm-8">
-                <div class="card-body">
-                  <p class="card-text">
-                    Anthony Smidh Urrego Pineda <br>
-                    Mercadeo <br>
-                    analista.desarrollador@hyu...<br>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>-->
-      </div>
+      <div id="cards" class="row justify-content-center justify-content-lg-start"></div>
     </div>
   </div>
   <?php 
     include($ruta_raiz . 'footer.php');
+
+    echo($lib->cambioPantalla());
   ?>
   <script type="text/javascript">
     $(function() {
       $.ajax({
         url: '<?php echo(direccionIPRuta()); ?>paginas/nosotros.php',
         type: 'POST',
-        dataType: 'html',
+        dataType: 'json',
         data: {accion: 'cardUsuarios', ruta: "<?php echo(RUTA_ALMACENAMIENTO); ?>"},
         success: function(data){
-          $("#cards").html(data);
+          $("#cards").empty();
+          if(data.success == true){
+            for (let i = 0; i < data.msj.cantidad_registros; i++) {
+              var foto = "<?php echo(RUTA_ALMACENAMIENTO); ?>foto-usuario/0.png";
+              var correo = "N/A";
+              var ext = "N/A"
+
+              if (data.msj[i].fun_foto != null) {
+                foto = '<?php echo(RUTA_ALMACENAMIENTO); ?>' + data.msj[i].fun_foto;
+              }
+
+              if (data.msj[i].fun_correo != null) {
+                correo = `<a class="text-decoration-none" href="mailto:'${data.msj[i].fun_correo}'">${data.msj[i].fun_correo.slice(0,-17)}...</a>`;
+              }
+
+              if (data.msj[i].fun_extension != null) {
+                ext= data.msj[i].fun_extension;
+              }
+
+              $("#cards").append(`
+                <div class="col-10 col-sm-12 col-md-10 col-lg-6 col-xl-4 items">
+                  <div class="card mt-3 border-left-primary shadow">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-12 col-sm-4">
+                        <img src="${foto}" class="card-img w-100" alt="...">
+                      </div>
+                      <div class="col-12 col-sm-8">
+                        <div class="card-body">
+                          <p class="card-text">
+                            ${data.msj[i].fun_nombre_completo}<br>
+                            ${data.msj[i].dep_tag}<br>
+                            ${correo}<br>
+                            Ext: ${ext}<br>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `);
+            }
+          }else{
+            alertify.error(data.msj);
+          }
         },
         error: function(){
           alertify.error("No se han cargado los usuarios.");
@@ -86,8 +112,6 @@
           return rex.test($(this).text());
           cont++;
         }).show();
-
-        console.log(cont);
       });
     });
   </script>

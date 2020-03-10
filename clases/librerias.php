@@ -195,7 +195,7 @@
       <script type="text/javascript">
         top.$("#cargando").modal("show");
         $(function(){
-          localStorage.url = window.location;
+          localStorage.url' . PROYECTO . ' = window.location;
           var insideIframe = window.top !== window.self;
           if(!insideIframe){
             window.location.href="' . RUTA_RAIZ . 'central";
