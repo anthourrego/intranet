@@ -102,12 +102,12 @@
             <span>Nosotros</span>
           </a>
         </li>
-        <li class="nav-item">
+        <!--<li class="nav-item">
           <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/jobs/">
             <i class="fas fa-sitemap"></i>
             <span>Job's</span>
           </a>
-        </li>
+        </li>-->
         <!--</li><li class="nav-item">
           <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/funcionario_compra/">
             <i class="fas fa-store"></i>
