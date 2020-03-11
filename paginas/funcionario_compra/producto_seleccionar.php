@@ -145,7 +145,7 @@
 			$.ajax({
 				type:'POST',
 				dataType: 'json',
-				url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
+				url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",
 				async:false,
 				data:{
 					ejecutar_accion:'productos_disponibles_funcionario_compra',

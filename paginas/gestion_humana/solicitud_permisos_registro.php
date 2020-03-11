@@ -86,7 +86,7 @@
     cerrarCargando();
     $(".motivo").on("click", function(){
       $.ajax({
-        url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php",
+        url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php",
         type: "POST",
         dataType: "json",
         data: {accion: "listaPermisosRegistros", ano: $("#ano").val(), mes: $("#mes").val(), motivo: $(this).val()},
@@ -134,7 +134,7 @@
     });
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_registros"},
@@ -152,7 +152,7 @@
       type: "POST",
       dataType: "json",
       cache: false,
-      url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php",
       data: {accion: "listaYearPermisos"},
       success: function(data){
         $("#ano").empty();
@@ -168,7 +168,7 @@
             type: "POST",
             dataType: "json",
             cache: false,
-            url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php",
+            url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php",
             data: {accion: "listaMesesPermisos", ano: $(this).val()},
             success: function(data){
               $("#mes").attr("disabled", false);

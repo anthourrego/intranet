@@ -46,7 +46,7 @@
   <script type="text/javascript">
     $(function() {
       $.ajax({
-        url: '<?php echo(direccionIPRuta()); ?>paginas/nosotros.php',
+        url: '<?php echo(RUTA_CONSULTAS); ?>paginas/nosotros.php',
         type: 'POST',
         dataType: 'json',
         data: {accion: 'cardUsuarios', ruta: "<?php echo(RUTA_ALMACENAMIENTO); ?>"},

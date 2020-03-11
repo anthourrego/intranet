@@ -124,7 +124,7 @@
         //console.log(arg.start);
         //console.log(moment(arg.start).add(1, 'm').format('YYYY-MM-DD H:mm:ss') + "  " + moment(arg.end).format('YYYY-MM-DD H:mm:ss') + "  " + arg.resource.id)
         $.ajax({
-          url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/sala_juntas.php",
+          url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/sala_juntas.php",
           type: "GET",
           dataType: "json",
           data: {accion: "validar", inicio: moment(arg.start).add(1, 'm').format('YYYY-MM-DD H:mm:ss'), fin: moment(arg.end).subtract(1, 'm').format('YYYY-MM-DD H:mm:ss'), sala: arg.resource.id},
@@ -148,7 +148,7 @@
       eventClick: function (info) {
         var eventObj = info.event;
         $.ajax({
-          url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+          url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
           type: 'POST',
           dataType: 'json',
           data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "sala_juntas_eliminar"},
@@ -157,7 +157,7 @@
               alertify.confirm('<b>Eliminar reservación</b> | ' + moment(eventObj.start).format('h:mm a') + " - " + moment(eventObj.end).format('h:mm a'), eventObj.extendedProps.description + "<br><b>Estás seguro de eliminarla?</b>", 
                       function(){
                         $.ajax({
-                          url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/sala_juntas.php",
+                          url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/sala_juntas.php",
                           type: "POST",
                           dataType: "json",
                           data: {accion: "eliminarReservacion", id: eventObj.id},
@@ -192,7 +192,7 @@
         { id: 2, title: 'Inverter' }
       ],
       events: {
-        url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/sala_juntas.php?accion=reservaciones&idUsu=<?php echo($usuario['id']); ?>',
+        url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/sala_juntas.php?accion=reservaciones&idUsu=<?php echo($usuario['id']); ?>',
         cache: false
         /*failure: function () {
           document.getElementById('script-warning').style.display = 'block';
@@ -229,7 +229,7 @@
     $("#formSepararSala").submit(function(event){
       event.preventDefault();
       $.ajax({
-        url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/sala_juntas.php',
+        url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/sala_juntas.php',
         type: 'POST',
         cache: false,
         contentType: false,

@@ -96,7 +96,7 @@
 			$.ajax({
 				type:'POST',
 				dataType: 'json',
-				url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",			
+				url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",			
 				data: {
 					ejecutar_accion:'data_solicitud_reporte',
 					fun_id:'<?php echo($fun_id); ?>'
@@ -190,7 +190,7 @@
 			$.ajax({
 				type:'POST',
 				dataType: 'json',
-				url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",			
+				url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",			
 				data: {
 					ejecutar_accion:'funcionario_compra_anular_pedido',
 					fun_id:'<?php echo($fun_id); ?>',

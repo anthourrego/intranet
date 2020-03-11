@@ -60,7 +60,7 @@
 
     $.ajax({
       type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/certificados_laborales.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/certificados_laborales.php",
       dataType: "json",
       data: {accion: "listaUsuarios"},
       success: function(data){
@@ -87,7 +87,7 @@
     });
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "certificados_laborales"},
@@ -105,7 +105,7 @@
   function certificadoLaboral(id){
     top.$('#cargando').modal("show");
     $('#modalArchivosTitulo').html("Certificado ");
-    $("#contenidoArchivos").attr("src", '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/certificado_laboral.php?id=' + id);
+    $("#contenidoArchivos").attr("src", '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/certificado_laboral.php?id=' + id);
     modalArchivos();
   }
 

@@ -326,19 +326,19 @@
 <script type="text/javascript">
   $(function(){
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'modulo_lista_info', mod_nombre: 'intranet_inicio', mod_tipo: 'intranet'},
       success: function(data){
-        $('#sistemas_integrado_gestion').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_sistema_integrado_gestion.mod_ruta);
-        $('#alcohol_dogras_tabaco').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_prevencion_consumer_alcohol_drogar_tabaco.mod_ruta);
-        $('#seguridad_vial').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_seguridad_vial.mod_ruta);
-        $('#seguridad_informatica').attr('href', '<?php echo(direccionIP()); ?>' + data.  intranet_inicio_politica_seguridad_informatica.mod_ruta);
-        $('#firmas_sellos').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_firmas_sellos.mod_ruta);
-        $('#legalizacion_anticipos').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_legalizacion_anticipos.mod_ruta);
-        $('#politica_privacidad').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_privacidad.mod_ruta);
-        $('#compras').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_inicio_politica_compras.mod_ruta);
+        $('#sistemas_integrado_gestion').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_sistema_integrado_gestion.mod_ruta);
+        $('#alcohol_dogras_tabaco').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_prevencion_consumer_alcohol_drogar_tabaco.mod_ruta);
+        $('#seguridad_vial').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_seguridad_vial.mod_ruta);
+        $('#seguridad_informatica').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.  intranet_inicio_politica_seguridad_informatica.mod_ruta);
+        $('#firmas_sellos').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_firmas_sellos.mod_ruta);
+        $('#legalizacion_anticipos').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_legalizacion_anticipos.mod_ruta);
+        $('#politica_privacidad').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_privacidad.mod_ruta);
+        $('#compras').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_inicio_politica_compras.mod_ruta);
       },
       error: function(){
         alertify.error("Error al traer los daots de politicas.");

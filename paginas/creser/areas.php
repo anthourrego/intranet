@@ -91,7 +91,7 @@
   function cargarTabla(){
     $.ajax({
       type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>ajax/usuarios.php",
       dataType: 'json',
       data: {
         accion: "PersonasAreas", 

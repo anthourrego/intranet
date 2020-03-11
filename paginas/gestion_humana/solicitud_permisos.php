@@ -328,7 +328,7 @@
     });
 
      $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_registros"},
@@ -344,7 +344,7 @@
 
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_todos"},
@@ -421,7 +421,7 @@
       if($("#formCrearPermiso").valid()){
         top.$("#cargando").modal("show");
         $.ajax({
-          url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+          url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
           type: 'POST',
           cache: false,
           contentType: false,
@@ -451,7 +451,7 @@
 
   function tablaUsuario(){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'HTML',
       data: {accion: 'listaPermisosUsuario', idUsu: <?php echo($usuario['id']); ?>},
@@ -481,7 +481,7 @@
 
   function tablaUsuario1(id){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'listaPermisosUsuario1', idUsu: <?php echo($usuario['id']); ?>, idEstado: id},
@@ -511,7 +511,7 @@
 
   function anularPermiso(id){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'cambioEstadoPermiso', idPermiso: id, idEstado: 2},
@@ -532,7 +532,7 @@
   function cargarTablaUsuarios(){
     $.ajax({
       type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php",
       data: {accion: "listaUsuario", id: <?php echo $usuario['id']; ?>},
       success: function(data){
         if (data != "No") {
@@ -551,7 +551,7 @@
 
   function tablaPermisoUsuario(id, estado, lider){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'listaPermisosUsuario1', idUsu: id, idEstado: estado, lider: lider},
@@ -581,7 +581,7 @@
 
   function tablaPermisoUsuario1(id, estado){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'listaPermisosUsuario1', idUsu: id, idEstado: estado},
@@ -611,7 +611,7 @@
 
   function aprobarPermiso(idUsu, idPermiso){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'cambioEstadoPermiso', idPermiso: idPermiso, idEstado: 3, idAutoriza: <?php echo($usuario['id']); ?>},
@@ -631,7 +631,7 @@
 
   function rechazarPermiso(idUsu, idPermiso){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'cambioEstadoPermiso', idPermiso: idPermiso, idEstado: 4, idAutoriza: <?php echo($usuario['id']); ?>},
@@ -651,7 +651,7 @@
 
   function permisoUsuario(id, nombre){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'listaPermisosUsuario1', idEstado: 1, idUsu: id, lider: 1},

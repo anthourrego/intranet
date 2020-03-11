@@ -91,7 +91,7 @@
 		$.ajax({
 			type:'POST',
 			dataType: 'json',
-			url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
+			url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",
 			async:false,
 			data:{
 				ejecutar_accion:'funcionario_compra_completar_html',
@@ -161,7 +161,7 @@
 				$.ajax({
 					type:'POST',
 					dataType: 'json',
-					url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
+					url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",
 					cache: false,
 					contentType: false,
 					processData: false,					
@@ -207,7 +207,7 @@
 				$.ajax({
 					type:'POST',
 					dataType: 'json',
-					url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",
+					url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",
 					async:false,
 					data:{
 						ejecutar_accion:'funcionario_compra_autocompletar_ciudad_fk',

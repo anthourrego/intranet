@@ -34,7 +34,7 @@
   ?>
 </head>
 <body>
-  <object data="<?php echo(direccionIPRuta()); ?>/encuesta/creser_view.php?et_id=<?php echo($_GET['et_id']); ?>&filtro_atr=<?php echo($_GET['filtro_atr']); ?>&id_usuario=<?php echo($usuario['id']); ?>" class="w-100 vh-100"></object>
+  <object data="<?php echo(RUTA_CONSULTAS); ?>/encuesta/creser_view.php?et_id=<?php echo($_GET['et_id']); ?>&filtro_atr=<?php echo($_GET['filtro_atr']); ?>&id_usuario=<?php echo($usuario['id']); ?>" class="w-100 vh-100"></object>
 </body> 
 <?php  
   echo $lib->cambioPantalla();

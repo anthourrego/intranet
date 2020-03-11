@@ -55,7 +55,7 @@
     cargarTabla();
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "registros_creser"},
@@ -73,7 +73,7 @@
   function cargarTabla(){
     $.ajax({
       type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>ajax/usuarios.php",
       data: {accion: "listaUsuarioCreser", id: <?php echo $usuario['id']; ?>},
       success: function(data){
         $("#tabla").dataTable().fnDestroy();

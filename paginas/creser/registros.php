@@ -223,7 +223,7 @@
     $("#formCrearPeriodo").submit(function(e){
       e.preventDefault();
       $.ajax({
-        url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/creser.php',
+        url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/creser.php',
         type: 'POST',
         cache: false,
         contentType: false,
@@ -261,7 +261,7 @@
     top.$("#cargando").modal("show");
     $.ajax({
       type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>ajax/usuarios.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>ajax/usuarios.php",
       dataType: 'json',
       data: {
         accion: "areas", 
@@ -342,7 +342,7 @@
   function cargarProyectosyFormacion(idPeridodo){
     $.ajax({
       type: "POST",
-      url: '<?php echo(direccionIPRuta()); ?>ajax/usuarios.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>ajax/usuarios.php',
       dataType: 'json',
       data: {
         accion: "registroProyectoyFormacion",
@@ -382,7 +382,7 @@
   function cargarTablaPeriodos(){
     $.ajax({
       type: "POST",
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/creser.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/creser.php',
       dataType: 'json',
       data: {accion: "listaPeriodos"},
       success: function(data){
@@ -492,7 +492,7 @@
 
   function actualizarPeriodo(idPeriodo){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/creser.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/creser.php',
       type: "POST",
       dataType: "json",
       data: {
@@ -521,7 +521,7 @@
 
   function listaPeriodos(){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/creser.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/creser.php',
       type: "POST",
       dataType: "json",
       data:{

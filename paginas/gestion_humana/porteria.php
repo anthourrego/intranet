@@ -106,7 +106,7 @@
 
     //Se valida el permiso de acceso a la pagina
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_porteria"},
@@ -156,7 +156,7 @@
       if($("#formHoraLlegada").valid()){
         top.$("#cargando").modal("show");
         $.ajax({
-          url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+          url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
           type: 'POST',
           cache: false,
           contentType: false,
@@ -189,7 +189,7 @@
   function tablaPermiso(){
     top.$("#cargando").modal("show");
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/solicitud_permisos.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/solicitud_permisos.php',
       type: 'POST',
       dataType: 'json',
       data: {accion: 'listaUsuarioPorteria'},

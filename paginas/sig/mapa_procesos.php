@@ -85,10 +85,10 @@
 <script type="text/javascript">
   $(function(){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()) ?>paginas/sig/mapa_procesos.php',
+      url: '<?php echo(RUTA_CONSULTAS) ?>paginas/sig/mapa_procesos.php',
       type: 'POST',
       dataType: 'json',
-      data: {accion: 'mapaProcesos', fun_id: <?php echo($usuario['id']); ?>, ruta: "<?php echo(direccionIP()); ?>"},
+      data: {accion: 'mapaProcesos', fun_id: <?php echo($usuario['id']); ?>, ruta: "<?php echo(RUTA_DROPBOX); ?>"},
       success: function(data){
         $("#E01").html(data.E01);
         $("#E02").html(data.E02);

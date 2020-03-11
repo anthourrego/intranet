@@ -100,7 +100,7 @@
 			$.ajax({
 				type:'POST',
 				dataType: 'json',
-				url: "<?php echo(direccionIPRuta()); ?>funcionario_compra/ejecutar_acciones.php",			
+				url: "<?php echo(RUTA_CONSULTAS); ?>funcionario_compra/ejecutar_acciones.php",			
 				data: {
 					ejecutar_accion:'data_solicitud_reporte_revision',
 					car_nombre:'<?php echo($car_nombre); ?>',

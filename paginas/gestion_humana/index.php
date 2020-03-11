@@ -38,7 +38,7 @@
 	<div class="container mt-5">
     <div class="row justify-content-center" id="contenido">
       <div class="col-10 col-md-3 text-center mt-4 iconos-sig">
-        <a class="text-decoration-none archivos" href="<?php echo(direccionIPRuta()); ?>paginas/gestion_humana/certificado_laboral.php?id=<?php echo($usuario['id']) ?>">
+        <a class="text-decoration-none archivos" href="<?php echo(RUTA_CONSULTAS); ?>paginas/gestion_humana/certificado_laboral.php?id=<?php echo($usuario['id']) ?>">
           <i class="fas fa-certificate fa-7x"></i>
           <h4 class="mt-2">Certificado laboral</h4>
         </a>
@@ -99,7 +99,7 @@
     });
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "solicitud_permisos_porteria"},
@@ -120,7 +120,7 @@
     });
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "certificados_laborales"},
@@ -141,13 +141,13 @@
     });
 
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'modulo_lista_info', mod_nombre: 'intranet_gh', mod_tipo: 'intranet'},
       success: function(data){
         //console.log(data);
-        $('#higiene_seguridad_industrial').attr("href", '<?php echo(direccionIP()); ?>' + data.intranet_gh_regalmento_higene_seguridad_indsutrial.mod_ruta + '?ruta=/' + data.intranet_gh_regalmento_higene_seguridad_indsutrial.mod_ruta);
+        $('#higiene_seguridad_industrial').attr("href", '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_gh_regalmento_higene_seguridad_indsutrial.mod_ruta + '?ruta=/' + data.intranet_gh_regalmento_higene_seguridad_indsutrial.mod_ruta);
       },
       error: function(){
         alertify.error("No se ha podido cargar.");

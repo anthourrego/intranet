@@ -31,49 +31,21 @@
     }
   }
 
-  //Se define la ruta de almacenamiento
-  if (obtenerIp() == '201.236.254.67') {
-    define("RUTA_ALMACENAMIENTO","http://192.168.1.141" . RUTA_SERVER . "/almacenamiento/"); 
-  }else if(obtenerIp() == "::1"){
-    define("RUTA_ALMACENAMIENTO","http://192.168.1.141" . RUTA_SERVER . "/almacenamiento/"); 
+  //Parametrizamos la ruta de donde vamos a consultar
+  $ip = obtenerIp();
+  if ($ip == '201.236.254.67') {
+    define("RUTA_BASE","http://192.168.1.141/" . RUTA_SERVER ); 
+    define("RUTA_DROPBOX","http://192.168.1.198/" . RUTA_SERVER ); 
+  }else if($ip == "::1"){
+    define("RUTA_BASE","http://192.168.1.141/" . RUTA_SERVER ); 
+    define("RUTA_DROPBOX","http://192.168.1.198/" . RUTA_SERVER ); 
   }else{
-    define("RUTA_ALMACENAMIENTO","http://201.236.254.67:141" . RUTA_SERVER . "/almacenamiento/"); 
+    define("RUTA_BASE","http://201.236.254.67:141/" . RUTA_SERVER ); 
+    define("RUTA_DROPBOX","http://201.236.254.67:6060/" . RUTA_SERVER ); 
   }
 
-  function direccionIP(){
-    //Se trae la ip de donde esta ingresando
-    $ip = obtenerIp();
-    if ($ip == '201.236.254.67') {
-      return "http://192.168.1.198/";
-    }else if($ip == "::1"){
-      return "http://192.168.1.198/";
-    }else{
-      return "http://201.236.254.67:6060/";
-    }
-  }
-
-  function direccionIPRuta(){
-    //Se trae la ip de donde esta ingresando
-    $ip = obtenerIp();
-    if ($ip == '201.236.254.67') {
-      return "http://192.168.1.141" . RUTA_SERVER . "/pantallas/intranet/";
-    }else if($ip == "::1"){
-      return "http://192.168.1.141" . RUTA_SERVER . "/pantallas/intranet/";
-    }else{
-      return "http://192.168.1.141" . RUTA_SERVER . "/pantallas/intranet/";
-    }
-  }
-
-  function direccionIPRutaBase(){
-    //Se trae la ip de donde esta ingresando
-    $ip = obtenerIp();
-    if ($ip == '201.236.254.67') {
-      return "http://192.168.1.141" . RUTA_SERVER . "/";
-    }else if($ip == "::1"){
-      return "http://192.168.1.141" . RUTA_SERVER . "/";
-    }else{
-      return "http://192.168.1.141" . RUTA_SERVER . "/";
-    }
-  }
+  //Se define el resto de las rutas
+  define("RUTA_ALMACENAMIENTO", RUTA_BASE . "almacenamiento/"); 
+  define("RUTA_CONSULTAS", RUTA_BASE . "pantallas/intranet/"); 
 
 ?>

@@ -119,7 +119,7 @@
 
     //Validamos que tenga el permiso
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: "biometrico_todos"},
@@ -157,7 +157,7 @@
   function cargarTabla(){
     $.ajax({
       type: "POST",
-      url: "<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php",
+      url: "<?php echo(RUTA_CONSULTAS); ?>paginas/biometrico/index.php",
       data: {accion: "listaTodos"},
       success: function(data){
         $("#contenido").empty();
@@ -176,7 +176,7 @@
 
   function sincronizar(){
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/biometrico/index.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'sincronizar'},
@@ -208,7 +208,7 @@
     $("#tituloModalBiometricoUsuario").html(nombre);
 
     $.ajax({
-      url: '<?php echo(direccionIPRuta()); ?>paginas/biometrico/index.php',
+      url: '<?php echo(RUTA_CONSULTAS); ?>paginas/biometrico/index.php',
       type: 'POST',
       dataType: 'html',
       data: {accion: 'marcacionUsuario', idUsuario: id, inicio: fecha_inicio, final: fecha_final},

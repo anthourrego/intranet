@@ -205,7 +205,7 @@
           
           $.ajax({
             type: "POST",
-            url: "<?php echo(direccionIPRuta()); ?>ajax/index.php",
+            url: "<?php echo(RUTA_CONSULTAS); ?>ajax/index.php",
             cache: false,
             contentType: false,
             dataType: 'json',
@@ -243,7 +243,6 @@
           });
         }
       });
-
 
       $("#btnEye").on("click", function(){
         if ($("#btnEye").attr("aria-pressed") == "false") {

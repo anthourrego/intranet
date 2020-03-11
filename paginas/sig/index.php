@@ -73,7 +73,7 @@
         </a>
       </div>
       <div class="col-10 col-md-3 text-center mt-4 iconos-sig">
-        <a class="text-decoration-none" id="contexto_organizacion" href="<?php echo direccionIP() . $ruta_documentos['Contexto de la organizacion']['mod_ruta'] ?>">
+        <a class="text-decoration-none" id="contexto_organizacion" href="<?php echo RUTA_DROPBOX . $ruta_documentos['Contexto de la organizacion']['mod_ruta'] ?>">
           <i class="fas fa-file-excel fa-5x"></i>
           <h4 class="mt-2">Contexto de la organización</h4>
         </a>
@@ -105,20 +105,20 @@
 <script type="text/javascript">
   $(function(){
     $.ajax({
-      url: '<?php echo(direccionIPRutaBase()); ?>app/funciones.php',
+      url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
       type: 'POST',
       dataType: 'json',
       data: {ejecutar_accion: 'modulo_lista_info', mod_nombre: 'intranet_sig', mod_tipo: 'intranet'},
       success: function(data){
-        $('#documentos_generales').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_documentos_generales.mod_ruta + '?ruta=/' + data.intranet_sig_documentos_generales.mod_ruta);
-        $('#matriz_responsabilidades_autoridad').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_matriz_responsabilidades_autoridad.mod_ruta);
-        $('#comunicaciones').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_matriz_comunicaciones.mod_ruta);
-        $('#aspectos_impactos_ambientales').attr('href', '<?php echo(direccionIP()); ?>' + data.  intranet_sig_matriz_aspectos_impactos_ambientales.mod_ruta + '?ruta=/' + data.  intranet_sig_matriz_aspectos_impactos_ambientales.mod_ruta);
-        $('#peligros_riesgos').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_matriz_peligros_riesgos_sst.mod_ruta + '?ruta=/' + data.intranet_sig_matriz_peligros_riesgos_sst.mod_ruta);
-        $('#contexto_organizacion').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_contexto_organizacion.mod_ruta);
-        $('#seguimiento_medicion').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_matriz_seguimiento_medicion.mod_ruta + '?ruta=/' + data.intranet_sig_matriz_seguimiento_medicion.mod_ruta);
-        $('#revision_direccion').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_revision_direccion.mod_ruta + '?ruta=/' + data.intranet_sig_revision_direccion.mod_ruta);
-        $('#certificaciones').attr('href', '<?php echo(direccionIP()); ?>' + data.intranet_sig_certificaciones.mod_ruta + '?ruta=/' + data.intranet_sig_certificaciones.mod_ruta);
+        $('#documentos_generales').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_documentos_generales.mod_ruta + '?ruta=/' + data.intranet_sig_documentos_generales.mod_ruta);
+        $('#matriz_responsabilidades_autoridad').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_matriz_responsabilidades_autoridad.mod_ruta);
+        $('#comunicaciones').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_matriz_comunicaciones.mod_ruta);
+        $('#aspectos_impactos_ambientales').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.  intranet_sig_matriz_aspectos_impactos_ambientales.mod_ruta + '?ruta=/' + data.  intranet_sig_matriz_aspectos_impactos_ambientales.mod_ruta);
+        $('#peligros_riesgos').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_matriz_peligros_riesgos_sst.mod_ruta + '?ruta=/' + data.intranet_sig_matriz_peligros_riesgos_sst.mod_ruta);
+        $('#contexto_organizacion').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_contexto_organizacion.mod_ruta);
+        $('#seguimiento_medicion').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_matriz_seguimiento_medicion.mod_ruta + '?ruta=/' + data.intranet_sig_matriz_seguimiento_medicion.mod_ruta);
+        $('#revision_direccion').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_revision_direccion.mod_ruta + '?ruta=/' + data.intranet_sig_revision_direccion.mod_ruta);
+        $('#certificaciones').attr('href', '<?php echo(RUTA_DROPBOX); ?>' + data.intranet_sig_certificaciones.mod_ruta + '?ruta=/' + data.intranet_sig_certificaciones.mod_ruta);
       },
       error: function(){
         alertify.error("Error al traer los daots de politicas.");
