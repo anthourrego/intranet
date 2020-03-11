@@ -13,8 +13,8 @@
 
   require_once($ruta_raiz . 'clases/librerias.php');
   require_once($ruta_raiz . 'clases/Session.php');
+  
   $lib = new Libreria;
-
   $session = new Session();
 
   if(@$session->exist('usuario')){
