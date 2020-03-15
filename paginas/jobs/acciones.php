@@ -19,13 +19,15 @@ function crearMarca(){
   $db = new Bd();
   $db->conectar();
 
-  if (validarMarcaNombre($_REQUEST['nombre']) == 0) {
-    $db->sentencia("INSERT INTO marcas (nombre, fecha_creacion, activo) VALUES (:nombre, :fecha_creacion, :activo)", array(":nombre" => $_REQUEST['nombre'],":fecha_creacion" => date('Y-m-d H:i:s'), ":activo" => 1));
+  $marca = trim($_REQUEST['nombre']);
+
+  if (validarMarcaNombre($marca) == 0) {
+    $db->sentencia("INSERT INTO marcas (nombre, fecha_creacion, activo) VALUES (:nombre, :fecha_creacion, :activo)", array(":nombre" => $marca,":fecha_creacion" => date('Y-m-d H:i:s'), ":activo" => 1));
     $resp = array("success" => true,
-                  "msj" => "La marca <b>"  . $_REQUEST['nombre'] . "</b> se ha creado.");
+                  "msj" => "La marca <b>"  . $marca . "</b> se ha creado.");
   }else{
     $resp = array("success" => false,
-                "msj" => "La marca <b>" . $_REQUEST['nombre'] . "</b> ya se encuentra creada.");
+                "msj" => "La marca <b>" . $marca . "</b> ya se encuentra creada.");
   }
   
   $db->desconectar();
@@ -33,11 +35,16 @@ function crearMarca(){
   return json_encode($resp);
 };
 
-function validarMarcaNombre($nombre){
+function validarMarcaNombre($nombre, $id = 0){
   $db = new Bd();
   $db->conectar();
 
-  $nombreMarca = $db->consulta("SELECT * FROM marcas WHERE nombre = :nombre", array(":nombre" => $nombre));
+  if ($id = 0) {
+    $nombreMarca = $db->consulta("SELECT * FROM marcas WHERE nombre = :nombre", array(":nombre" => $nombre));
+  }else{
+    $nombreMarca = $db->consulta("SELECT * FROM marcas WHERE id != :id AND nombre = :nombre", array(":nombre" => $nombre, ":id" => $id));
+  }
+
 
   $db->desconectar();
 
@@ -57,6 +64,39 @@ function ListaMarcas(){
   } else {
     $resp['success'] = false;
     $resp['msj'] = 'No existen datos.';
+  }
+
+  $db->desconectar();
+
+  return json_encode($resp);
+}
+
+function eliminarMarca(){
+  $db = new Bd();
+  $db->conectar();
+
+  $db->sentencia("UPDATE marcas SET activo = 0 WHERE id = :id", array(":id" => $_REQUEST['idMarca']));
+
+  $db->desconectar();
+
+  return json_encode(1);
+}
+
+function editarMarca(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  $nombre = trim($_REQUEST['nombre']);
+
+  if (validarMarcaNombre($nombre, $_REQUEST['idMarca']) == 0) {
+    $db->sentencia("UPDATE marcas SET nombre = :nombre WHERE id = :id", array(":nombre" => $nombre, ":id" =>$_REQUEST['idMarca']));
+
+    $resp = array("success" => true,
+                  "msj" => "Se  ha actualizado el nombre");
+  }else{
+    $resp = array('success' => false,
+                  'msj' => "El nombre no se puede utilizar.</b>");
   }
 
   $db->desconectar();

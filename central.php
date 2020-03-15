@@ -97,13 +97,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/nosotros.php">
+          <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/nosotros">
             <i class="fas fa-fw fa-list"></i>
             <span>Nosotros</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/jobs/">
+          <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/jobs/marcas">
             <i class="fas fa-sitemap"></i>
             <span>Job's</span>
           </a>
