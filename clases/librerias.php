@@ -12,7 +12,7 @@
 
   require_once($ruta_raiz . 'clases/funciones_generales.php');
   require_once($ruta_raiz . 'clases/Session.php');
-
+  
   class Libreria{
     private $cadena_libreria;
     private $ruta_libreria;
@@ -52,7 +52,28 @@
     public function jqueryValidate(){
       $this->cadena_libreria = '
   <script type="text/javascript" src="'. $this->ruta_libreria .'jquery-validate/jquery.validate.min.js"></script>
-  <script type="text/javascript" src="'. $this->ruta_libreria .'jquery-validate/localization/messages_es.min.js"></script>';
+  <script type="text/javascript" src="'. $this->ruta_libreria .'jquery-validate/localization/messages_es.min.js"></script>
+  <script>
+    $(function(){
+      jQuery.validator.setDefaults({
+        debug: true,
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+          error.addClass("invalid-feedback");
+          element.closest(".form-group").append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass("is-invalid");
+          $(element).removeClass("is-valid");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass("is-invalid");
+          $(element).addClass("is-valid");
+        }
+      });
+      $("form").validate();
+    });
+  </script>';
       return($this->cadena_libreria); 
     }
 

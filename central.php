@@ -102,12 +102,12 @@
             <span>Nosotros</span>
           </a>
         </li>
-        <!--<li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/jobs/">
             <i class="fas fa-sitemap"></i>
             <span>Job's</span>
           </a>
-        </li>-->
+        </li>
         <!--</li><li class="nav-item">
           <a class="nav-link link" target="object-contenido" href="<?php $ruta_raiz ?>paginas/funcionario_compra/">
             <i class="fas fa-store"></i>
@@ -280,6 +280,26 @@
     function cerrarSesion(){
       localStorage.removeItem("url<?php echo(PROYECTO) ?>");
       window.location.href='<?php echo $ruta_raiz ?>clases/sessionCerrar';
+    }
+
+    function validarPermiso(nombre_permiso){
+      var datos;
+      $.ajax({
+        async: false,
+        url: '<?php echo(RUTA_BASE); ?>app/funciones.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {ejecutar_accion: 'permiso_fun_app', mod_tipo: 'intranet', fun_id: <?php echo($usuario['id']); ?>, mod_nombre: nombre_permiso},
+        success: function(data){
+          datos = data.length;
+        },
+        error: function(){
+          alertify.error('No ha validado el permiso');
+          datos = 0;
+        }
+      });
+
+      return datos;
     }
   </script>
 </html>

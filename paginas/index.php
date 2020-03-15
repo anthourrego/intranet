@@ -42,26 +42,10 @@
       <div class="row">
         <div class="col-12">
         <a href="<?php echo RUTA_RAIZ; ?>paginas/creser/">
-          <img src="../img/banner1.gif" class="w-100 mb-3 rounded">
+          <img src="<?php echo($ruta_raiz); ?>img/banner1.gif" class="w-100 mb-3 rounded">
         </a>
         </div>
       </div>
-
-      <?php
-      /*if (obtenerIp() == '201.236.254.67') {
-      ?>
-        <div class="row">
-          <div class="col-12 text-center">
-            <video class="video-principal" controls autoplay muted>
-              <source src="<?php echo RUTA_RAIZ; ?>videos/hyundai.mp4" type="video/mp4">
-              Su navegador no soporta este video...
-            </video>
-          </div>
-        </div>
-        <hr>
-      <?php
-      }*/
-      ?>
       <div class="row mb-5">
         <div class="col-12 bg-white border border-secondary rounded">
           <ul class="nav nav-pills mb-3 mt-3 justify-content-center" id="pills-tab" role="tablist">
@@ -207,34 +191,34 @@
             <div class="tab-pane fade" id="pills-nuestra-cultura" role="tabpanel" aria-labelledby="pills-nuestra-cultura-tab">
               <h3>Competencias</h3>
               <div class="text-center">
-                <img class="w-50" src="../img/creser/01.png">
+                <img class="w-50" src="<?php echo($ruta_raiz); ?>img/creser/01.png">
               </div>
               <div class="row mt-4">
                 <div class="col-3 text-center">
-                  <img class="w-75" src="../img/creser/03.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/03.png">
                 </div>
                 <div class="col-3 text-center">
-                  <img class="w-75" src="../img/creser/04.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/04.png">
                 </div>
                 <div class="col-3 text-center">
-                  <img class="w-75" src="../img/creser/05.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/05.png">
                 </div>
                 <div class="col-3 text-center">
-                  <img class="w-75" src="../img/creser/06.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/06.png">
                 </div>
               </div>
               <div class="text-center mt-5">
-                <img class="w-25" src="../img/creser/02.png">
+                <img class="w-25" src="<?php echo($ruta_raiz); ?>img/creser/02.png">
               </div>
               <div class="row mt-4">
                 <div class="col-4 text-center">
-                  <img class="w-75" src="../img/creser/07.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/07.png">
                 </div>
                 <div class="col-4 text-center">
-                  <img class="w-75" src="../img/creser/08.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/08.png">
                 </div>
                 <div class="col-4 text-center">
-                  <img class="w-75" src="../img/creser/09.png">
+                  <img class="w-75" src="<?php echo($ruta_raiz); ?>img/creser/09.png">
                 </div>
               </div>
               <hr>
