@@ -104,6 +104,95 @@ function editarMarca(){
   return json_encode($resp);
 }
 
+function selectTecnologia(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  $sql = $db->consulta("SELECT * FROM tecnologias WHERE activo = 1 AND fk_tecnologia = :fk_tecnologia", array(":fk_tecnologia" => $_REQUEST['tecnologia']));
+
+  if ($sql['cantidad_registros'] > 0) {
+    $resp = array("success" => true,
+                  "msj" => $sql);
+  }else{
+    $resp = array("success" => false,
+                  "msj" => "No se han encontrado datos.");
+  }
+
+  $db->desconectar();
+
+  return json_encode($resp);
+}
+
+function crearReferencia(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  if (isset($_REQUEST['referencia']) && isset($_REQUEST['tecnologia'])) {
+    $referencia = trim($_REQUEST['referencia']);
+
+    if (validarNombreReferencia($referencia) == 0) {
+      $db->sentencia("INSERT INTO referencias (referencia, fecha_creacion, fk_marca) VALUES (:referencia, :fecha_creacion, :fk_marca)", array(":referencia" => $referencia, ":fecha_creacion" => date("Y-m-d H:i:s"), ":fk_marca" => $_REQUEST['fk_marca']));
+
+      $idReferencia = $db->consulta('SELECT * FROM referencias WHERE fk_marca = :fk_marca AND referencia = :referencia', array(":fk_marca" => $_REQUEST['fk_marca'], ":referencia" => $referencia));
+
+      if ($idReferencia['cantidad_registros'] == 1) {
+
+        foreach($_POST['tecnologia'] as $tec) {
+          $db->sentencia("INSERT INTO referencias_tecnologias (fk_referencia, fk_tecnologia, fecha_creacion, activo) VALUES (:fk_referencia, :fk_tecnologia, :fecha_creacion, :activo)", array(":fk_referencia" => $idReferencia[0]['id'], ":fk_tecnologia" => $tec, ":fecha_creacion" => date("Y-m-d H:i:s"), ":activo" => 1));
+        }
+
+        $resp = array("success" => true,
+                    "msj" => 'Se ha creado la referencia <b>' . $referencia . '</b>');
+      }else{
+        $resp = array("success" => false,
+                    "msj" => 'Error al crear la referencia <b>' . $referencia . '</b>.');
+      }
+
+    }else{
+      $resp = array("success" => false,
+                    "msj" => 'Esta referencia <b>' . $referencia . '</b> ya se encuentra creado.');
+    }
+  } else {
+    $resp = array("success" => false,
+                  "msj" => "Algunos campos no se encuentra definidos.");
+  }
+
+  $db->desconectar();
+
+  return json_encode($resp);
+}
+
+function validarNombreReferencia($referencia){
+  $db = new Bd();
+  $db->conectar();
+
+  $validar = $db->consulta("SELECT * FROM referencias WHERE referencia = :referencia", array(":referencia" => $referencia));
+
+  $db->desconectar();
+  return json_encode($validar['cantidad_registros']);
+}
+
+function listaReferencias(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  $referencias = $db->consulta("SELECT r.id, r.referencia FROM referencias_tecnologias AS rt INNER JOIN referencias AS r ON r.id = rt.fk_referencia WHERE r.fk_marca = :fk_marca AND rt.fk_tecnologia = :fk_tecnologia", array(":fk_marca" => $_REQUEST['marca'], ":fk_tecnologia" => $_REQUEST['tecnologia']));
+  
+  if ($referencias['cantidad_registros'] > 0) {
+    $resp = array("success" => true,
+                  "msj" => $referencias);
+  } else {
+    $resp = array("success" => false,
+                  "msj" => "No se han encontrado referencias relacionadas.");
+  }
+  
+  $db->desconectar();
+  return json_encode($resp);
+}
+
 if(@$_REQUEST['accion']){
 	if(function_exists($_REQUEST['accion'])){
 		echo($_REQUEST['accion']($_REQUEST));

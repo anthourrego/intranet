@@ -253,7 +253,7 @@
                   <td class="text-center">
                     <button class='btn btn-primary' data-toggle="tooltip" data-placement="top" title="Editar" onclick="modalEditarMarca(${data.msj[i].id} , '${data.msj[i].nombre}')"><i class="fas fa-edit"></i></button>
                     <button class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="eliminarMarca(${data.msj[i].id} , '${data.msj[i].nombre}')"><i class="far fa-trash-alt"></i></button>
-                    <a class="btn btn-success" href="referencias?marca=${data.msj[i].id}&nombre='${data.msj[i].nombre}'" data-toggle="tooltip" data-placement="top" title="Ingresar"><i class="fas fa-sign-in-alt"></i></a>
+                    <a class="btn btn-success" href="referencias?marca=${data.msj[i].id}&nombre=${data.msj[i].nombre}" data-toggle="tooltip" data-placement="top" title="Ingresar"><i class="fas fa-sign-in-alt"></i></a>
                   </td>
                 </tr>
               `);
@@ -264,7 +264,7 @@
                                             </tr>`);
             for (let i = 0; i < data.msj.cantidad_registros; i++) {
               $("#marcas-tabla-tbody").append(`
-                <tr onClick="window.location='referencias?marca?marca=${data.msj[i].id}&nombre='${data.msj[i].nombre}'">
+                <tr onClick="window.location='referencias?marca?marca=${data.msj[i].id}&nombre=${data.msj[i].nombre}">
                   <td>${data.msj[i].nombre}</td>
                 </tr>
               `);
