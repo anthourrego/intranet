@@ -63,7 +63,7 @@
     <hr>
     <div id="btn-referencia" class="d-flex justify-content-end m-3"></div>
   
-    <table class="table table-hover mt-4" id="referencia-tabla">
+    <table class="table table-hover mt-4 w-100" id="referencia-tabla">
       <thead id="referencia-tabla-thead">
         <tr>
           <th>Referencia</th>

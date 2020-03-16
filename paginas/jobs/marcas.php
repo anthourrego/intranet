@@ -40,7 +40,7 @@
   <div class="container mt-5 rounded pt-3 pb-5 border" style="background: rgba(255,255,255,0.6)">
     <div id="btn-marcas" class="d-flex justify-content-end m-3"></div>
   
-    <table class="table table-hover mt-4" id="marcas-tabla">
+    <table class="table table-hover mt-4 w-100" id="marcas-tabla">
       <thead id="marcas-tabla-thead">
         <tr>
           <th>Nombre</th>
