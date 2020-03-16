@@ -37,8 +37,8 @@
     define("RUTA_BASE","http://192.168.1.141/" . RUTA_SERVER ); 
     define("RUTA_DROPBOX","http://192.168.1.198/"); 
   }else if($ip == "::1"){
-    define("RUTA_BASE","http://192.168.1.141/" . RUTA_SERVER ); 
-    define("RUTA_DROPBOX","http://192.168.1.198/"); 
+    define("RUTA_BASE","http://201.236.254.67:141/" . RUTA_SERVER ); 
+    define("RUTA_DROPBOX","http://201.236.254.67:141/"); 
   }else{
     define("RUTA_BASE","http://201.236.254.67:141/" . RUTA_SERVER ); 
     define("RUTA_DROPBOX","http://201.236.254.67:6060/"); 
@@ -47,5 +47,41 @@
   //Se define el resto de las rutas
   define("RUTA_ALMACENAMIENTO", RUTA_BASE . "almacenamiento/"); 
   define("RUTA_CONSULTAS", RUTA_BASE . "pantallas/intranet/"); 
+
+  function textoblanco($texto){
+    $conv= array(" " => "");
+    //Guardamos el resultado en una variable
+    $textblanco = strtr($texto, $conv);
+    /* Cuenta cuantos caracteres tiene el texto */
+    $cont = strlen($textblanco);
+    /* Retornamos la cantidad */
+    return $cont;
+  }
+
+  function iconos($tipo){
+    $icono = "";
+    if ($tipo == "application/pdf") {
+      $icono = "fas fa-file-pdf";
+    }elseif ($tipo == "application/msword") {
+      $icono = "fas fa-file-word";
+    }elseif ($tipo == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+      $icono = "fas fa-file-word";
+    }elseif ($tipo == "application/vnd.ms-excel") {
+      $icono = "fas fa-file-excel";
+    }elseif ($tipo == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+      $icono = "fas fa-file-excel";
+    }elseif ($tipo == "application/x-zip-compressed") {
+      $icono = "fas fa-file-archive";
+    }elseif ($tipo == "application/zip" || $tipo == "rar") {
+      $icono = "fas fa-file-archive";
+    }elseif ($tipo == "application/vnd.ms-powerpoint") {
+      $icono = "fas fa-file-powerpoint";
+    }elseif ($tipo == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+      $icono = "fas fa-file-powerpoint";
+    }else{
+      $icono = "fas fa-file";
+    }
+    return $icono;
+  }
 
 ?>

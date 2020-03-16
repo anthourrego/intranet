@@ -45,7 +45,7 @@
 
     public function jquery(){
       $this->cadena_libreria = '
-  <script type="text/javascript" src="'. $this->ruta_libreria .'jquery/jquery-3.4.1.min.js"></script><script type="text/javascript"></script>';
+  <script type="text/javascript" src="'. $this->ruta_libreria .'jquery/jquery-3.3.1.min.js"></script><script type="text/javascript"></script>';
       return($this->cadena_libreria);
     }
 
@@ -71,7 +71,7 @@
           $(element).addClass("is-valid");
         }
       });
-      $("form").validate();
+      //$("form").validate();
     });
   </script>';
       return($this->cadena_libreria); 
@@ -130,7 +130,10 @@
       //Este nos ayuda con los input fila en boostrap se inicia como $(function(){bsCustomFileInput.init();});
       $this->cadena_libreria = '
       <!-- bs-custom-file-input -->
-      <script type="text/javascript" src="' . $this->ruta_libreria . 'bs-custom-file-input/bs-custom-file-input.min.js"></script>';
+      <script type="text/javascript" src="' . $this->ruta_libreria . 'bs-custom-file-input/bs-custom-file-input.min.js"></script>
+      <script>
+        $(function(){bsCustomFileInput.init();});
+      </script>';
       return $this->cadena_libreria;
     }
 
@@ -196,6 +199,21 @@
       return $this->cadena_libreria;
     }
 
+    public function jqueryForm(){
+      $this->cadena_libreria = '
+      <!-- JQuert Form -->
+      <script src="' . $this->ruta_libreria . 'jquery.form/jquery.form.js?"></script>';
+      return $this->cadena_libreria;
+    }
+
+    public function lightbox(){
+      $this->cadena_libreria = '
+      <!-- Intranet -->
+      <link rel="stylesheet" href="' . $this->ruta_libreria . 'lightbox/lightbox.css"/>
+      <script type="text/javascript" src="' . $this->ruta_libreria . 'lightbox/lightbox.js"></script>';
+      return $this->cadena_libreria;
+    }
+
     public function cambioPantalla(){
       $this->cadena_libreria = '
       <!-- Modal Archivos -->
@@ -216,6 +234,10 @@
       <script type="text/javascript">
         top.$("#cargando").modal("show");
         $(function(){
+          /*Mostramos los datos dentro del input file de boostrap */
+          $(".custom-file-input").on("change",function(){
+            $(this).next(".custom-file-label").addClass("selected").html($(this).val());
+          });
           localStorage.url' . PROYECTO . ' = window.location;
           var insideIframe = window.top !== window.self;
           if(!insideIframe){
