@@ -138,7 +138,7 @@
       $this->cadena_libreria = '
       <!-- Intranet -->
       <link rel="stylesheet" href="' . $this->ruta_libreria . 'intranet/intranet.css"/>
-      <script type="text/javascript" src="' . $this->ruta_libreria . 'intranet/intranet.js?2"></script>';
+      <script type="text/javascript" src="' . $this->ruta_libreria . 'intranet/intranet.js?3"></script>';
       return $this->cadena_libreria;
     }
 

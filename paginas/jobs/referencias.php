@@ -243,7 +243,6 @@
         }else{
           alertify.error(data.msj);
         }
-
       },
       error: function(){
         alertify.error('No se han encontrado datos.');

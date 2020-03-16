@@ -193,6 +193,58 @@ function listaReferencias(){
   return json_encode($resp);
 }
 
+function crearPI(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+  $pi = trim($_REQUEST['nombre']);
+
+  if (validarPI($pi) == 0) {
+    $db->sentencia("INSERT INTO pi (pi, unidades, fecha_creacion, activo, fk_referencia) VALUES (:pi, :unidades, :fecha_creacion, :activo, :fk_referencia)", array(":pi" => $pi, ":unidades" => $_REQUEST['unidades_pi'], ":fecha_creacion" => date("Y-m-d H:i:s"), ":activo" => 1, ":fk_referencia" => $_REQUEST['fk_referencia']));
+    $resp = array("success" => true,
+                  "msj" => "La PI <b>" . $pi . "</b> se ha creado.");
+  } else {
+    $resp = array("success" => false,
+                  "msj" => "La PI ya se encuentra creada");
+  }
+
+  $db->desconectar();
+
+  return json_encode($resp);
+}
+
+function validarPI($pi){
+  $db = new Bd();
+  $db->conectar();
+
+  $sql = $db->consulta("SELECT * FROM pi WHERE pi = :pi", array(":pi" => $pi));
+
+  $db->desconectar();
+
+  return json_encode($sql['cantidad_registros']);
+}
+
+function listaPI(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  $sql = $db->consulta("SELECT * FROM pi WHERE fk_referencia = :fk_referencia", array(":fk_referencia" => $_REQUEST['fk_referencia']));
+
+  if ($sql["cantidad_registros"] > 0) {
+    $resp = array("success" => true,
+                  "msj" => $sql);
+  } else {
+    $resp = array("success" => false,
+                  "msj" => "No hay PI creadas");
+  }
+  
+
+  $db->desconectar();
+
+  return json_encode($resp);
+}
+
 if(@$_REQUEST['accion']){
 	if(function_exists($_REQUEST['accion'])){
 		echo($_REQUEST['accion']($_REQUEST));
