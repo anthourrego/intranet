@@ -206,6 +206,10 @@
                   </div>
                 `); 
                 $("#formCrearReferencia :input[name='referencia']").val(""); 
+
+                if ($("#selectTecnologias").val() != null) {
+                  listaReferencias($("#selectTecnologias").val());
+                }
               }else{
                 alertify.error(data.msj);
               }
