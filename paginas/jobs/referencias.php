@@ -194,6 +194,17 @@
               if (data.success == true) {
                 $("#modalCrearReferencia").modal("hide");
                 alertify.success(data.msj);
+                $("#formSelectLinea").val(0);
+                $("#formSelectCategoria").val(0);
+                $("#formSelectCategoria").prop("disabled", true);
+                $("#check-tecnologia").html(`
+                  <div class="form-group col-12">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="categoriaCrear0" required disabled>
+                      <label class="custom-control-label" for="categoriaCrear0" value="0">Debe seleccionar una categoria</label>
+                    </div>
+                  </div>
+                `); 
                 $("#formCrearReferencia :input[name='referencia']").val(""); 
               }else{
                 alertify.error(data.msj);
@@ -282,7 +293,7 @@
         if (data.success == true) {
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
             $("#referencia-tabla-tbody").append(`
-              <tr>
+              <tr onClick="window.location.href='producto?id=${data.msj[i].id}&referencia=${data.msj[i].referencia}';">
                 <td>${data.msj[i].referencia}</td>
               </tr>
             `);

@@ -264,7 +264,7 @@
                                             </tr>`);
             for (let i = 0; i < data.msj.cantidad_registros; i++) {
               $("#marcas-tabla-tbody").append(`
-                <tr onClick="window.location='referencias?marca?marca=${data.msj[i].id}&nombre=${data.msj[i].nombre}">
+                <tr onClick="window.location.href='referencias?marca=${data.msj[i].id}&nombre=${data.msj[i].nombre}';">
                   <td>${data.msj[i].nombre}</td>
                 </tr>
               `);
