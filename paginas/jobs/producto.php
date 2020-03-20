@@ -103,16 +103,16 @@
   </div>
 
   <!-- Agregar Imagenes -->
-  <div class="modal fade bd-example-modal-md" id="agregarImagen" tabindex="-1" role="dialog" aria-labelledby="modalAgregarDocumentoTitle" aria-hidden="true">
+  <div class="modal fade" id="agregarImagen" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title font-weight-bold" id="modalAgregarImagenTitle">Agregar Imagenes</h5>
+          <h5 class="modal-title font-weight-bold">Agregar Imagenes</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form class="was-validated" novalidate id="formAgregarImagen" name="formAgregarImagen" method="post" autocomplete="off" enctype="multipart/form-data" action="acciones">
+        <form id="formAgregarImagen" method="post" autocomplete="off" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="custom-file">
               <input type="hidden" name="accion" value="subirImagenes">
@@ -120,20 +120,22 @@
               <input type="hidden" name="PIImagen" id="PIImagen">
               <input type="hidden" name="idRefImagen" id="idRefImagen" value="<?= $_REQUEST['id'] ?>">
               <input type="hidden" name="referenciaImagen" id="referenciaImagen" value="<?= $_REQUEST['referencia'] ?>">
-              <input required type="file" class="custom-file-input" id="imagenes" name="imagenes[]" multiple="true" accept=".jpg, .jpeg, .png">
-              <label class="custom-file-label" id="labelImagen" for="archivo">Seleccionar Archivo</label>
-              <small class="form-text text-muted">
-                Solo se permiten archivos jpg, jpeg, png.
-              </small>
+              <div class="form-group">
+                <input required type="file" class="custom-file-input" id="imagenes" name="imagenes[]" multiple="true" accept=".jpg, .jpeg, .png">
+                <label class="custom-file-label" id="labelImagen" for="archivo">Seleccionar Archivo</label>
+                <small class="form-text text-muted">
+                  Solo se permiten archivos jpg, jpeg, png.
+                </small>
+              </div>
             </div>
           </div>
-          <div class="modal-footer justify-content-center">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" id="subirImagen" name="subirImagen" class="btn btn-success">Subir</button>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Subir</button>
           </div>
         </form>
         <div class="progress mt-2" style="height: 25px;">
-          <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><div class="percent">0%</div></div>
+          <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><div class="percent">50%</div></div>
         </div>
       </div>
     </div>
@@ -183,7 +185,7 @@
           </div>
           <div class="modal-footer justify-content-center">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <input type="button" id="subirArchivo" class="btn btn-success" value="Agregar">
+            <input type="submit" class="btn btn-success" value="Agregar">
           </div>
         </form>
         <div class="progress mt-2" style="height: 25px;">
@@ -255,49 +257,66 @@
       // Variables de barra de progreso
       var bar = $('.progress-bar');
       var percent = $('.percent');
-      var status = $('#status');
+      //var status = $('#status');
       /*====================== Formulario Agregar Imagenes ================== */
-      $('#subirImagen').click(function(){
-        if (textoBlanco($('#imagenes')) > 0) {
-          $('#formAgregarImagen').submit();
-        }else{
-          alertify.warning('Debes de adjuntar una imagen');
-          imagenes.focus();
-        }
-      });
-
-      $('#formAgregarImagen').ajaxForm({
-        beforeSend: function() {
-          status.empty();
-          var percentVal = '0%';
-          bar.width(percentVal)
-          percent.html(percentVal);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-          var percentVal = percentComplete + '%';
-          bar.width(percentVal)
-          percent.html(percentVal);
-          //console.log(percentVal, position, total);
-        },
-        success: function() {
-          var percentVal = '100%';
-          bar.width(percentVal)
-          percent.html(percentVal);
-        },
-        complete: function(xhr) {
-          if (xhr.responseText === 'OK') {
-            alertify.success("Se han agregado correctamente");
-            cargarImagenes();
-            $('#agregarImagen').modal('hide');
-            $('#labelImagen').text('Seleccionar Archivo');
-            $('#imagenes').val('');
-            bar.width('0%');
-            percent.html('0%');
-          }else{
-            alertify.error(xhr.responseText);
-            bar.width('0%');
-            percent.html('0%');
-          }
+      $("#formAgregarImagen").submit(function(event){
+        event.preventDefault();
+        if ($(this).valid()) {
+          $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = ((evt.loaded / evt.total) * 100);
+                        $(".progress-bar").width(percentComplete + '%');
+                        $(".progress-bar").html(percentComplete+'%');
+                    }
+                }, false);
+                return xhr;
+            },
+            url: "acciones",
+            type: "POST",
+            dataType: "html",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: new FormData(this),
+            beforeSend: function(){
+              $(".progress-bar").width('0%');
+              $(".progress-bar").html('0%');
+            },
+            success: function(data){
+              if(data == "OK"){
+                alertify.success("Se han agregado correctamente");
+                cargarImagenes();
+                console.log();
+                //$("#formAgregarImagen").find('input').removeClass('is-valid');
+                //$("#formAgregarImagen").find('input').removeClass('is-invalid');
+                $('#agregarImagen').modal('hide');
+                $('#labelImagen').text('Seleccionar Archivo');
+                $('#imagenes').val('');
+              }else{
+                alertify.error("No se ha subido el archivo.");
+              }
+              /*if (data.success == true) {
+                $("#modalCrearPI").modal("hide");
+                alertify.success(data.msj);
+                $("#formCrearPI :input[name='nombre']").val(""); 
+                $("#formCrearPI :input[name='unidades_pi']").val(""); 
+              }else{
+                alertify.error(data.msj);
+              }*/
+            },
+            error: function(){
+              alertify.error("No se han enviado datos...");
+            },
+            complete: function(){
+              setTimeout(function(){
+                bar.width('0%');
+                percent.html('0%');
+              }, 1000);
+            }
+          });
         }
       });
       /* ==================================================================== */

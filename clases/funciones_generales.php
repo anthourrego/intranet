@@ -37,8 +37,8 @@
     define("RUTA_BASE","http://192.168.1.141/" . RUTA_SERVER ); 
     define("RUTA_DROPBOX","http://192.168.1.198/"); 
   }else if($ip == "::1"){
-    define("RUTA_BASE","http://201.236.254.67:141/" . RUTA_SERVER ); 
-    define("RUTA_DROPBOX","http://201.236.254.67:141/"); 
+    define("RUTA_BASE","http://192.168.1.141/" . RUTA_SERVER ); 
+    define("RUTA_DROPBOX","http://192.168.1.141/"); 
   }else{
     define("RUTA_BASE","http://201.236.254.67:141/" . RUTA_SERVER ); 
     define("RUTA_DROPBOX","http://201.236.254.67:6060/"); 

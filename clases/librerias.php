@@ -45,7 +45,7 @@
 
     public function jquery(){
       $this->cadena_libreria = '
-  <script type="text/javascript" src="'. $this->ruta_libreria .'jquery/jquery-3.3.1.min.js"></script><script type="text/javascript"></script>';
+  <script type="text/javascript" src="'. $this->ruta_libreria .'jquery/jquery-3.4.1.min.js"></script><script type="text/javascript"></script>';
       return($this->cadena_libreria);
     }
 
@@ -65,13 +65,19 @@
         highlight: function (element, errorClass, validClass) {
           $(element).addClass("is-invalid");
           $(element).removeClass("is-valid");
+          console.log("funca");
         },
         unhighlight: function (element, errorClass, validClass) {
           $(element).removeClass("is-invalid");
           $(element).addClass("is-valid");
+          console.log("No funca");
+        },
+        submitHandler: function() {
+          console.log("funca");
+          //return false;  // <-- add this line
         }
       });
-      //$("form").validate();
+      $("form").validate();
     });
   </script>';
       return($this->cadena_libreria); 
@@ -202,7 +208,7 @@
     public function jqueryForm(){
       $this->cadena_libreria = '
       <!-- JQuert Form -->
-      <script src="' . $this->ruta_libreria . 'jquery.form/jquery.form.js?"></script>';
+      <script src="' . $this->ruta_libreria . 'jquery.form/jquery.form.js?1"></script>';
       return $this->cadena_libreria;
     }
 
