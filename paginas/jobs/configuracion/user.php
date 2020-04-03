@@ -86,13 +86,13 @@
 
     $("#tree").fancytree({
         extensions: ["edit", "filter"],
-        source: [
-          {title: "Jobs", key: "1",folder: false, children: [
-            {title: "Folder 2", key: "2"}, 
-            {title: "Node 2.1", key: "3"},
-            {title: "Node 2.2", key: "4"}
-          ]}
-        ],
+        source: {
+          url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
+          cache: false,
+          data: {
+            accion:"permisos_usuarios"
+          },
+        },
         checkbox: true,
         icon:false
       });
