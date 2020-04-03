@@ -13,8 +13,12 @@ while($max_salida>0){
 include_once($ruta_raiz.'clases/define.php');
 include_once($ruta_raiz.'clases/funciones_generales.php');
 include_once($ruta_raiz.'clases/Conectar.php');
+include_once($ruta_raiz . 'clases/sessionActiva.php');
+$usuario = $session->get("usuario");
+
 
 function crearMarca(){
+  global $usuario;
   $resp = array();
   $db = new Bd();
   $db->conectar();
@@ -22,7 +26,11 @@ function crearMarca(){
   $marca = trim($_REQUEST['nombre']);
 
   if (validarMarcaNombre($marca) == 0) {
-    $db->sentencia("INSERT INTO marcas (nombre, fecha_creacion, activo) VALUES (:nombre, :fecha_creacion, :activo)", array(":nombre" => $marca,":fecha_creacion" => date('Y-m-d H:i:s'), ":activo" => 1));
+    //Insertamos la marca en la tabla
+    $ultimoId = $db->sentencia("INSERT INTO marcas (nombre, fecha_creacion, activo, fk_creador) VALUES (:nombre, :fecha_creacion, :activo, :fk_creador)", array(":nombre" => $marca,":fecha_creacion" => date('Y-m-d H:i:s'), ":activo" => 1, ":fk_creador" => $usuario['id']));
+
+    $db->insertLogs("marcas", $ultimoId, "Creacion de marca " . $marca, $usuario['id']);
+
     $resp = array("success" => true,
                   "msj" => "La marca <b>"  . $marca . "</b> se ha creado.");
   }else{
@@ -72,10 +80,13 @@ function ListaMarcas(){
 }
 
 function eliminarMarca(){
+  global $usuario;
   $db = new Bd();
   $db->conectar();
 
   $db->sentencia("UPDATE marcas SET activo = 0 WHERE id = :id", array(":id" => $_REQUEST['idMarca']));
+
+  $db->insertLogs("marcas", $_REQUEST['idMarca'], "Se eliminar la marca " . $_REQUEST['nombreMarca'], $usuario['id']);
 
   $db->desconectar();
 
@@ -83,6 +94,7 @@ function eliminarMarca(){
 }
 
 function editarMarca(){
+  global $usuario;
   $db = new Bd();
   $db->conectar();
   $resp = array();
@@ -91,6 +103,8 @@ function editarMarca(){
 
   if (validarMarcaNombre($nombre, $_REQUEST['idMarca']) == 0) {
     $db->sentencia("UPDATE marcas SET nombre = :nombre WHERE id = :id", array(":nombre" => $nombre, ":id" =>$_REQUEST['idMarca']));
+
+    $db->insertLogs("marcas", $_REQUEST['idMarca'], "Cambio nombre marca a " . $nombre, $usuario['id']);
 
     $resp = array("success" => true,
                   "msj" => "Se  ha actualizado el nombre");
