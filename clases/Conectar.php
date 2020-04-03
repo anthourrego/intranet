@@ -101,9 +101,19 @@
 
     public function sentencia($sql,$prepare=array()){
       $this->result = $this->conexion->prepare($sql); 
-      $this->result->execute($prepare);
+      try {
+        $this->result->execute($prepare);
+        return $this->conexion->lastInsertId();
+      } catch(PDOExecption $e) {
+          $this->conexion->rollback();
+          return "Error!: " . $e->getMessage() . "</br>";
+      }
     }
 
+    public function insertLogs($nombreTabla, $ultimoId, $accion, $fk_usuario){
+      $this->result = $this->conexion->prepare("INSERT INTO logs_jobs (nombre_tabla, id_registro, accion, fk_usuario, fecha_creacion) VALUES (:nombre_tabla, :id_registro, :accion, :fk_usuario, :fecha_creacion)"); 
+      $this->result->execute(array(":nombre_tabla" => $nombreTabla, ":id_registro" => $ultimoId, ":accion" =>  $accion, ":fk_usuario" => $fk_usuario, ":fecha_creacion" => date('Y-m-d H:i:s')));
+    }
 
     public function desconectar(){
       $this->vector_consulta = array();

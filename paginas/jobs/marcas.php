@@ -17,6 +17,7 @@
   $ruta_documentos = array();
 
   $lib = new Libreria;
+
 ?>
 
 <!DOCTYPE html>
@@ -210,7 +211,7 @@
       url: 'acciones.php',
       type: 'POST',
       dataType: 'json',
-      data: {accion: "eliminarMarca", idMarca: id},
+      data: {accion: "eliminarMarca", idMarca: id, nombreMarca: nombre},
       success: function(data){
         if (data == 1) {
           alertify.success("Se ha aliminado la marca <b>" + nombre + "</b>");
