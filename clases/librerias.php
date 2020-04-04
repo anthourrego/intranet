@@ -220,6 +220,15 @@
       return $this->cadena_libreria;
     }
 
+
+    public function fancytree(){
+      $this->cadena_libreria = '
+      <!-- Alertify - Tema de Bootstrap -->
+      <link rel="stylesheet" href="'. $this->ruta_libreria .'fancytree/skin-lion/ui.fancytree.css?0"/>
+      <script type="text/javascript" src="'. $this->ruta_libreria .'fancytree/jquery.fancytree-all-deps.min.js?0"></script>';
+      return($this->cadena_libreria);
+    }
+
     public function cambioPantalla(){
       $this->cadena_libreria = '
       <!-- Modal Archivos -->

@@ -239,6 +239,10 @@
                 alertify.success(data.msj);
                 $("#formCrearPI :input[name='nombre']").val(""); 
                 $("#formCrearPI :input[name='unidades_pi']").val(""); 
+                setTimeout(() => {
+                  location.reload();
+                }, 1500);
+                
               }else{
                 alertify.error(data.msj);
               }
