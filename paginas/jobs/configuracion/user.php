@@ -85,20 +85,37 @@
     iniciar_consulta();
 
     $("#tree").fancytree({
-        extensions: ["edit", "filter"],
-        source: {
-          url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
-          cache: false,
-          data: {
-            accion:"permisos_usuarios"
-          },
+      extensions: ["edit", "filter"],
+      source: {
+        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
+        cache: false,
+        data: {
+          accion:"permisos_usuarios"
         },
-        checkbox: true,
-        icon:false
-      });
+      },
+      checkbox: true,
+      icon:false
+    });
 
 
   $(".btn_permisos").on("click",function(){
+
+    var fun_id= $(this).attr("fun_id");
+
+
+    $("#tree").fancytree({
+      extensions: ["edit", "filter"],
+      source: {
+        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
+        cache: false,
+        data: {
+          accion:"permisos_usuarios",
+          fun_id:fun_id
+        },
+      },
+      checkbox: true,
+      icon:false
+    });
   
   });
 
