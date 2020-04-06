@@ -34,7 +34,7 @@
     echo $lib->jqueryValidate();
     echo $lib->datatables();
     echo $lib->intranet();
-    echo $lib->fancytree();
+    echo $lib->bootstrapTreeView();
   ?>
 </head>
 <body>
@@ -84,18 +84,7 @@
 	  dt_gestionUsuarios();	
     iniciar_consulta();
 
-    $("#tree").fancytree({
-      extensions: ["edit", "filter"],
-      source: {
-        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
-        cache: false,
-        data: {
-          accion:"permisos_usuarios"
-        },
-      },
-      checkbox: true,
-      icon:false
-    });
+   
 
 
   $(".btn_permisos").on("click",function(){
@@ -103,25 +92,44 @@
     var fun_id= $(this).attr("fun_id");
 
 
-    $("#tree").fancytree({
-      extensions: ["edit", "filter"],
-      source: {
-        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
-        cache: false,
-        data: {
-          accion:"permisos_usuarios",
-          fun_id:fun_id
-        },
-      },
-      checkbox: true,
-      icon:false
+    $('#tree').treeview({
+      data: getTree(fun_id)
     });
+
+
+    
   
   });
 
 
 
   });
+
+  function getTree(fun_id) {
+    var datatree= "";
+    $.ajax({
+        type: "POST",
+        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
+        cache: false,
+        dataType: 'json',
+        async:false,
+        data: {
+          accion:"permisos_usuarios",
+          fun_id:fun_id
+        },
+        success: function(data){
+         datatree= data
+        },
+        error: function(){
+          //Habilitamos el botón
+          $("#btn-login").attr("Disabled", false);
+          alertify.error("Error al inicar sesion.");
+        } 
+      });
+    return datatree;
+  }
+
+  
   //OPCIONES DE DATATABLE
   function dt_gestionUsuarios(){
       datatable =$("#table_usuarios").DataTable({       
