@@ -93,7 +93,18 @@
 
 
     $('#tree').treeview({
-      data: getTree(fun_id)
+      expanded: true,
+      data: getTree(fun_id),
+      // shows borders
+      showBorder:true,
+      // hows icons
+      showIcon:true,
+      // shows checkboxes
+      showCheckbox:false
+ 
+
+
+      
     });
 
 
