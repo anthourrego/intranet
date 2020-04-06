@@ -110,9 +110,9 @@
       }
     }
 
-    public function insertLogs($nombreTabla, $ultimoId, $accion, $fk_usuario){
+    public function insertLogs($nombreTabla, $idRegistro, $accion, $fk_usuario){
       $this->result = $this->conexion->prepare("INSERT INTO logs_jobs (nombre_tabla, id_registro, accion, fk_usuario, fecha_creacion) VALUES (:nombre_tabla, :id_registro, :accion, :fk_usuario, :fecha_creacion)"); 
-      $this->result->execute(array(":nombre_tabla" => $nombreTabla, ":id_registro" => $ultimoId, ":accion" =>  $accion, ":fk_usuario" => $fk_usuario, ":fecha_creacion" => date('Y-m-d H:i:s')));
+      $this->result->execute(array(":nombre_tabla" => $nombreTabla, ":id_registro" => $idRegistro, ":accion" =>  $accion, ":fk_usuario" => $fk_usuario, ":fecha_creacion" => date('Y-m-d H:i:s')));
     }
 
     public function desconectar(){
