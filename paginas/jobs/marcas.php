@@ -44,7 +44,7 @@
         <div id="btn-permisos" class="m-3"></div>
       </div>
       <div class="col md-3 offset-md-7">
-        <div id="btn-marcas" class="d-flex justify-content-end m-3"></div>
+        <div id="btn-marcas" class="d-flex justify-content-around m-3"></div>
       </div>
     </div>
   
@@ -132,7 +132,7 @@
 
     if ($btn_permiso == 1) {
       $("#btn-permisos").append(`
-        <a class="btn btn-info" href="configuracion/user.php"><i class="fas fa-plus"> Permisos</i></a>
+        <a class="btn btn-info" href="configuracion/user"><i class="fas fa-plus"></i> Permisos</a>
       `);
     }
 
