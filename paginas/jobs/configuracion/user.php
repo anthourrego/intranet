@@ -63,13 +63,14 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div id="tree">
+      <div class="modal-body" style="min-height: 50vh !important;">
+        <div class="form-group">
+          <input type="input" class="form-control" id="input-search" placeholder="Buscar una permiso" value="" autocomplete="off">
         </div>
+        <div id="tree"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
       </div>
     </div>
   </div>
@@ -90,24 +91,38 @@
     // accion boton para abrir arbol y asiganar permisos
     $(document).on("click",".btn_permisos",function(){
       var fun_id= $(this).attr("fun_id");
-      $('#tree').treeview({
-        data: getTree(fun_id),
-        color: "#428bca",
-        showIcon:true,
-        showCheckbox:true,
-        expanded: true,
-        
-        //eventos del checked asigna permiso
-        onNodeChecked: function(event, node) {
-          gestionPermisosJobs(node.idPermiso,fun_id,1);
-          //$('#checkable-output').prepend('<p>' + node.text + ' was checked</p>');
-        },
+      var initSelectableTree = function() {
+        return $('#tree').treeview({
+          data: getTree(fun_id),
+          color: "#428bca",
+          showIcon:true,
+          showCheckbox:true,
+          expanded: true,
+          
+          //eventos del checked asigna permiso
+          onNodeChecked: function(event, node) {
+            gestionPermisosJobs(node.idPermiso,fun_id,1);
+            //$('#checkable-output').prepend('<p>' + node.text + ' was checked</p>');
+          },
 
-        //eventos cuando se quita el checked quita permiso
-        onNodeUnchecked: function (event, node) {
-          gestionPermisosJobs(node.idPermiso,fun_id,0);
-          //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
-        }
+          //eventos cuando se quita el checked quita permiso
+          onNodeUnchecked: function (event, node) {
+            gestionPermisosJobs(node.idPermiso,fun_id,0);
+            //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+          }
+        });
+      }
+
+      var $selectableTree = initSelectableTree();
+
+      var findSelectableNodes = function() {
+        return $selectableTree.treeview('search', [ $('#input-search').val(), { ignoreCase: true, exactMatch: false } ])
+      };
+      var selectableNodes = findSelectableNodes();
+
+      $('#input-search').on('keyup', function (e) {
+        //$('#tree').treeview('collapseAll', { silent:true });
+        selectableNodes = findSelectableNodes();
       });
     });
   });
@@ -173,7 +188,7 @@
   function dt_gestionUsuarios(){
       datatable =$("#table_usuarios").DataTable({       
         paging: true,	
-        stateSave: true,	
+        stateSave: false,	
         "searching": true,
         "autoWidth": false,		
         ordering:false,
