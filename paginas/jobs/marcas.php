@@ -132,7 +132,7 @@
 
     if ($btn_permiso == 1) {
       $("#btn-permisos").append(`
-        <a class="btn btn-info" href="configuracion/user"><i class="fas fa-plus"></i> Permisos</a>
+        <a class="btn btn-info" href="configuracion/user"><i class="fas fa-key"></i> Permisos</a>
       `);
     }
 
