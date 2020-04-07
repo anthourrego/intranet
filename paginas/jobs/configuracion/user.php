@@ -38,9 +38,12 @@
   ?>
 </head>
 <body>
+  <!-- button ir atras -->
+  <!-- <i class="fas fa-plus" onclick="history.back()"> </i>    -->
+  
   <div class="container mt-5 rounded pt-3 pb-5 border" style="background: rgba(255,255,255,0.6)">
     <div class="mx-auto" style="width: 200px;">
-    <h5>Gestion de Usuarios</h5>
+      <h5>Gestion de Usuarios</h5>
     </div>
     <table class="table table-hover mt-4 w-100" id="table_usuarios">
       <thead id="marcas-tabla-thead">
@@ -65,8 +68,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        
       </div>
     </div>
   </div>
@@ -84,43 +87,68 @@
 	  dt_gestionUsuarios();	
     iniciar_consulta();
 
-   
+    // accion boton para abrir arbol y asiganar permisos
+    $(document).on("click",".btn_permisos",function(){
+      var fun_id= $(this).attr("fun_id");
+      $('#tree').treeview({
+        data: getTree(fun_id),
+        color: "#428bca",
+        showIcon:true,
+        showCheckbox:true,
+        expanded: true,
+        
+        //eventos del checked asigna permiso
+        onNodeChecked: function(event, node) {
+          gestionPermisosJobs(node.idPermiso,fun_id,1);
+          //$('#checkable-output').prepend('<p>' + node.text + ' was checked</p>');
+        },
 
-
-  $(".btn_permisos").on("click",function(){
-
-    var fun_id= $(this).attr("fun_id");
-
-
-    $('#tree').treeview({
-      expanded: true,
-      data: getTree(fun_id),
-      // shows borders
-      showBorder:true,
-      // hows icons
-      showIcon:true,
-      // shows checkboxes
-      showCheckbox:false
- 
-
-
-      
+        //eventos cuando se quita el checked quita permiso
+        onNodeUnchecked: function (event, node) {
+          gestionPermisosJobs(node.idPermiso,fun_id,0);
+          //$('#checkable-output').prepend('<p>' + node.text + ' was unchecked</p>');
+        }
+      });
     });
-
-
-    
-  
   });
 
+  // consulta a dyn para hacer la accion del boton
+  function gestionPermisosJobs(idPermiso,fun_id,accionPermiso){
 
-
-  });
+    //accionPermiso 1 si es seleccionado 0 si es deseleccionado
+    $.ajax({
+      type: "POST",
+      url: "<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
+      cache: false,
+      dataType: 'json',
+      async:false,
+      data: {
+        accion:"gestionPermisosJobs",
+        fun_id:fun_id,
+        idPermiso:idPermiso,
+        accionPermiso:accionPermiso
+      },
+      success: function(data){
+        if(data.exito){
+          if(accionPermiso == 0){
+            alertify.warning("Permiso Inhabilitado.");
+          }else if(accionPermiso == 1){
+            alertify.success("Permiso Habilitado.");
+          }
+        }
+      },
+      error: function(){
+        //Habilitamos el botón
+        alertify.error("Error al intentar modificar permiso.");
+      } 
+    });
+  }
 
   function getTree(fun_id) {
     var datatree= "";
     $.ajax({
         type: "POST",
-        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
+        url: "<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
         cache: false,
         dataType: 'json',
         async:false,
@@ -146,7 +174,7 @@
       datatable =$("#table_usuarios").DataTable({       
         paging: true,	
         stateSave: true,	
-        "searching": false,
+        "searching": true,
         "autoWidth": false,		
         ordering:false,
         columns: [
@@ -202,7 +230,7 @@
 
       $.ajax({
         type: "POST",
-        url: "<?php echo(RUTA_CONSULTAS); ?>ajax/jobs/gestionUsuarios.php",
+        url: "<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
         cache: false,
         dataType: 'json',
         async:false,

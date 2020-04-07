@@ -39,8 +39,16 @@
 </head>
 <body>
   <div class="container mt-5 rounded pt-3 pb-5 border" style="background: rgba(255,255,255,0.6)">
-    <div id="btn-marcas" class="d-flex justify-content-end m-3"></div>
+    <div class="row">
+      <div class="col md-2">
+        <div id="btn-permisos" class="m-3"></div>
+      </div>
+      <div class="col md-3 offset-md-7">
+        <div id="btn-marcas" class="d-flex justify-content-end m-3"></div>
+      </div>
+    </div>
   
+    
     <table class="table table-hover mt-4 w-100" id="marcas-tabla">
       <thead id="marcas-tabla-thead">
         <tr>
@@ -112,12 +120,19 @@
   $(function(){
     
     $permiso = top.validarPermiso('jobs_marcas');
+    $btn_permiso = top.validarPermiso('jobs_gestion_permisos');
     //Cargamos la tabla de marcas
     cargarMarcas();
 
     if ($permiso == 1) {
       $("#btn-marcas").append(`
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalCrearMarca"><i class="fas fa-plus"></i> Crear Marca</button>
+      `);
+    }
+
+    if ($btn_permiso == 1) {
+      $("#btn-permisos").append(`
+        <a class="btn btn-info" href="configuracion/user.php"><i class="fas fa-plus"> Permisos</i></a>
       `);
     }
 
