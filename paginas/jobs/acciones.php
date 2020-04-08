@@ -476,7 +476,7 @@ function listaDocumentos(){
 
 if(@$_REQUEST['accion']){
 	if(function_exists($_REQUEST['accion'])){
-		echo($_REQUEST['accion']($_REQUEST));
+		echo($_REQUEST['accion']());
 	}
 }
 ?>

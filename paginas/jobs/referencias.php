@@ -124,10 +124,17 @@
 <script>
   $(function(){
     $permiso = top.validarPermiso('jobs_referencias');
+    $permisoTec = top.validarPermiso('jobs_tecnologias');
     cerrarCargando();
     if ($permiso == 1) {
       $("#btn-referencia").append(`
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalCrearReferencia"><i class="fas fa-plus"></i> Crear Referencia</button>
+        <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#modalCrearReferencia"><i class="fas fa-plus"></i> Crear Referencia</button>
+      `);
+    }
+
+    if ($permisoTec == 1) {
+      $("#btn-referencia").append(`
+        <a href="configuracion/tecnologia" class="btn btn btn-primary mr-2"><i class="fas fa-microchip"></i> Tecnologías</a>
       `);
     }
 

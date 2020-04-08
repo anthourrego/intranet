@@ -65,16 +65,10 @@
         highlight: function (element, errorClass, validClass) {
           $(element).addClass("is-invalid");
           $(element).removeClass("is-valid");
-          console.log("funca");
         },
         unhighlight: function (element, errorClass, validClass) {
           $(element).removeClass("is-invalid");
           $(element).addClass("is-valid");
-          console.log("No funca");
-        },
-        submitHandler: function() {
-          console.log("funca");
-          //return false;  // <-- add this line
         }
       });
       $("form").validate();

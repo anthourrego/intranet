@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-04-2020 a las 20:28:40
+-- Tiempo de generación: 08-04-2020 a las 23:38:32
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.3
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `intranet1`
+-- Base de datos: `intranet`
 --
 
 -- --------------------------------------------------------
@@ -55,7 +55,6 @@ CREATE TABLE `categorias` (
   `activo` int(11) NOT NULL DEFAULT 1,
   `publico` int(11) NOT NULL DEFAULT 1,
   `fk_categoria` int(11) NOT NULL DEFAULT 0,
-  `fk_tipo_archivo` int(11) NOT NULL DEFAULT 0,
   `fk_creador` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -145,6 +144,7 @@ CREATE TABLE `tecnologias` (
   `fecha_creacion` datetime NOT NULL,
   `activo` int(11) NOT NULL DEFAULT 1,
   `fk_tecnologia` int(11) NOT NULL DEFAULT 0,
+  `nivel` int(11) NOT NULL DEFAULT 1,
   `fk_creador` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -152,39 +152,39 @@ CREATE TABLE `tecnologias` (
 -- Volcado de datos para la tabla `tecnologias`
 --
 
-INSERT INTO `tecnologias` (`id`, `nombre`, `fecha_creacion`, `activo`, `fk_tecnologia`, `fk_creador`) VALUES
-(1, 'Línea Marrón', '2020-03-15 00:32:27', 1, 0, 0),
-(2, 'Línea Blanca', '2020-03-15 00:32:49', 1, 0, 0),
-(3, 'Televisores', '2020-03-15 00:32:56', 1, 1, 0),
-(4, 'Accesorios', '2020-03-15 00:33:04', 1, 1, 0),
-(5, 'Audio y Video', '2020-03-15 00:33:10', 1, 1, 0),
-(6, 'Alta potencia', '2020-03-15 00:33:21', 1, 3, 0),
-(7, 'Básicos', '2020-03-15 00:33:31', 1, 3, 0),
-(8, 'Curvo', '2020-03-15 00:33:39', 1, 3, 0),
-(9, 'Smart', '2020-03-15 00:33:39', 1, 3, 0),
-(10, 'UHD (4K)', '2020-03-15 00:33:57', 1, 3, 0),
-(11, 'Voice Assistant', '2020-03-15 00:34:05', 1, 4, 0),
-(12, 'Smart', '2020-03-15 00:34:16', 1, 4, 0),
-(13, 'MultiStream', '2020-03-15 00:34:23', 1, 4, 0),
-(14, 'Barras de sonido', '2020-03-15 00:34:37', 1, 5, 0),
-(15, 'Mini componentes', '2020-03-15 00:34:45', 1, 5, 0),
-(16, 'Parlantes Multimedia', '2020-03-15 00:34:55', 1, 5, 0),
-(17, 'Decodificadores', '2020-03-15 00:35:05', 1, 5, 0),
-(18, 'DVD', '2020-03-15 00:35:10', 1, 5, 0),
-(19, 'Aires Acondicionados', '2020-03-15 00:35:23', 1, 2, 0),
-(20, 'Refrigeración', '2020-03-15 00:35:32', 1, 2, 0),
-(21, 'Pequeños Electrodomésticos', '2020-03-15 00:35:38', 1, 2, 0),
-(22, 'Lavadoras', '2020-03-15 00:35:43', 1, 2, 0),
-(23, 'Split', '2020-03-15 00:35:51', 1, 19, 0),
-(24, 'Inverter', '2020-03-15 00:36:10', 1, 19, 0),
-(25, 'Portati', '2020-03-15 00:36:17', 1, 19, 0),
-(26, 'Wifi', '2020-03-15 00:36:24', 1, 19, 0),
-(27, 'Congeladores Horizontales', '2020-03-15 00:36:35', 1, 20, 0),
-(28, 'Vitrinas Verticales', '2020-03-15 00:36:45', 1, 20, 0),
-(29, 'Neveras Minibar', '2020-03-15 00:36:52', 1, 20, 0),
-(30, 'Freidora de Aire', '2020-03-15 00:37:04', 1, 21, 0),
-(31, 'Microondas', '2020-03-15 00:37:14', 1, 21, 0),
-(32, 'Lavadoras', '2020-03-15 00:37:31', 1, 22, 0);
+INSERT INTO `tecnologias` (`id`, `nombre`, `fecha_creacion`, `activo`, `fk_tecnologia`, `nivel`, `fk_creador`) VALUES
+(1, 'Línea Marrón', '2020-03-15 00:32:27', 1, 0, 1, 98),
+(2, 'Línea Blanca', '2020-03-15 00:32:49', 1, 0, 1, 98),
+(3, 'Televisores', '2020-03-15 00:32:56', 1, 1, 2, 98),
+(4, 'Accesorios', '2020-03-15 00:33:04', 1, 1, 2, 98),
+(5, 'Audio y Video', '2020-03-15 00:33:10', 1, 1, 2, 98),
+(6, 'Alta potencia', '2020-03-15 00:33:21', 1, 3, 3, 98),
+(7, 'Básicos', '2020-03-15 00:33:31', 1, 3, 3, 98),
+(8, 'Curvo', '2020-03-15 00:33:39', 1, 3, 3, 98),
+(9, 'Smart', '2020-03-15 00:33:39', 1, 3, 3, 98),
+(10, 'UHD (4K)', '2020-03-15 00:33:57', 1, 3, 3, 98),
+(11, 'Voice Assistant', '2020-03-15 00:34:05', 1, 4, 3, 98),
+(12, 'Smart', '2020-03-15 00:34:16', 1, 4, 3, 98),
+(13, 'MultiStream', '2020-03-15 00:34:23', 1, 4, 3, 98),
+(14, 'Barras de sonido', '2020-03-15 00:34:37', 1, 5, 3, 98),
+(15, 'Mini componentes', '2020-03-15 00:34:45', 1, 5, 3, 98),
+(16, 'Parlantes Multimedia', '2020-03-15 00:34:55', 1, 5, 3, 98),
+(17, 'Decodificadores', '2020-03-15 00:35:05', 1, 5, 3, 98),
+(18, 'DVD', '2020-03-15 00:35:10', 1, 5, 3, 98),
+(19, 'Aires Acondicionados', '2020-03-15 00:35:23', 1, 2, 2, 98),
+(20, 'Refrigeración', '2020-03-15 00:35:32', 1, 2, 2, 98),
+(21, 'Pequeños Electrodomésticos', '2020-03-15 00:35:38', 1, 2, 2, 98),
+(22, 'Lavadoras', '2020-03-15 00:35:43', 1, 2, 2, 98),
+(23, 'Split', '2020-03-15 00:35:51', 1, 19, 3, 98),
+(24, 'Inverter', '2020-03-15 00:36:10', 1, 19, 3, 98),
+(25, 'Portatil', '2020-03-15 00:36:17', 1, 19, 3, 98),
+(26, 'Wifi', '2020-03-15 00:36:24', 1, 19, 3, 98),
+(27, 'Congeladores Horizontales', '2020-03-15 00:36:35', 1, 20, 3, 98),
+(28, 'Vitrinas Verticales', '2020-03-15 00:36:45', 1, 20, 3, 98),
+(29, 'Neveras Minibar', '2020-03-15 00:36:52', 1, 20, 3, 98),
+(30, 'Freidora de Aire', '2020-03-15 00:37:04', 1, 21, 3, 98),
+(31, 'Microondas', '2020-03-15 00:37:14', 1, 21, 3, 98),
+(32, 'Lavadoras', '2020-03-15 00:37:31', 1, 22, 3, 98);
 
 -- --------------------------------------------------------
 
@@ -211,6 +211,39 @@ CREATE TABLE `tipo_archivo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `extensiones` varchar(100) NOT NULL,
+  `estado` int(11) NOT NULL DEFAULT 0,
+  `fecha_creacion` datetime NOT NULL,
+  `fk_creador` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `tipo_archivo`
+--
+
+INSERT INTO `tipo_archivo` (`id`, `nombre`, `extensiones`, `estado`, `fecha_creacion`, `fk_creador`) VALUES
+(1, 'imagen', 'jpg', 1, '2020-04-07 16:29:00', 98),
+(2, 'imagen', 'jpeg', 1, '2020-04-07 16:29:00', 98),
+(3, 'imagen', 'png', 1, '2020-04-07 16:29:00', 98),
+(4, 'documento', 'docx', 1, '2020-04-07 16:29:00', 98),
+(5, 'documento', 'xlsx', 1, '2020-04-07 16:29:00', 98),
+(6, 'documento', 'pptx', 1, '2020-04-07 16:29:00', 98),
+(8, 'documento', 'xls', 1, '2020-04-07 16:29:00', 98),
+(9, 'documento', 'ppt', 1, '2020-04-07 16:29:00', 98),
+(10, 'documento', 'doc', 1, '2020-04-07 16:29:00', 98),
+(11, 'documento', 'pdf', 1, '2020-04-07 16:29:00', 98),
+(12, 'archivo', 'rar', 1, '2020-04-07 16:29:00', 98),
+(13, 'archivo', 'zip', 1, '2020-04-07 16:29:00', 98);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_archivo_categoria`
+--
+
+CREATE TABLE `tipo_archivo_categoria` (
+  `id` int(11) NOT NULL,
+  `fk_categoria` int(11) NOT NULL DEFAULT 0,
+  `fk_tarchivo` int(11) NOT NULL DEFAULT 0,
   `estado` int(11) NOT NULL DEFAULT 0,
   `fecha_creacion` datetime NOT NULL,
   `fk_creador` int(11) NOT NULL DEFAULT 0
@@ -281,6 +314,12 @@ ALTER TABLE `tipo_archivo`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `tipo_archivo_categoria`
+--
+ALTER TABLE `tipo_archivo_categoria`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -306,7 +345,7 @@ ALTER TABLE `logs_jobs`
 -- AUTO_INCREMENT de la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `pi`
@@ -342,6 +381,12 @@ ALTER TABLE `tecnologia_no_compatible`
 -- AUTO_INCREMENT de la tabla `tipo_archivo`
 --
 ALTER TABLE `tipo_archivo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_archivo_categoria`
+--
+ALTER TABLE `tipo_archivo_categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
