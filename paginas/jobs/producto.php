@@ -202,12 +202,18 @@
 <script>
   $(function(){
     $permiso = top.validarPermiso('jobs_pi');
+    $permiso_categorias = top.validarPermiso('categoria_tipo_archivos');
     cerrarCargando();
     btnPI();
 
     if ($permiso == 1) {
       $("#btn-pi").append(`
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalCrearPI"><i class="fas fa-plus"></i> Crear PI</button>
+        <button class="btn btn-success" data-toggle="modal" data-target="#modalCrearPI"><i class="fas fa-plus"></i> Crear PI</button>
+      `);
+    }
+    if ($permiso_categorias == 1) {
+      $("#btn-pi").append(`
+        <a class="btn btn-info ml-2 text-white" href="view/producto/categoria_archivos"><i class="fas fa-plus"></i> Categoria Archivos</a>
       `);
     }
 

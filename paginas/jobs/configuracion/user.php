@@ -85,6 +85,12 @@
     //INICIAR VARIABLE GLOBAL DE DATATABLE
     window.datatable='';	
 
+    $btn_permiso = top.validarPermiso('jobs_gestion_permisos');
+
+    if(!$btn_permiso){
+      window.location.href="<?php echo($ruta_raiz)?>paginas";
+    }
+
 	  dt_gestionUsuarios();	
     iniciar_consulta();
 
