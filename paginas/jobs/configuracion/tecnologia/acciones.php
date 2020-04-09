@@ -63,16 +63,7 @@
     $db = new Bd();
     $db->conectar();
 
-    if ($_REQUEST['idTecnologia'] == 0) {
-      $lista = $db->consulta("SELECT * FROM tecnologias WHERE nivel != 3 AND activo = 1");
-    }else{
-      if ($_REQUEST['fkTecnologia'] == 0) {
-        $lista = $db->consulta("SELECT * FROM tecnologias WHERE nivel != 3 AND activo = 1 AND fk_tecnologia != :fk_tecnologia AND id != :id", array(":fk_tecnologia" => $_REQUEST['idTecnologia'], ":id" => $_REQUEST['idTecnologia']));
-      }else{
-        $lista = $db->consulta("SELECT * FROM tecnologias WHERE nivel != 3 AND activo = 1 AND fk_tecnologia != :fk_tecnologia AND id != :id AND fk_tecnologia != :fk_Tecnologia1", array(":fk_tecnologia" => $_REQUEST['idTecnologia'], ":id" => $_REQUEST['idTecnologia'], ":fk_Tecnologia1" => $_REQUEST['fkTecnologia']));
-      }
-
-    }
+    $lista = $db->consulta("SELECT * FROM tecnologias WHERE nivel != 3 AND activo = 1 AND id != :idTec", array(":idTec" => $_REQUEST["idTecnologia"]));
 
     if ($lista["cantidad_registros"] > 0) {
       $resp = array(

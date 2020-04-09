@@ -132,7 +132,7 @@
       window.location.href = "../../marcas.php";
     } */
     cargarArbol(0);
-    cargarSelect();
+    //cargarSelect();
     //Formulario de crear padre
     $("#formCrearTecnologia").submit(function(e){
       e.preventDefault();
@@ -182,7 +182,7 @@
 
               //Se cargan todos los datos datos del arbol y del select
               cargarArbol();
-              cargarSelect(idSelect);
+              cargarSelect(0, idSelect);
               
               //Volvemos a deshabilitar los campos
               $("#formEditar :input[name='idTecnologia']").attr("disabled", true);
@@ -231,30 +231,37 @@
     });
 
     $("#crearTecnologiaModal").on("show.bs.modal", function(e){
-      cargarSelect();
+      cargarSelect(2);
     });
 
   });
 
-  function cargarSelect(fkTec = 0, idTec = 0){
+  function cargarSelect(idSelec = 0, fkTec = 0, idTec = 0){
     $.ajax({
       url: "acciones",
       type: "POST",
       dataType: "json",
       data: {
         accion: "listaTecnologia",
-        idTecnologia: idTec,
-        fkTecnologia: fkTec
+        idTecnologia: idTec
       },
       success: function(data){
         if (data.success) {
-          $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").empty();
+          $inputSelect = "#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']";
+          if (idSelec == 1) {
+            $inputSelect = "#formEditar :input[name='tecPadre']";
+          }else if(idSelec == 2){
+            $inputSelect = "#formCrearTecnologia :input[name='fk_tecnologia']";
+          }
 
-          $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").append(`
+
+          $($inputSelect).empty();
+
+          $($inputSelect).append(`
             <option value="0" selected>Raíz</option>
           `);
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
-            $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").append(`
+            $($inputSelect).append(`
               <option data-nivel="${data.msj[i].nivel}" value="${data.msj[i].id}">${data.msj[i].nombre}</option>
             `); 
           }
@@ -316,7 +323,7 @@
             showTags: true,
             onNodeSelected: function(event, node) {
               //Cargamos el select
-              cargarSelect(node.fk_tecnologia, node.idTecnologia);
+              cargarSelect(1, node.fk_tecnologia, node.idTecnologia);
 
               $("#compatible").addClass("d-none");
 
