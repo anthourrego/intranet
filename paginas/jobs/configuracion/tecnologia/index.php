@@ -109,6 +109,10 @@
               <label for="nombre">Nombre</label>
               <input class="form-control" type="text" name="nombre" autocomplete="off" required>
             </div>
+            <div id="compatibleCrear" class="form-group d-none">
+              <label for="compatibleCrear">Compatible:</label>
+              <div id="datos-checkCrear" class="row"></div>
+            </div>
           </div>
           <div class="modal-footer d-flex justify-content-between">
             <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
@@ -124,11 +128,11 @@
 ?>
 <script>
   $(function(){
-    if (top.validarPermiso('jobs_tecnologias') != 1) {
+    /* if (top.validarPermiso('jobs_tecnologias') != 1) {
       window.location.href = "../../marcas.php";
-    }
-    cargarArbol();
-    cargarSelect();
+    } */
+    cargarArbol(0);
+    //cargarSelect();
     //Formulario de crear padre
     $("#formCrearTecnologia").submit(function(e){
       e.preventDefault();
@@ -146,7 +150,7 @@
               alertify.success(data.msj);
               $("#crearTecnologiaModal").modal("hide");
               $("#formCrearTecnologia :input[name='fk_tecnologia']").val(0);
-              $("#formCrearTecnologia :input[name='nombre']").val();
+              $("#formCrearTecnologia :input[name='nombre']").val('');
               cargarArbol();
             } else {
               alertify.error(data.msj);
@@ -178,7 +182,7 @@
 
               //Se cargan todos los datos datos del arbol y del select
               cargarArbol();
-              cargarSelect(idSelect);
+              cargarSelect(0, idSelect);
               
               //Volvemos a deshabilitar los campos
               $("#formEditar :input[name='idTecnologia']").attr("disabled", true);
@@ -198,7 +202,6 @@
       }
     });
 
-
     //Botón de editar tecnólogia
     $("#btnEditar").on("click", function(){
       $("#formEditar :input[name='idTecnologia']").attr("disabled", false);
@@ -213,7 +216,7 @@
       if ($(this).val() != 0) {
         alertify.confirm(
                   '¿Estas seguro?', 
-                  'Deseas eliminar la tecnólogia <b>' + $(this).data("nombre") + '</b>', 
+                  'Deseas eliminar la tecnólogia <b>' + $("#formEditar :input[name='nombre']").val() + '</b>', 
                 function(){ 
                   eliminarTecnologia($("#btnEliminar").val() , $("#btnEliminar").data("nombre"))
                 }, 
@@ -227,33 +230,69 @@
       }
     });
 
+    $("#crearTecnologiaModal").on("show.bs.modal", function(e){
+      cargarSelect(2);
+    });
+
   });
 
-  function cargarSelect(idSelect = 0){
+  function cargarSelect(idSelec = 0, fkTec = 0, idTec = 0){
     $.ajax({
       url: "acciones",
       type: "POST",
       dataType: "json",
       data: {
-        accion: "listaTecnologia"
+        accion: "listaTecnologia",
+        idTecnologia: idTec
       },
       success: function(data){
         if (data.success) {
-          $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").empty();
+          $inputSelect = "#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']";
+          if (idSelec == 1) {
+            $inputSelect = "#formEditar :input[name='tecPadre']";
+          }else if(idSelec == 2){
+            $inputSelect = "#formCrearTecnologia :input[name='fk_tecnologia']";
+          }
 
-          $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").append(`
+
+          $($inputSelect).empty();
+
+          $($inputSelect).append(`
             <option value="0" selected>Raíz</option>
           `);
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
-            $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").append(`
-              <option value="${data.msj[i].id}">${data.msj[i].nombre}</option>
+            $($inputSelect).append(`
+              <option data-nivel="${data.msj[i].nivel}" value="${data.msj[i].id}">${data.msj[i].nombre}</option>
             `); 
           }
 
-          if (idSelect != 0) {
-            $("#formEditar :input[name='tecPadre']").val(idSelect);
+          //Seleccionamos el fk padre de la tecnologia seleccionada
+          if (fkTec != 0) {
+            $("#formEditar :input[name='tecPadre']").val(fkTec);
           }
 
+          //Cuando cambie en el editar el padre cambia los check box
+          $("#formEditar :input[name='tecPadre']").on("change", function(){
+            //Validamos en el select en que nivel se encuentra para mirar si se muestra los checkbox 
+            if($("#formEditar :input[name='tecPadre'] option[value='" + $(this).val() + "']").data("nivel") == 2){
+              $("#compatible").removeClass("d-none");
+              checkCompatible($(this).val(), $("#formEditar :input[name='idTecnologia']").val(), 0);
+            }else{
+              $('#datos-check').empty();
+              $("#compatible").addClass("d-none");
+            }
+          });
+
+          $("#formCrearTecnologia :input[name='fk_tecnologia']").on("change", function(){
+            //Validamos en el select en que nivel se encuentra para mirar si se muestra los checkbox 
+            if($("#formCrearTecnologia :input[name='fk_tecnologia'] option[value='" + $(this).val() + "']").data("nivel") == 2){
+              $("#compatibleCrear").removeClass("d-none");
+              checkCompatible($(this).val(), $(this).val(), 0, "Crear");
+            }else{
+              $('#datos-checkCrear').empty();
+              $("#compatibleCrear").addClass("d-none");
+            }
+          });
         } else {
           alertify.error(data.msj);
         }
@@ -264,7 +303,7 @@
     });
   }
 
-  function cargarArbol(){
+  function cargarArbol(iniciar = 1){
     $.ajax({
       url: "acciones",
       type: "POST",
@@ -273,6 +312,9 @@
         accion: "arbolTecnologias"
       },
       success: function(data){
+        if (iniciar == 1) {
+          arbol = $('#treeview1').treeview('getExpanded');
+        }
 
         var initSelectableTree = function() {
           return $('#treeview1').treeview({
@@ -280,7 +322,9 @@
             data: data,
             showTags: true,
             onNodeSelected: function(event, node) {
-              console.log(node);
+              //Cargamos el select
+              cargarSelect(1, node.fk_tecnologia, node.idTecnologia);
+
               $("#compatible").addClass("d-none");
 
               //Motramos todos los campos del selece en editar si hemos ocultado alguno
@@ -312,8 +356,10 @@
 
               //Datos para crear tecnólogia
               $("#formCrearTecnologia :input[name='fk_tecnologia']").val(node.fk_tecnologia);
+              $("#formCrearTecnologia :input[name='fk_tecnologia']").change();
               $("#formCrearHijo :input[name='nombre']").val(node.text);
-
+              
+              //Habilitamos los botónes para editar
               $("#btnCrearHijo").prop("disabled", false);
               $("#btnEditar").prop("disabled", false);
               $("#btnEliminar").prop("disabled", false);
@@ -321,6 +367,7 @@
             }
           });
         };
+
 
         var $selectableTree = initSelectableTree();
 
@@ -334,6 +381,13 @@
           selectableNodes = findSelectableNodes();
         });
 
+        if (iniciar == 1) {
+          if (arbol.length > 0) {
+            for (let i = 0; i < arbol.length; i++) {
+              $('#treeview1').treeview('expandNode', [ arbol[i].nodeId, { silent: true } ]);
+            }
+          }
+        }
       },
       error: function(){
         alertify.error("No se han encontrado datos...");
@@ -358,6 +412,20 @@
         if (data == 1) {
           cargarArbol();
           cargarSelect();
+          $("#formEditar :input[name='idTecnologia']").val(0);
+          $("#formEditar :input[name='tecPadre']").val(0);
+          $("#formEditar :input[name='nombre']").val('N/A');
+          $("#formEditar :input[name='fechaCreacion']").val('N/A');
+
+          $("#datos-check").empty();
+          $("#compatible").addClass("d-none");
+          
+          $("#formEditar :input[name='idTecnologia']").attr("disabled", true);
+          $("#formEditar :input[name='tecPadre']").attr("disabled", true);
+          $("#formEditar :input[name='nombre']").attr("disabled", true);
+          $("#formEditar :input[name='compatibilidad[]']").attr("disabled", true);
+          $("#formEditar :input[name='btnGuardar']").attr("disabled", true);
+
           alertify.warning("Se ha eliminado correctamente");
         }else{
           alertify.error("No ha podido eliminar la tecnólogia <b>" + nombre + "</b>")
@@ -369,7 +437,7 @@
     });
   }
 
-  function checkCompatible(idTecnologia, idTecActual){
+  function checkCompatible(idTecnologia, idTecActual, disabled = 1, idCheck = ""){
     $.ajax({
       url: "acciones",
       type: "POST",
@@ -381,20 +449,25 @@
       },
       success: function(data){
         if (data.success) {
-          console.log(data.msj);
-          $('#datos-check').empty();
+          $('#datos-check' + idCheck).empty();
           for (let i = 0; i < data.msj['cantidad_registros']; i++) {
             let check = '';
+
+            if (disabled == 1) {
+              dis = 'disabled';
+            }else{
+              dis = '';
+            }
+
             if(data.msj[i].id != idTecActual){
               if (data.msj[i].check == 1) {
                 check = 'checked'
               }
-              console.log(check);
-              $('#datos-check').append(`
+              $('#datos-check' + idCheck).append(`
                 <div class="col-12 col-lg-6">
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" name="compatibilidad[]" class="custom-control-input" value="${data.msj[i].id}" id="compatibilidad${data.msj[i].id}" ${check} disabled>
-                    <label class="custom-control-label" for="compatibilidad${data.msj[i].id}">${data.msj[i].nombre}</label>
+                    <input type="checkbox" name="compatibilidad[]" class="custom-control-input" value="${data.msj[i].id}" id="compatibilidad${idCheck + '' + data.msj[i].id}" ${check} ${dis}>
+                    <label class="custom-control-label" for="compatibilidad${idCheck + '' + data.msj[i].id}">${data.msj[i].nombre}</label>
                   </div>
                 </div>
               `); 
