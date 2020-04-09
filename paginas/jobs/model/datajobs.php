@@ -17,23 +17,83 @@ include_once($ruta_raiz.'clases/Conectar.php');
 include_once($ruta_raiz .'clases/sessionActiva.php');
 $usuario = $session->get("usuario");
 
+function changeStateExt(){
+    $db = new Bd();
+    $db -> conectar();
+    $retorno = array();
+
+    $seleccionados = @$_REQUEST['seleccionados'];
+    $noseleccionados = @$_REQUEST['noseleccionados'];
+
+    if($seleccionados != "" || $noseleccionados != ""){
+        $seleccionados=trim($seleccionados,',');
+        $vseleccionados = explode(',',$seleccionados);
+        $noseleccionados=trim($noseleccionados,',');
+        $vnoseleccionados = explode(',',$noseleccionados);
+	   
+        $sql_changestateext= $db -> consulta("
+        SELECT 
+            id,
+            estado
+        FROM
+            tipo_archivo
+        ");
+        $activos=array();
+        $noativos=array();
+        if($sql_changestateext['cantidad_registros']){
+
+            for ($i=0; $i < $sql_changestateext['cantidad_registros']; $i++) { 
+                if($sql_changestateext[$i]['estado']==1){
+                    $activos[]=$sql_changestateext[$i]['id'];
+                }else{
+                    $noactivos[]=$sql_changestateext[$i]['id'];
+                }  
+            }
+
+            $idsEstado1="";
+            $idsEstado0="";
+
+            for ($a=0; $a <count($vseleccionados) ; $a++) { 
+                if(!in_array($vseleccionados[$a],$activos)){
+                    $idsEstado1.=$vseleccionados[$a].",";
+                }
+            }
+
+            for ($a=0; $a <count($vnoseleccionados) ; $a++) { 
+                if(!in_array($vnoseleccionados[$a],$noactivos)){
+                    $idsEstado0.=$vnoseleccionados[$a].",";
+                }
+            }
+            
+        }
+
+
+
+    }
+
+    
+
+
+}
+
 function getExtPorTipoDocumento(){
 
     $db = new Bd();
     $db->conectar();
     
-    $retorno['exito']=0;
+    
 
     $retorno=array();
+    $retorno['exito']=0;
 
     $sql_extensiones = $db->consulta("
     SELECT 
         nombre,
-        extensiones 
+        extensiones,
+        estado,
+        id
     FROM 
         tipo_archivo 
-    WHERE 
-        estado = 1 
     ORDER BY 
         nombre
         ");
@@ -46,7 +106,10 @@ function getExtPorTipoDocumento(){
             }
 
             if($sql_extensiones[$a]['nombre'] == $catnombre[$sql_extensiones[$a]['nombre']] ){
-                $retorno['extensiones'][$sql_extensiones[$a]['nombre']][] = $sql_extensiones[$a]['extensiones'];
+                $extensiones['ext'] =$sql_extensiones[$a]['extensiones'];
+                $extensiones['estado']=$sql_extensiones[$a]['estado'];
+                $extensiones['id']=$sql_extensiones[$a]['id'];
+                $retorno['extensiones'][$sql_extensiones[$a]['nombre']][] = $extensiones;
                 //$retorno['extensiones'] = array($sql_extensiones[$a]['nombre'] => $sql_extensiones[$a]['extensiones']);
             }
 

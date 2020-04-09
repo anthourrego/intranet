@@ -49,7 +49,7 @@
     </div>
     <div class="row">
         <div class="col-md-6 btn_ptipo_archivo_categoria">
-            <button class="btn btn-sm btn-success"  data-toggle="modal" data-target="#modal_tipo_archivo_categoria" id="tipo_archivo_categoria"><i class="fas fa-cogs"></i> Tipo Archivo por Categoria</button>
+            <button class="btn btn-sm btn-success" id="tipo_archivo_categoria"><i class="fas fa-cogs"></i> Tipo Archivo por Categoria</button>
         </div>
     </div>
     <br>
@@ -79,6 +79,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+        <button type="button" id="guardar_tipo_ext" class="btn btn-success" data-dismiss="modal"><i class="fas fa-save"></i> Guardar</button>
       </div>
     </div>
   </div>
@@ -90,7 +91,60 @@
 ?>
 <script type="text/javascript">
   $(function(){
-    //OBTENER LAS EXTENCIONES ACTIVAS POR TIPO DOCUMETO(IMAGENES,DOCUMENTOS,ARCHIVOS)
+    
+    cerrarCargando();
+
+    $(document).on("click","#tipo_archivo_categoria",function(){
+      // obtener lista ext
+      top.$("#cargando").modal("show");
+      getTypeExt();
+    });
+
+    $(document).on("click","#guardar_tipo_ext",function(){
+
+      var seleccionados= "";
+      var noseleccionados="";
+      $(".ext_tipo_archivos").each(function(){
+        if($(this).is(":checked")){
+          seleccionados+=$(this).val()+',';
+        }else{
+          noseleccionados+=$(this).val()+',';
+        }   
+      });
+      console.log(seleccionados);
+    });
+
+
+
+  });
+
+  //ACTUALIZAR ESTADO DE LAS EXTENSIONES
+  function changeStateExt(){
+    $.ajax({
+      url: "../../model/datajobs.php",
+      type: "POST",
+      dataType: "json",
+      data:{
+        accion: "changeStateExt"
+      },
+      success:function(data){
+        if(data.exito){
+          alertify.succes("Cambios almacenados con exito")
+        }
+        
+      },
+      error:function(){
+        alertify.error('error, Intentalo de nuevo');
+      },
+      complete:function(){
+        
+      }
+
+    });
+  }
+  
+  //OBTENER LAS EXTENCIONES ACTIVAS POR TIPO DOCUMETO(IMAGENES,DOCUMENTOS,ARCHIVOS)
+  function getTypeExt(){
     $.ajax({
         url: '../../model/datajobs.php',
         type: 'POST',
@@ -100,6 +154,8 @@
         },
         success: function(data){
             if(data.exito){
+              $(".contenedor_extensiones").html("");
+              console.log(data.extensiones);
                 var categorias = Object.keys(data.extensiones);
                 
                 for (let i = 0; i < categorias.length; i++) {
@@ -109,15 +165,21 @@
                 }
 
                 for (let i = 0; i < categorias.length; i++) {
+                  
 
                   html = `<div class="col-md-4">
                       <h6 class="mx-auto">${categorias[i].toUpperCase()}</h6>`;
 
                   for (let j = 0; j < data.extensiones[categorias[i]].length; j++) {
+                    if(data.extensiones[categorias[i]][j].estado == 1){
+                      checked="checked";
+                    }else{
+                      checked="";
+                    }
                     html = html + `<div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                  ${"." + data.extensiones[categorias[i]][j].toUpperCase()}
+                                <input class="form-check-input ext_tipo_archivos" ${checked} type="checkbox" value="${data.extensiones[categorias[i]][j].id}" id="">
+                                <label class="form-check-label" for="${ data.extensiones[categorias[i]][j].id}">
+                                  ${"." + data.extensiones[categorias[i]][j].ext.toUpperCase()}
                                 </label>
                               </div>`;
                   }  
@@ -126,6 +188,7 @@
 
 
                   $(".contenedor_extensiones").append(html);
+                  $("#modal_tipo_archivo_categoria").modal("show");
                 } 
             }
         },    
@@ -136,8 +199,8 @@
             cerrarCargando();
         }
     });
-
-  });
+  }
+  
 
   
 </script>
