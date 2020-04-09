@@ -222,26 +222,38 @@
   });
 
   function eliminarMarca(id, nombre){
-    $.ajax({
-      url: 'acciones.php',
-      type: 'POST',
-      dataType: 'json',
-      data: {accion: "eliminarMarca", idMarca: id, nombreMarca: nombre},
-      success: function(data){
-        if (data == 1) {
-          alertify.success("Se ha aliminado la marca <b>" + nombre + "</b>");
-          cargarMarcas();
-        }else{
-          alertify.error("No se ha podido eliminar la marca <b>" + nombre + "</b>")
-        }
-      },
-      error: function(){
-        alertify.error('No se han encontrado datos.');
-      },
-      complete: function(){
-        cerrarCargando();
-      }
-    });
+    //Acción al click botón eliminar
+    if (id != 0) {
+      alertify.confirm(
+                '¿Estas seguro?', 
+                'Deseas eliminar la marca <b>' + nombre + '</b>', 
+              function(){ 
+                $.ajax({
+                  url: 'acciones.php',
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {accion: "eliminarMarca", idMarca: id, nombreMarca: nombre},
+                  success: function(data){
+                    if (data == 1) {
+                      alertify.success("Se ha aliminado la marca <b>" + nombre + "</b>");
+                      cargarMarcas();
+                    }else{
+                      alertify.error("No se ha podido eliminar la marca <b>" + nombre + "</b>")
+                    }
+                  },
+                  error: function(){
+                    alertify.error('No se han encontrado datos.');
+                  }
+                });
+              }, 
+              function(){})
+              .set('labels', {
+                ok:'<i class="far fa-trash-alt"></i> Si', 
+                cancel:'<i class="fa fa-times"></i> No'
+              });
+    }else{
+      alerify.error("No ha seleccionado ninguna marca.");
+    }
   }
 
 
