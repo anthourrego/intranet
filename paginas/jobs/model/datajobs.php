@@ -47,6 +47,7 @@ function getExtPorTipoDocumento(){
 
             if($sql_extensiones[$a]['nombre'] == $catnombre[$sql_extensiones[$a]['nombre']] ){
                 $retorno['extensiones'][$sql_extensiones[$a]['nombre']][] = $sql_extensiones[$a]['extensiones'];
+                //$retorno['extensiones'] = array($sql_extensiones[$a]['nombre'] => $sql_extensiones[$a]['extensiones']);
             }
 
     
