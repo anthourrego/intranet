@@ -138,6 +138,57 @@ function selectTecnologia(){
   return json_encode($resp);
 }
 
+function listaTecnologiaNoCompatible(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+  $datos = array();
+
+  if (@$_REQUEST['tecnologia']) {
+    $compatible = '';
+    for ($i=0; $i < count($_REQUEST["tecnologia"]); $i++) {
+      if ((count($_REQUEST["tecnologia"]) -1 ) != $i) {
+        $compatible .= $_REQUEST["tecnologia"][$i] . ', ';
+      }else{
+        $compatible .= $_REQUEST["tecnologia"][$i];
+      }
+    }
+
+    $sql = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE estado = 1 AND (fk_tecnologia IN (" . $compatible . ") OR fk_tecnologia_compatible IN (" . $compatible . "))");
+
+    for ($i=0; $i < $sql['cantidad_registros']; $i++) { 
+      $datos[] = $sql[$i]['fk_tecnologia'];
+      $datos[] = $sql[$i]['fk_tecnologia_compatible'];
+    }
+    
+    $datos = array_unique($datos);
+    
+    foreach ($_REQUEST["tecnologia"] as $da) {
+      if (in_array($da, $datos)) {
+        $key = array_search($da, $datos);
+        unset($datos[$key]);
+      }
+    }
+
+
+    if ($sql['cantidad_registros'] > 0) {
+      $resp = array("success" => true,
+                    "msj" => array_values($datos));
+    }else{
+      $resp = array("success" => false,
+                    "msj" => "No se han encontrado datos.");
+    }
+  }else{
+    $resp = array("success" => false,
+                  "msj" => "No se han encontrado datos.");
+  }
+
+
+  $db->desconectar();
+
+  return json_encode($resp);
+}
+
 function crearReferencia(){
   $db = new Bd();
   $db->conectar();

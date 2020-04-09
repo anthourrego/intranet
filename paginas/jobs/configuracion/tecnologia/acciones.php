@@ -210,7 +210,58 @@
         $db->sentencia("UPDATE tecnologias SET nombre = :nombre, fk_tecnologia = :fk_tecnologia, nivel = :nivel WHERE id = :id", array(":id" => $_REQUEST["idTecnologia"], ":nombre" => $nombreTec, ":fk_tecnologia" => $_REQUEST["tecPadre"], ":nivel" => $nivel));
   
         $db->insertLogs("tecnologias", $_REQUEST["idTecnologia"], "Se ha actualizado la tecnólogia nombre " . $_REQUEST["nombre"] . " y tecnólogia padre " . $_REQUEST["tecPadre"], $usuario['id']);
+
+        if (@$_REQUEST["compatibilidad"]) {
+          $compatible = $_REQUEST["idTecnologia"];
+
+          for ($i=0; $i < count($_REQUEST["compatibilidad"]); $i++) { 
+            $compatible .= ', ' . $_REQUEST["compatibilidad"][$i];
+            
+            $check = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE fk_tecnologia = :fk_tecnologia AND fk_tecnologia_compatible = :fk_tecnologia_compatible", array(":fk_tecnologia" => $_REQUEST["idTecnologia"], ":fk_tecnologia_compatible" => $_REQUEST["compatibilidad"][$i]));
+    
+            $check1 = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE fk_tecnologia = :fk_tecnologia AND fk_tecnologia_compatible = :fk_tecnologia_compatible", array(":fk_tecnologia" => $_REQUEST["compatibilidad"][$i], ":fk_tecnologia_compatible" => $_REQUEST["idTecnologia"]));
+            
+            if ($check['cantidad_registros'] == 1) {
+              $db->sentencia("UPDATE tecnologia_no_compatible SET estado = 0 WHERE id = :id", array(":id" => $check[0]['id']));
+            }elseif($check1['cantidad_registros'] == 1){
+              $db->sentencia("UPDATE tecnologia_no_compatible SET estado = 0 WHERE id = :id", array(":id" => $check1[0]['id']));
+            }
+          }
+
+
+          $todasTecnologia = $db->consulta("SELECT * FROM tecnologias WHERE activo = 1 AND fk_tecnologia = :fk_tecnologia AND id NOT IN (" . $compatible . ")", array(":fk_tecnologia" => $_REQUEST["tecPadre"]));
+
+          /* for ($i=0; $i < $todasTecnologia['cantidad_registros']; $i++) { 
+            $db->sentencia("INSERT INTO tecnologia_no_compatible (fk_tecnologia, fk_tecnologia_compatible, fecha_creacion, estado, fk_creador) VALUES (:fk_tecnologia, :fk_tecnologia_compatible, :fecha_creacion, :estado, :fk_creador)", array(":fk_tecnologia" => $_REQUEST["idTecnologia"], ":fk_tecnologia_compatible" => $todasTecnologia[$i]['id'], ":fecha_creacion" => date("Y-m-d H:i:s"), ":estado" => 1, ":fk_creador" => $usuario['id']));
+          } */
+
+          /* 
+            //Parte de no compatible
+            foreach ($_REQUEST["compatibilidad"] as $comp) {
+            $db->sentencia("INSERT INTO tecnologia_no_compatible (fk_tecnologia, fk_tecnologia_compatible, fecha_creacion, estado, fk_creador) VALUES (:fk_tecnologia, :fk_tecnologia_compatible, :fecha_creacion, :estado, :fk_creador)", array(":fk_tecnologia" => $_REQUEST["idTecnologia"], ":fk_tecnologia_compatible" => $comp, ":fecha_creacion" => date("Y-m-d H:i:s"), ":estado" => 1, ":fk_creador" => $usuario['id']));
+          } */
+        }else{
+          $todasTecnologia = $db->consulta("SELECT * FROM tecnologias WHERE activo = 1 AND fk_tecnologia = :fk_tecnologia AND id != :id", array(":fk_tecnologia" => $_REQUEST["tecPadre"], ":id" => $_REQUEST["idTecnologia"]));
+        }
+
+        if ($todasTecnologia['cantidad_registros'] > 0) {
+          for ($i=0; $i < $todasTecnologia['cantidad_registros']; $i++) { 
+            $check = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE fk_tecnologia = :fk_tecnologia AND fk_tecnologia_compatible = :fk_tecnologia_compatible", array(":fk_tecnologia" => $_REQUEST["idTecnologia"], ":fk_tecnologia_compatible" => $todasTecnologia[$i]['id']));
   
+            $check1 = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE fk_tecnologia = :fk_tecnologia AND fk_tecnologia_compatible = :fk_tecnologia_compatible", array(":fk_tecnologia" => $todasTecnologia[$i]['id'], ":fk_tecnologia_compatible" => $_REQUEST["idTecnologia"]));
+            
+            if ($check['cantidad_registros'] == 1) {
+              $db->sentencia("UPDATE tecnologia_no_compatible SET estado = 1 WHERE id = :id", array(":id" => $check[0]['id']));
+            }elseif($check1['cantidad_registros'] == 1){
+              $db->sentencia("UPDATE tecnologia_no_compatible SET estado = 1 WHERE id = :id", array(":id" => $check1[0]['id']));
+            }else{
+              $db->sentencia("INSERT INTO tecnologia_no_compatible (fk_tecnologia, fk_tecnologia_compatible, fecha_creacion, estado, fk_creador) VALUES (:fk_tecnologia, :fk_tecnologia_compatible, :fecha_creacion, :estado, :fk_creador)", array(":fk_tecnologia" => $_REQUEST["idTecnologia"], ":fk_tecnologia_compatible" => $todasTecnologia[$i]['id'], ":fecha_creacion" => date("Y-m-d H:i:s"), ":estado" => 1, ":fk_creador" => $usuario['id']));
+            }
+          }
+        }else{
+          $db->sentencia("UPDATE tecnologia_no_compatible SET estado = 0 WHERE fk_tecnologia = :fk_tecnologia OR fk_tecnologia_compatible = :fk_tecnologia_compatible", array(":fk_tecnologia" => $_REQUEST["idTecnologia"], ":fk_tecnologia_compatible" => $_REQUEST["idTecnologia"]));
+        }
+
         $resp = array(
                   "success" => true,
                   "msj" => "Se ha aculizado correctamente"
@@ -235,15 +286,40 @@
 
   }
 
-  /* function tecnologiaHijas(){
+  function tecnologiaCheckbox(){
     $db = new Bd();
     $db->conectar();
 
-    $db->consulta("SELECT * FROM tecnologias ");
+    $sql = $db->consulta("SELECT * FROM tecnologias WHERE activo = 1 AND nivel = 3 AND fk_tecnologia = :fk_tecnologia", array(":fk_tecnologia" => $_REQUEST['idTec']));
+    
+    for ($i=0; $i < $sql['cantidad_registros']; $i++) { 
+      $check = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE fk_tecnologia = :fk_tecnologia AND fk_tecnologia_compatible = :fk_tecnologia_compatible AND estado = 1", array(":fk_tecnologia" => $_REQUEST['idTecActual'], ":fk_tecnologia_compatible" => $sql[$i]['id']));
+      
+      $check1 = $db->consulta("SELECT * FROM tecnologia_no_compatible WHERE fk_tecnologia = :fk_tecnologia AND fk_tecnologia_compatible = :fk_tecnologia_compatible AND estado = 1", array(":fk_tecnologia" => $sql[$i]['id'], ":fk_tecnologia_compatible" => $_REQUEST['idTecActual']));
+
+      if (($check['cantidad_registros'] + $check1['cantidad_registros']) == 0) {
+        $sql[$i]['check'] = 1;
+      }else{
+        $sql[$i]['check'] = 0;
+      }
+    }
 
     $db->desconectar();
 
-  } */
+    if ($sql['cantidad_registros'] > 0) {
+      $resp = array(
+        "success" => true,
+        "msj" => $sql
+      );
+    }else{
+      $resp = array(
+                "success" => false,
+                "msj" => "No se han encontrado datos."
+              );
+    }
+
+    return json_encode($resp);
+  }
 
   if(@$_REQUEST['accion']){
     if(function_exists($_REQUEST['accion'])){

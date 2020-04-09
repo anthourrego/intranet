@@ -77,14 +77,7 @@
           </div>
           <div id="compatible" class="form-group d-none">
             <label for="compatible">Compatible:</label>
-            <div id="datos-check" class="row">
-              <div class="col-12 col-lg-6">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="customCheck1">
-                  <label class="custom-control-label" for="customCheck1">Check this custom checkbox</label>
-                </div>
-              </div>
-            </div>
+            <div id="datos-check" class="row"></div>
           </div>
           <div class="text-right">
             <button type="submit" class="btn btn-success" name="btnGuardar" disabled><i class="far fa-save"></i> Guardar</button>
@@ -192,6 +185,7 @@
               $("#formEditar :input[name='tecPadre']").attr("disabled", true);
               $("#formEditar :input[name='nombre']").attr("disabled", true);
               $("#formEditar :input[name='btnGuardar']").attr("disabled", true);
+              $("#formEditar :input[name='compatibilidad[]']").attr("disabled", true);
               alertify.success(data.msj);
             } else {
               alertify.error(data.msj);
@@ -210,6 +204,7 @@
       $("#formEditar :input[name='idTecnologia']").attr("disabled", false);
       $("#formEditar :input[name='tecPadre']").attr("disabled", false);
       $("#formEditar :input[name='nombre']").attr("disabled", false);
+      $("#formEditar :input[name='compatibilidad[]']").attr("disabled", false);
       $("#formEditar :input[name='btnGuardar']").attr("disabled", false);
     });
 
@@ -252,8 +247,7 @@
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
             $("#formEditar :input[name='tecPadre'], #formCrearTecnologia :input[name='fk_tecnologia']").append(`
               <option value="${data.msj[i].id}">${data.msj[i].nombre}</option>
-            `);
-            
+            `); 
           }
 
           if (idSelect != 0) {
@@ -310,6 +304,7 @@
 
               if (node.nivel == 3) {
                 $("#compatible").removeClass("d-none");
+                checkCompatible(node.fk_tecnologia, node.idTecnologia);
               }
 
               //Ocultamos la tecnólogia seleccionada en el select
@@ -366,6 +361,47 @@
           alertify.warning("Se ha eliminado correctamente");
         }else{
           alertify.error("No ha podido eliminar la tecnólogia <b>" + nombre + "</b>")
+        }
+      },
+      error: function(data){
+        alertify.error("No se han encontrado datos...");
+      }
+    });
+  }
+
+  function checkCompatible(idTecnologia, idTecActual){
+    $.ajax({
+      url: "acciones",
+      type: "POST",
+      dataType: "json",
+      data: {
+        accion: "tecnologiaCheckbox",
+        idTec: idTecnologia,
+        idTecActual: idTecActual
+      },
+      success: function(data){
+        if (data.success) {
+          console.log(data.msj);
+          $('#datos-check').empty();
+          for (let i = 0; i < data.msj['cantidad_registros']; i++) {
+            let check = '';
+            if(data.msj[i].id != idTecActual){
+              if (data.msj[i].check == 1) {
+                check = 'checked'
+              }
+              console.log(check);
+              $('#datos-check').append(`
+                <div class="col-12 col-lg-6">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" name="compatibilidad[]" class="custom-control-input" value="${data.msj[i].id}" id="compatibilidad${data.msj[i].id}" ${check} disabled>
+                    <label class="custom-control-label" for="compatibilidad${data.msj[i].id}">${data.msj[i].nombre}</label>
+                  </div>
+                </div>
+              `); 
+            }
+          }
+        }else{
+          alertify.error(data.msj);
         }
       },
       error: function(data){
