@@ -274,8 +274,8 @@
             $("#check-tecnologia").append(`
               <div class="form-group col-6">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" name="tecnologia[]" class="custom-control-input" id="${data.msj[i].nombre + data.msj[i].id}" value="${data.msj[i].id}" required>
-                  <label class="custom-control-label" for="${data.msj[i].nombre + data.msj[i].id}" >${data.msj[i].nombre}</label>
+                  <input type="checkbox" name="tecnologia[]" class="custom-control-input chekcTec" id="tec${data.msj[i].id}" value="${data.msj[i].id}" required>
+                  <label class="custom-control-label" for="tec${data.msj[i].id}" >${data.msj[i].nombre}</label>
                 </div>
               </div>
             `); 
@@ -283,6 +283,17 @@
         }else{
           alertify.error(data.msj);
         }
+        
+        $(".chekcTec").on("click", function(){
+          var tecs = new Array();
+          for (let i = 0; i < $(".chekcTec").length; i++) {
+            if ($(".chekcTec")[i].checked) {
+              tecs.push($(".chekcTec")[i].value); 
+            }
+          }
+          $(".chekcTec").attr("disabled", false);
+          listaTecnologiaNoCompatible(tecs)
+        });
       },
       error: function(){
         alertify.error('No se han encontrado datos.');
@@ -313,6 +324,28 @@
         }
         definirdataTable("#referencia-tabla");
         $('[data-toggle="tooltip"]').tooltip();
+      },
+      error: function(){
+        alertify.error('No se han encontrado datos.');
+      }
+    });
+  }
+
+  function listaTecnologiaNoCompatible(idTec){
+    $.ajax({
+      url: 'acciones',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        accion: "listaTecnologiaNoCompatible", 
+        tecnologia: idTec
+      },
+      success: function(data){
+        if (data.success) {
+          for (let i = 0; i < data.msj.length; i++) {
+            $("#tec" + data.msj[i]).attr("disabled", true);
+          }
+        }
       },
       error: function(){
         alertify.error('No se han encontrado datos.');
