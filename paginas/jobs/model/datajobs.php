@@ -17,63 +17,282 @@ include_once($ruta_raiz.'clases/Conectar.php');
 include_once($ruta_raiz .'clases/sessionActiva.php');
 $usuario = $session->get("usuario");
 
-function changeStateExt(){
+function crearCategoria(){
+    global $usuario;
     $db = new Bd();
     $db -> conectar();
     $retorno = array();
 
-    $seleccionados = @$_REQUEST['seleccionados'];
-    $noseleccionados = @$_REQUEST['noseleccionados'];
+    $retorno['exito']=0;
 
-    if($seleccionados != "" || $noseleccionados != ""){
-        $seleccionados=trim($seleccionados,',');
-        $vseleccionados = explode(',',$seleccionados);
-        $noseleccionados=trim($noseleccionados,',');
-        $vnoseleccionados = explode(',',$noseleccionados);
-	   
-        $sql_changestateext= $db -> consulta("
-        SELECT 
-            id,
-            estado
-        FROM
-            tipo_archivo
-        ");
-        $activos=array();
-        $noativos=array();
-        if($sql_changestateext['cantidad_registros']){
+    $padre=@$_REQUEST['fk_categoria'];
+    $nombreCat =strtolower(trim(@$_REQUEST['nameCategoria']));
+    $checkboxprivacidad =@$_REQUEST['checkboxprivacidad'];
+    $checkboxaplicaPI = @$_REQUEST['checkboxaplicaPI'];
+    
 
-            for ($i=0; $i < $sql_changestateext['cantidad_registros']; $i++) { 
-                if($sql_changestateext[$i]['estado']==1){
-                    $activos[]=$sql_changestateext[$i]['id'];
-                }else{
-                    $noactivos[]=$sql_changestateext[$i]['id'];
-                }  
-            }
+    if($padre != "" && $nombreCat != ""){
+        $aplicapi=0;
+        $publico=0;
 
-            $idsEstado1="";
-            $idsEstado0="";
-
-            for ($a=0; $a <count($vseleccionados) ; $a++) { 
-                if(!in_array($vseleccionados[$a],$activos)){
-                    $idsEstado1.=$vseleccionados[$a].",";
-                }
-            }
-
-            for ($a=0; $a <count($vnoseleccionados) ; $a++) { 
-                if(!in_array($vnoseleccionados[$a],$noactivos)){
-                    $idsEstado0.=$vnoseleccionados[$a].",";
-                }
-            }
-            
+        if($checkboxaplicaPI == "on"){
+            $aplicapi=1;
         }
 
+        if($checkboxprivacidad =="on"){
+            $publico=1;
+        }
 
+        if(validarNameCategoria($nombreCat)==0){
+            $getlastId =$db -> sentencia("
+            INSERT INTO
+                categorias 
+                    (nombre,
+                    fecha_creacion,
+                    aplica_pi,
+                    activo,
+                    publico,
+                    fk_categoria,
+                    fk_creador)
+                VALUES
+                    (:nombre,
+                    :fecha_creacion,
+                    :aplica_pi,
+                    1,
+                    :publico,
+                    :fk_categoria,
+                    :fk_creador)",
+                    array(":nombre" => strtolower($nombreCat),":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'])
+            );
+
+            $db->insertLogs("categorias", $getlastId, "Creacion de categoria " . $nombreCat, $usuario['id']);
+
+            $retorno['exito']=1;
+            $msj=array("success" => true,
+                       "msj" => "Categoria <b>".$nombreCat."</b> Creada");
+        }else{
+            $msj = array("success" => false,
+                         "msj" => "La categoria <b>".$nombreCat."</b> ya existe");
+        }
+        
+    }
+    $retorno['alert']=$msj;
+    $db->desconectar();
+    return json_encode($retorno);
+}
+
+function eliminarCategoria($id = 0, $nombre = ''){
+    if ($id == 0) {
+      $id = $_REQUEST["idCat"];
+      $nombre =  $_REQUEST["nombre"];
+    }
+    
+    
+    global $usuario;
+    $db = new Bd();
+    $db->conectar();
+
+    $db->sentencia("UPDATE categorias SET activo = 0 WHERE id = :id", array(":id" => $id));
+
+    $db->insertLogs("categorias", $id, "Elimina la categoria " . $nombre, $usuario['id']);
+
+    $sql = $db->consulta("SELECT * FROM categorias WHERE fk_categoria = :fk_categoria AND activo = 1", array(":fk_categoria" => $id));
+
+    for ($i=0; $i < $sql["cantidad_registros"]; $i++) { 
+      
+      eliminarCategoria($sql[$i]['id'], $sql[$i]['nombre']);
 
     }
 
+    $db->desconectar();
+    
+    return json_encode(1);
+  }
+
+function editarCategoria(){
+    $resp = array();
+    global $usuario;
+    $db = new Bd();
+    $db->conectar();
+    $nombreCat = strtolower(trim(@$_REQUEST["nombre"]));
+
+    if (validarNameCategoria($nombreCat)== 0) {
+    
+        $db->sentencia("UPDATE categorias SET nombre = :nombre, fk_categoria = :fk_categoria WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":nombre" => $nombreCat, ":fk_categoria" => $_REQUEST["catPadre"]));
+  
+        $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado la categoria nombre " . $_REQUEST["nombre"] . " y categoria padre " . $_REQUEST["catPadre"], $usuario['id']);
+
     
 
+        $resp = array(
+                  "success" => true,
+                  "msj" => "Se ha actualizado correctamente"
+                );
+      
 
+    } else {
+      $resp = array(
+                "success" => false,
+                "msj" => "El nombre <b>" . $nombreCat . "</b> ya  existe."
+              );
+    }
+
+    $db->desconectar();
+
+    return json_encode($resp);
+
+  }
+
+
+
+function arbolCategorias($cat = 0){
+    $arbol = array();
+    $db = new Bd();
+    $db->conectar();
+
+    $categorias = $db->consulta("SELECT * FROM categorias WHERE fk_categoria = :fk_categoria AND activo = 1", array(":fk_categoria" => $cat));
+
+    for ($i=0; $i < $categorias["cantidad_registros"]; $i++) { 
+      
+      $hijos = $db->consulta("SELECT * FROM categorias WHERE fk_categoria = :fk_categoria AND activo = 1", array(":fk_categoria" => $categorias[$i]["id"]));
+
+      if ($hijos["cantidad_registros"] > 0) {
+        $arbol[] = array(
+                  "idCategoria" => $categorias[$i]["id"],
+                  "fechaCreacion" => $categorias[$i]["fecha_creacion"], 
+                  "fk_categoria" => $categorias[$i]["fk_categoria"],
+                  "text" => $categorias[$i]["nombre"],
+                  "tags" => [$hijos['cantidad_registros']],
+                  "nodes" => arbolCategorias($categorias[$i]["id"])
+                );
+      }else {
+        $arbol[] = array(
+                  "idCategoria" => $categorias[$i]["id"],
+                  "text" => $categorias[$i]["nombre"],
+                  "fechaCreacion" => $categorias[$i]["fecha_creacion"],
+                  "fk_categoria" => $categorias[$i]["fk_categoria"]
+                );
+      }
+    }
+
+    $db->desconectar();
+
+    if ($cat == 0) {
+      return json_encode($arbol);
+    } else {
+      return $arbol;
+    }
+    
+  }
+
+function dataSelectCategoria(){
+    $db = new Bd();
+    $db ->conectar();
+
+    $retorno = array();
+    $retorno['exito']=0;
+
+    $sql_categorias = $db->consulta("
+    SELECT
+        id,
+        nombre
+    FROM
+        categorias
+    WHERE
+        activo= 1
+    ");
+    
+    if($sql_categorias['cantidad_registros']){
+        $retorno['lista'] = array(
+            "success" => true,
+            "msj" => $sql_categorias    
+        );
+
+        $retorno['exito']=1;
+    }else{
+        $retorno['lista'] = array(
+            "success" => false,
+            "msj" => "No se encontraron Registros"    
+        );
+    }
+
+
+    $db -> desconectar();
+    return json_encode($retorno);
+}
+
+function validarNameCategoria($namecategoria){
+    $db= new Bd();
+    $db -> conectar();
+    $sql_buscarSiExiste = $db-> consulta("
+        SELECT
+            nombre
+        FROM
+            categorias
+        WHERE
+            nombre = '".$namecategoria."'
+        ");
+
+    $db->desconectar();
+    return json_encode($sql_buscarSiExiste['cantidad_registros']);
+}
+
+function changeStateExt(){
+    global $usuario;
+    $db = new Bd();
+    $db -> conectar();
+    $retorno = array();
+
+    $retorno['exito'] = 0;
+
+    $seleccionados = @$_REQUEST['seleccionados'];
+    $noseleccionados = @$_REQUEST['noseleccionados'];
+
+    
+        
+        
+        
+        if($seleccionados != ""){
+            $seleccionados=trim($seleccionados,',');
+            $vseleccionados = explode(",",$seleccionados);
+            $update_ext_1= $db-> sentencia("
+            UPDATE
+                tipo_archivo
+            SET
+                estado = 1
+            WHERE
+                id IN (".$seleccionados.")
+            ");
+
+            
+            for ($i=0; $i < count($vseleccionados); $i++) { 
+                $db->insertLogs("tipo_archivo", $vseleccionados[$i], "Se cambio el estado a 1 de la ext con id" . $vseleccionados[$i], $usuario['id']);
+            }
+            $retorno['exito']=1;
+            
+        }
+        
+        if($noseleccionados != ""){
+            $noseleccionados=trim($noseleccionados,',');
+            $vnoseleccionados = explode(",",$noseleccionados);
+            $update_ext_0 = $db -> sentencia("
+            UPDATE
+                tipo_archivo
+            SET
+                estado = 0
+            WHERE
+                id IN(".$noseleccionados.")
+            ");
+
+            for ($i=0; $i < count($vnoseleccionados); $i++) { 
+                $db->insertLogs("tipo_archivo", $vnoseleccionados[$i], "Se cambio el estado a 0 de la ext con id " . $vnoseleccionados[$i], $usuario['id']);
+            }
+
+            $retorno['exito']=1;
+        }
+
+    $db->desconectar();
+    return json_encode($retorno);
 }
 
 function getExtPorTipoDocumento(){
@@ -120,7 +339,7 @@ function getExtPorTipoDocumento(){
 
     
    
-
+    $db->desconectar();
     return json_encode($retorno);
 
     
