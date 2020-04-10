@@ -128,9 +128,10 @@
 ?>
 <script>
   $(function(){
-    /* if (top.validarPermiso('jobs_tecnologias') != 1) {
+    $("#formCrearTecnologia :input[name='fk_tecnologia']").val(3);
+    if (top.validarPermiso('jobs_tecnologias') != 1) {
       window.location.href = "../../marcas.php";
-    } */
+    }
     cargarArbol(0);
     //cargarSelect();
     //Formulario de crear padre
@@ -234,6 +235,29 @@
       cargarSelect(2);
     });
 
+    //Cuando cambie en el editar el padre cambia los check box
+    $("#formEditar :input[name='tecPadre']").on("change", function(){
+      //Validamos en el select en que nivel se encuentra para mirar si se muestra los checkbox 
+      if($("#formEditar :input[name='tecPadre'] option[value='" + $(this).val() + "']").data("nivel") == 2){
+        $("#compatible").removeClass("d-none");
+        checkCompatible($(this).val(), $("#formEditar :input[name='idTecnologia']").val(), 0);
+      }else{
+        $('#datos-check').empty();
+        $("#compatible").addClass("d-none");
+      }
+    });
+
+    $("#formCrearTecnologia :input[name='fk_tecnologia']").on("change", function(){
+      //Validamos en el select en que nivel se encuentra para mirar si se muestra los checkbox 
+      if($("#formCrearTecnologia :input[name='fk_tecnologia'] option[value='" + $(this).val() + "']").data("nivel") == 2){
+        $("#compatibleCrear").removeClass("d-none");
+        checkCompatible($(this).val(), $(this).val(), 0, "Crear");
+      }else{
+        $('#datos-checkCrear').empty();
+        $("#compatibleCrear").addClass("d-none");
+      }
+    });
+
   });
 
   function cargarSelect(idSelec = 0, fkTec = 0, idTec = 0){
@@ -266,33 +290,21 @@
             `); 
           }
 
+          //Datos para crear tecnólogia
+          if (idSelec == 2) {
+            val = 0
+            if ($("#formEditar :input[name='tecPadre']").val() != null) {
+             val = $("#formEditar :input[name='tecPadre']").val();
+            }
+            $("#formCrearTecnologia :input[name='fk_tecnologia']").val(val);
+            $("#formCrearTecnologia :input[name='fk_tecnologia']").change();
+          }
+
           //Seleccionamos el fk padre de la tecnologia seleccionada
           if (fkTec != 0) {
             $("#formEditar :input[name='tecPadre']").val(fkTec);
           }
 
-          //Cuando cambie en el editar el padre cambia los check box
-          $("#formEditar :input[name='tecPadre']").on("change", function(){
-            //Validamos en el select en que nivel se encuentra para mirar si se muestra los checkbox 
-            if($("#formEditar :input[name='tecPadre'] option[value='" + $(this).val() + "']").data("nivel") == 2){
-              $("#compatible").removeClass("d-none");
-              checkCompatible($(this).val(), $("#formEditar :input[name='idTecnologia']").val(), 0);
-            }else{
-              $('#datos-check').empty();
-              $("#compatible").addClass("d-none");
-            }
-          });
-
-          $("#formCrearTecnologia :input[name='fk_tecnologia']").on("change", function(){
-            //Validamos en el select en que nivel se encuentra para mirar si se muestra los checkbox 
-            if($("#formCrearTecnologia :input[name='fk_tecnologia'] option[value='" + $(this).val() + "']").data("nivel") == 2){
-              $("#compatibleCrear").removeClass("d-none");
-              checkCompatible($(this).val(), $(this).val(), 0, "Crear");
-            }else{
-              $('#datos-checkCrear').empty();
-              $("#compatibleCrear").addClass("d-none");
-            }
-          });
         } else {
           alertify.error(data.msj);
         }
@@ -323,7 +335,7 @@
             showTags: true,
             onNodeSelected: function(event, node) {
               //Cargamos el select
-              cargarSelect(1, node.fk_tecnologia, node.idTecnologia);
+              cargarSelect(0, node.fk_tecnologia, node.idTecnologia);
 
               $("#compatible").addClass("d-none");
 
@@ -353,11 +365,6 @@
 
               //Ocultamos la tecnólogia seleccionada en el select
               $("#formEditar :input[name='tecPadre'] option[value='" + node.idTecnologia + "']").hide();
-
-              //Datos para crear tecnólogia
-              $("#formCrearTecnologia :input[name='fk_tecnologia']").val(node.fk_tecnologia);
-              $("#formCrearTecnologia :input[name='fk_tecnologia']").change();
-              $("#formCrearHijo :input[name='nombre']").val(node.text);
               
               //Habilitamos los botónes para editar
               $("#btnCrearHijo").prop("disabled", false);
