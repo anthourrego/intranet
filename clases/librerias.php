@@ -217,9 +217,16 @@
 
     public function bootstrapTreeView(){
       $this->cadena_libreria = '
-      <!-- Alertify - Tema de Bootstrap -->
+      <!-- Arbol bootstrap -->
       <link rel="stylesheet" href="'. $this->ruta_libreria .'bootstrap-treeview/css/bootstrap-treeview.css?0"/>
       <script type="text/javascript" src="'. $this->ruta_libreria .'bootstrap-treeview/js/bootstrap-treeview.js?0"></script>';
+      return($this->cadena_libreria);
+    }
+
+    public function materialSwitch(){
+      $this->cadena_libreria = '
+      <!-- Switch estilo material -->
+      <link rel="stylesheet" href="'. $this->ruta_libreria .'material-switch/css/material-switch.css?0"/>';
       return($this->cadena_libreria);
     }
 
