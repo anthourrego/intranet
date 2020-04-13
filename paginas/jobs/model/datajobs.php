@@ -130,11 +130,29 @@ function editarCategoria(){
                 );
       
 
-    } else {
-      $resp = array(
-                "success" => false,
-                "msj" => "El nombre <b>" . $nombreCat . "</b> ya  existe."
-              );
+    } else { 
+        //se realiza consulta para determinar si el nombre siendo igual a uno existente. solo quieren cambiar el padre
+        $cambiarPadre =$db->consulta("SELECT fk_categoria FROM categorias WHERE id=:id",array(":id" => @$_REQUEST['idCategoria']));
+        if($cambiarPadre['cantidad_registros']){
+            if($cambiarPadre[0]['fk_categoria'] != $_REQUEST['catPadre']){
+
+                $db->sentencia("UPDATE categorias SET fk_categoria = :fk_categoria WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":fk_categoria" => $_REQUEST["catPadre"]));
+  
+                $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado el padre a la categoria " . $_REQUEST["nombre"] . " y la nueva categoria padre es" . $_REQUEST["catPadre"], $usuario['id']);
+
+                $resp = array(
+                    "success" => true,
+                    "msj" => "Se ha actualizado correctamente"
+                  );
+
+            }else{
+                $resp = array(
+                    "success" => false,
+                    "msj" => "El nombre <b>" . $nombreCat . "</b> ya  existe."
+                  );
+            }
+        }
+      
     }
 
     $db->desconectar();
@@ -161,14 +179,14 @@ function arbolCategorias($cat = 0){
                   "idCategoria" => $categorias[$i]["id"],
                   "fechaCreacion" => $categorias[$i]["fecha_creacion"], 
                   "fk_categoria" => $categorias[$i]["fk_categoria"],
-                  "text" => $categorias[$i]["nombre"],
+                  "text" => ucwords($categorias[$i]["nombre"]),
                   "tags" => [$hijos['cantidad_registros']],
                   "nodes" => arbolCategorias($categorias[$i]["id"])
                 );
       }else {
         $arbol[] = array(
                   "idCategoria" => $categorias[$i]["id"],
-                  "text" => $categorias[$i]["nombre"],
+                  "text" => ucwords($categorias[$i]["nombre"]),
                   "fechaCreacion" => $categorias[$i]["fecha_creacion"],
                   "fk_categoria" => $categorias[$i]["fk_categoria"]
                 );
@@ -231,6 +249,7 @@ function validarNameCategoria($namecategoria){
             categorias
         WHERE
             nombre = '".$namecategoria."'
+            AND activo=1
         ");
 
     $db->desconectar();

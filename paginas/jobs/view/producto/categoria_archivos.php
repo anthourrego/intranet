@@ -213,7 +213,14 @@
     //CARGAR ARBOL
     cargarArbol(0);
     //CARGAR SELECET CATEGORIA
-    cargarSelectMiembros(2);
+    //cargarSelectMiembros(2);
+    
+
+    $("#modalAddCatergorias").on("show.bs.modal", function(e){
+      cargarSelectMiembros(2);
+    });
+
+    
 
     //Acción al click botón eliminar
     $("#btnEliminar").on("click", function(){
@@ -409,7 +416,7 @@
             `);
             for (let i = 0; i < data.lista.msj.cantidad_registros; i++) {
               $($inputSelect).append(`
-                <option  value="${data.lista.msj[i].id}">${data.lista.msj[i].nombre}</option>
+                <option  value="${data.lista.msj[i].id}">${data.lista.msj[i].nombre.charAt(0).toUpperCase() + data.lista.msj[i].nombre.slice(1) }</option>
               `); 
             }
 
@@ -535,10 +542,10 @@
             showTags: true,
             onNodeSelected: function(event, node) {
               //Cargamos el select
-              cargarSelectMiembros(1, node.fk_categoria, node.idCategoria);
+              cargarSelectMiembros(0, node.fk_categoria, node.idCategoria);
 
               
-
+              console.log(node.idCategoria);
               //Motramos todos los campos del selece en editar si hemos ocultado alguno
               $("#formEditar :input[name='catPadre'] option").show();
           
@@ -561,6 +568,9 @@
 
               //Ocultamos la tecnólogia seleccionada en el select
               $("#formEditar :input[name='catPadre'] option[value='" + node.idCategoria + "']").hide();
+
+              $("#formEditar :input[name='catPadre']").removeClass('is-valid')
+              $("#formEditar :input[name='nombre']").removeClass('is-valid');
               
 
               
