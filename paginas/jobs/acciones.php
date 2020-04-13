@@ -262,6 +262,29 @@ function listaReferencias(){
   return json_encode($resp);
 }
 
+/* function listaReferenciaTec(){
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  $sql = $db->consulta("SELECT * FROM referencias_tecnologias WHERE fk_referencia = :fk_referencia", array(":fk_referencia" => $_REQUEST["fk_referencia"]));
+
+  if ($sql["cantidad_registros"] > 0) {
+    $resp = array(
+              "success" => true,
+              "msj" => $sql
+            );
+  }else{
+    $resp = array(
+              "success" => false,
+              "msj" => "No se han encontrado resultados."
+            );
+  }
+
+  $db->desconectar();
+  return json_encode($resp);
+} */
+
 function crearPI(){
   global $usuario;
   $db = new Bd();
@@ -370,7 +393,8 @@ function subirArchivos(){
 
         //Validamos el tipo de archivos
         $extensionesPermitidad = $db->consulta("SELECT ta.extensiones AS extension FROM tipo_archivo_categoria AS tac INNER JOIN tipo_archivo AS ta ON ta.id = tac.fk_tarchivo WHERE fk_categoria = :fk_categoria", array(":fk_categoria" => $_POST['categoria']));
-  
+        
+        $extension = strtolower($extension);
         //Realizamos un ciclo para validad si es compativle esl tipo de rachivo
         for ($i=0; $i < $extensionesPermitidad["cantidad_registros"]; $i++) { 
           if ($extensionesPermitidad[$i]['extension'] == $extension) {
