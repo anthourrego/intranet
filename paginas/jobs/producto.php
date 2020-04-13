@@ -42,32 +42,18 @@
   <div class="container mt-5 rounded pt-3 pb-5 border" style="background: rgba(255,255,255,0.6)">
     <h2 class="text-center"><?php echo($_GET['referencia']) ?></h2>
     <hr>
-    <div id="btn-pi" class="d-flex justify-content-end m-3"></div>
-    <div id="btns-pi" class="d-flex justify-content-center m-3"></div>
-    <div id="documentos" class="d-none">
-      <div class="text-center text-md-right">
-        <button class="btn btn-primary mt-2 mt-md-0" type="button" data-toggle="modal" data-target="#modalAgregarDocumento">Agregar Documento</button>
-        <button type="button" class="btn btn-primary mt-2 mt-md-0" data-toggle="modal" data-target="#agregarImagen">Agregar Fotos</button>
+    <div id="btn-pi" class="d-flex justify-content-end mb-3"></div>
+    
+    <div class="row">
+      <div class="col-3">
+        <select id="selectPi" class="custom-select d-none"></select>
       </div>
-      <hr>
-      <div class="row">
-        <div class="col-12 col-md-3 border-right">
-          <h5 class="text-center text-md-right">Ficha técnica comercial</h5>
-        </div>
-        <div class="col-12 col-md-9">
-          <div class="row" id='documento1'></div>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-12 col-md-3 border-right">
-          <h5 class="text-center text-md-right">Fotos de alta resolución</h5>
-        </div>
-        <div class="col-12 col-md-9">
-          <div class="row" id="mostrarImagenes"></div>
-        </div>
+      <div class="col-9 text-right">
+        <button id="btnAddArchivos" class="btn btn-primary d-none" type="button" data-toggle="modal" data-target="#modalAgregarDocumento"><i class="fas fa-file-upload"></i> Agregar Documento</button>
       </div>
     </div>
+    
+    <div id="categorias"></div>
   </div>
 
 
@@ -102,44 +88,6 @@
     </div>
   </div>
 
-  <!-- Agregar Imagenes -->
-  <div class="modal fade" id="agregarImagen" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title font-weight-bold">Agregar Imagenes</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form id="formAgregarImagen" method="post" autocomplete="off" enctype="multipart/form-data">
-          <div class="modal-body">
-            <div class="custom-file">
-              <input type="hidden" name="accion" value="subirImagenes">
-              <input type="hidden" name="idPIImagen" id="idPIImagen">
-              <input type="hidden" name="PIImagen" id="PIImagen">
-              <input type="hidden" name="idRefImagen" id="idRefImagen" value="<?= $_REQUEST['id'] ?>">
-              <input type="hidden" name="referenciaImagen" id="referenciaImagen" value="<?= $_REQUEST['referencia'] ?>">
-              <div class="form-group">
-                <input required type="file" class="custom-file-input" id="imagenes" name="imagenes[]" multiple="true" accept=".jpg, .jpeg, .png">
-                <label class="custom-file-label" id="labelImagen" for="archivo">Seleccionar Archivo</label>
-                <small class="form-text text-muted">
-                  Solo se permiten archivos jpg, jpeg, png.
-                </small>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
-            <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Subir</button>
-          </div>
-        </form>
-        <div class="progress mt-2" style="height: 25px;">
-          <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><div class="percent">50%</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- ==================== Modal Agregar Documento ============================ -->
   <div class="modal fade bd-example-modal-md" id="modalAgregarDocumento" tabindex="-1" role="dialog" aria-labelledby="modalAgregarDocumentoTitle" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
@@ -150,29 +98,25 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form class="was-validated" novalidate id="formAgregarArchivo" method="post" autocomplete="off" enctype="multipart/form-data" action="acciones">
+        <form id="formAgregarArchivo" autocomplete="off" enctype="multipart/form-data">
+          <input type="hidden" name="accion" value="subirArchivos">
+          <input type="hidden" name="idPI" id="idPI" value="0">
+          <input type="hidden" name="refPI" id="refPI" value="0">
+          <input type="hidden" name="aplicaPI" id="aplicaPI" value="1">
+          <input type="hidden" name="idProducto" id="idProducto" value="<?= $_REQUEST['id'] ?>">
+          <input type="hidden" name="referencia" id="referencia" value="<?= $_REQUEST['referencia'] ?>">
           <div class="modal-body">
-            <input type="hidden" name="accion" value="subirArchivos">
-            <input type="hidden" name="idPI" id="idPI">
-            <input type="hidden" name="refPI" id="refPI">
-            <input type="hidden" name="idProducto" id="idProducto" value="<?= $_REQUEST['id'] ?>">
-            <input type="hidden" name="referencia" id="referencia" value="<?= $_REQUEST['referencia'] ?>">
-            <div class="">
-              <div class="form-group col-12">
-                <label for="Categoria">Categoria</label>
-                <select required class="custom-select" name="categoria" id="categoria" autofocus>
-                  <option value="0" disabled selected>Debe selecciona una opcion</option>
-                  <option value="1">Ficha técnica</option>
-                </select>
-              </div>
+            <div class="form-group col-12">
+              <label for="Categoria">Categoria <span class="text-danger">*</span></label>
+              <select required class="custom-select" name="categoria" id="categoria" autofocus></select>
             </div>
             <div class="col-12">
-              <label for="">Adjuntar Archivo</label>
+              <label for="">Adjuntar Archivo <span class="text-danger">*</span></label>
               <div class="custom-file">
-                <input required type="file" class="custom-file-input" id="archivo" name="archivo[]" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/pdf, application/x-zip-compressed, .rar" multiple>
+                <input required type="file" disabled class="custom-file-input" id="archivos" name="archivos[]" accept="N/A" multiple>
                 <label class="custom-file-label" id="labelArchivo" for="archivo">Seleccionar Archivo</label>
-                <small class="form-text text-muted">
-                  Archivos permitidos: zip, rar, pfd, doc, docx, xls, xlsx, ppt, pptx.
+                <small id="archivosExtensionesSmall" class="form-text text-muted">
+                  Archivos permitidos: N/A.
                 </small>
               </div>
             </div>
@@ -195,6 +139,37 @@
     </div>
   </div>
   <!-- ======================= Fin Modal Agregar Documento =============== -->
+
+  <!-- Modal Admin PI -->
+  <div id="modalAdminPI" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-chalkboard-teacher"></i> Admin PI</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table id="tablaPI" class="mt-3 table table-bordered table-hover table-sm w-100">
+            <thead>
+              <tr>
+                <th class="text-center">PI</th>
+                <th class="text-center">Unidades</th>
+                <th class="text-center">Fecha Creación</th>
+                <th class="text-center">Acciones</th> 
+              </tr>
+            </thead>
+            <tbody id="contenidoPI"></tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 <?php 
   echo $lib->cambioPantalla();
@@ -203,12 +178,21 @@
   $(function(){
     $permiso = top.validarPermiso('jobs_pi');
     $permiso_categorias = top.validarPermiso('categoria_tipo_archivos');
-    cerrarCargando();
-    btnPI();
+    selectPi();
+
+    $(".archivos").on("click", function(event){
+      event.preventDefault();
+      //top.$('#modalArchivos').modal("show");
+      top.$('#cargando').modal("show");
+      $('#modalArchivosTitulo').html("Documentos");
+      $("#contenidoArchivos").attr("src", $(this).attr("href"));
+      modalArchivos();
+    });
 
     if ($permiso == 1) {
       $("#btn-pi").append(`
-        <button class="btn btn-success" data-toggle="modal" data-target="#modalCrearPI"><i class="fas fa-plus"></i> Crear PI</button>
+        <button class="btn btn-success ml-2" data-toggle="modal" data-target="#modalCrearPI"><i class="fas fa-plus"></i> Crear PI</button>
+        <button class="btn btn-success ml-2" data-toggle="modal" data-target="#modalAdminPI"><i class="fas fa-tools"></i> Admin PI</button>
       `);
     }
     if ($permiso_categorias == 1) {
@@ -216,6 +200,13 @@
         <a class="btn btn-info ml-2 text-white" href="view/producto/categoria_archivos"><i class="fas fa-plus"></i> Categoria Archivos</a>
       `);
     }
+
+    $("#modalAdminPI").on('shown.bs.modal', function(e){
+      if ($permiso == 0) {
+        $("#btn-pi").empty();
+        $("#modalAdminPI").modal('hide');
+      }
+    });
 
     $("#modalCrearPI").on('shown.bs.modal', function(e){
       if ($permiso == 1) {
@@ -245,10 +236,7 @@
                 alertify.success(data.msj);
                 $("#formCrearPI :input[name='nombre']").val(""); 
                 $("#formCrearPI :input[name='unidades_pi']").val(""); 
-                setTimeout(() => {
-                  location.reload();
-                }, 1500);
-                
+                selectPi();
               }else{
                 alertify.error(data.msj);
               }
@@ -264,145 +252,140 @@
     });
 
     /* ==================================================================== */
-      // Variables de barra de progreso
-      var bar = $('.progress-bar');
-      var percent = $('.percent');
-      //var status = $('#status');
-      /*====================== Formulario Agregar Imagenes ================== */
-      $("#formAgregarImagen").submit(function(event){
-        event.preventDefault();
-        if ($(this).valid()) {
-          $.ajax({
-            xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        var percentComplete = ((evt.loaded / evt.total) * 100);
-                        $(".progress-bar").width(percentComplete + '%');
-                        $(".progress-bar").html(percentComplete+'%');
-                    }
-                }, false);
-                return xhr;
-            },
-            url: "acciones",
-            type: "POST",
-            dataType: "html",
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: new FormData(this),
-            beforeSend: function(){
-              $(".progress-bar").width('0%');
-              $(".progress-bar").html('0%');
-            },
-            success: function(data){
-              if(data == "OK"){
-                alertify.success("Se han agregado correctamente");
-                cargarImagenes();
-                console.log();
-                //$("#formAgregarImagen").find('input').removeClass('is-valid');
-                //$("#formAgregarImagen").find('input').removeClass('is-invalid');
-                $('#agregarImagen').modal('hide');
-                $('#labelImagen').text('Seleccionar Archivo');
-                $('#imagenes').val('');
-              }else{
-                alertify.error("No se ha subido el archivo.");
-              }
-              /*if (data.success == true) {
-                $("#modalCrearPI").modal("hide");
-                alertify.success(data.msj);
-                $("#formCrearPI :input[name='nombre']").val(""); 
-                $("#formCrearPI :input[name='unidades_pi']").val(""); 
-              }else{
-                alertify.error(data.msj);
-              }*/
-            },
-            error: function(){
-              alertify.error("No se han enviado datos...");
-            },
-            complete: function(){
-              setTimeout(function(){
-                bar.width('0%');
-                percent.html('0%');
-              }, 1000);
-            }
-          });
-        }
-      });
-      /* ==================================================================== */
-      /* ======================= Formulario de Archivos ===================== */
-      $('#subirArchivo').click(function(){
-        if ((textoBlanco($('#archivo')) > 0) && ($("#categoria").val() > 0)) {
-          $('#formAgregarArchivo').submit()
-        }else{
-          if ($("#categoria").val() <= 0) {
-            alertify.warning('Debes seleccionar una categoría');
-            $("#categoria").focus();
-          }else if ((textoBlanco($('#archivo')) > 0)) {
-            alertify.warning('Debes adjuntar un documento o archivo');
-            $('#archivo').focus();
-          }else{
-            alertify.warning('Error en el formulario');
-          }
-        }
-      });
+    // Variables de barra de progreso
+    var bar = $('.progress-bar');
+    var percent = $('.percent');
 
-      $('#formAgregarArchivo').ajaxForm({
-        beforeSend: function() {
-          status.empty();
-          var percentVal = '0%';
-          bar.width(percentVal)
-          percent.html(percentVal);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-          var percentVal = percentComplete + '%';
-          bar.width(percentVal)
-          percent.html(percentVal);
-          //console.log(percentVal, position, total);
-        },
-        success: function() {
-          var percentVal = '100%';
-          bar.width(percentVal)
-          percent.html(percentVal);
-        },
-        complete: function(xhr) {
-          if (xhr.responseText === 'OK') {
-            alertify.success("Se han agregado correctamente");
-            $('#modalAgregarDocumento').modal('hide');
-            $('#labelArchivo').text('Seleccionar Archivo');
-            mostrarDocumentos(idPIA, $("#categoria").val());
-            $("#categoria").val();
-            $('#archivo').val('');
-            bar.width('0%');
-            parcent.html('0%');
-          }else{
-            alertify.error(xhr.responseText);
-            bar.width('0%');
-            parcent.html('0%');
+    $("#formAgregarArchivo").submit(function(event){
+      event.preventDefault();
+      if ($(this).valid()) {
+        $.ajax({
+          xhr: function() {
+              var xhr = new window.XMLHttpRequest();
+              xhr.upload.addEventListener("progress", function(evt) {
+                  if (evt.lengthComputable) {
+                      var percentComplete = ((evt.loaded / evt.total) * 100);
+                      $(".progress-bar").width(percentComplete + '%');
+                      $(".progress-bar").html(percentComplete+'%');
+                  }
+              }, false);
+              return xhr;
+          },
+          url: "acciones",
+          type: "POST",
+          dataType: "json",
+          cache: false,
+          contentType: false,
+          processData: false,
+          data: new FormData(this),
+          beforeSend: function(){
+            $(".progress-bar").width('0%');
+            $(".progress-bar").html('0%');
+          },
+          success: function(data){
+            if (data.success) {
+              if ($("#aplicaPI").val() == 0) {
+                mostrarDocumentos($("#categoria").val(), $("#documento" + $("#categoria").val()).data("permiso"));
+              }else{
+                mostrarDocumentos($("#categoria").val(), $("#documento" + $("#categoria").val()).data("permiso"), $("#idPI").val());
+              }
+              $('#modalAgregarDocumento').modal('hide');
+              $('#labelArchivo').text('Seleccionar Archivo');
+              $("#categoria").val(0);
+              $("#archivosExtensionesSmall").html("Archivos permitidos: N/A.");
+              $('#archivos').val('');
+              $("#archivos").prop("disabled", true);
+              alertify.success("Se han agregado correctamente");
+            }else{
+              alertify.error(data.msj);
+            }
+          },
+          error: function(){
+            alertify.error("No se han enviado datos...");
+          },
+          complete: function(){
+            setTimeout(function(){
+              bar.width('0%');
+              percent.html('0%');
+            }, 1000);
           }
-        }
-      });
+        });
+      }
+    });
   });
 
-  function btnPI(){
+  function selectPi(){
     $.ajax({
       url: 'acciones',
       type: 'POST',
       dataType: 'json',
-      data: {accion: "listaPI" , fk_referencia: <?php echo($_GET['id']); ?>},
+      data: {
+        accion: "listaPI", 
+        fk_referencia: <?php echo($_GET['id']); ?>
+      },
       success: function(data){
-        $('[data-toggle="tooltip"]').tooltip('hide');
-        $("#btns-pi").empty();
-        if (data.success == true) {
+        if (data.success) {
+          let ultimoID = 0;
+          $("#selectPi").removeClass("d-none");
+          $("#selectPi").empty();
+          $("#tablaPI").dataTable().fnDestroy();
+          $("#contenidoPI").empty();
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
-            $("#btns-pi").append(`
-              <button class="btn btn-primary ml-2" data-toggle="tooltip" data-placement="top" title="${data.msj[i].unidades} unidades" onClick="mostrarContenido(${data.msj[i].id}, '${data.msj[i].pi}')">${data.msj[i].pi}</button>
+            ultimoID = data.msj[i].id;
+            $("#selectPi").append(`
+              <option value="${data.msj[i].id}">${data.msj[i].pi}</option>
             `);
+
+            $("#contenidoPI").append(`
+              <tr>
+                <td><input class="form-control" type="text" id="EditPIPI${data.msj[i].id}" value="${data.msj[i].pi}" disabled></td>
+                <td><input class="form-control" type="number" onkeypress="return soloNumeros(event)" id="EditPIUnidades${data.msj[i].id}" value="${data.msj[i].unidades}" disabled></td>
+                <td class="text-center">${data.msj[i].fecha_creacion}</td>
+                <td class="text-center">
+                  <button class="btn btn-success EditBtnEditar" value="0" data-id="${data.msj[i].id}"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger" id="BtnEliminarPI${data.msj[i].id}" onClick="eliminarPI(${data.msj[i].id}, '${data.msj[i].pi}')"><i class="fas fa-trash-alt"></i></button>
+                </td>
+              </tr>
+            `);
+
           }
-        } else {
-          alertify.error(data.msj);
+          //Definimos la tabla en la modal
+          definirdataTable("#tablaPI");
+
+          //Enviamos los ultimos datos de la PI
+          $('#idPI').val(data.msj[data.msj.cantidad_registros - 1].id);
+          $('#refPI').val(data.msj[data.msj.cantidad_registros - 1].pi);
+          $("#selectPi").val(ultimoID);
+          cargarCategorias(1);
+
+          $("#selectPi").on("change", function(){
+            top.$("#cargando").modal("show");
+            cargarCategorias(1);
+          });
+
+          //Botones de editar en la PI
+          $(".EditBtnEditar").on("click", function(){
+            let id = $(this).data("id");
+            if ($(this).val() == 0) {
+              $(this).html(`<i class="far fa-save"></i>`);
+              $("#EditPIPI" + id ).attr("disabled", false);
+              $("#EditPIUnidades" + id).attr("disabled", false);
+              $("#BtnEliminarPI" + id).attr("disabled", true);
+              $(this).val(1);
+            }else{
+              $(this).html(`<i class="fas fa-edit"></i>`);
+              $("#EditPIPI" + id ).attr("disabled", true);
+              $("#EditPIUnidades" + id).attr("disabled", true);
+              $("#BtnEliminarPI" + id).attr("disabled", false);
+              editarPI(id);
+              $(this).val(0);
+            }
+          });
+        }else{
+          $("#selectPi").addClass("d-none");
+          $("#selectPi").empty();
+          cargarCategorias(0);
         }
-        $('[data-toggle="tooltip"]').tooltip();
       },
       error: function(){
         alertify.error('No se han encontrado datos.');
@@ -410,60 +393,275 @@
     });
   }
 
-  function mostrarDocumentos(id, subCat){
+  function mostrarDocumentos(subCat, permiso = 0, idPI = 0){
     $.ajax({
       type: 'POST',
       url: 'acciones',
-      data: {accion: "listaDocumentos", idPI: id, idSub: subCat, idPro: <?= $_GET['id'] ?>},
-      success: function(result){
-        $('#documento' + subCat).empty(),
-        $('#documento' + subCat).append(result),
-        $('[data-toggle="tooltip"]').tooltip()
+      dataType: 'json',
+      data: {
+        accion: "listaDocumentos", 
+        idPI: idPI, 
+        idSub: subCat, 
+        idPro: <?= $_GET['id'] ?>
       },
-      error: function(result){
-        alert("Error al cargar documentos")
+      success: function(data){
+        $('#documento' + subCat).empty();
+        if(data.success == true){
+          for (let i = 0; i < data.msj.cantidad_registros; i++) {
+            let html = '';
+            if (data.msj[i].tipo2 == "jpg" || data.msj[i].tipo2 == "jpeg" || data.msj[i].tipo2 == "png") {
+              html = `<div class="col-3 col-sm-2 col-md-2 col-lg-1">
+                  <a data-toggle="tooltip" title="${"V" + i + " " + data.msj[i].observaciones}" href="<?php echo($ruta_raiz); ?>${data.msj[i].ruta}" data-lightbox="galeria${subCat}" data-title="${"V" + i + " " + data.msj[i].observaciones}"><img class="img-thumbnail" src="../../${data.msj[i].ruta}"></a>
+                  <div class="text-center iconos-sig">
+                    <a href="<?php echo($ruta_raiz); ?>${data.msj[i].ruta}" download="${data.msj[i].nombre_sub + "-" + i + "." + data.msj[i].tipo2}"><i class="fas fa-download"></i></a>`;
+              
+              if (permiso == 1) {
+                html = html + `<hr>
+                              <button class="btn btn-link text-danger" onClick="eliminarArchivo(${data.msj[i].id}, ${subCat}, ${permiso}, ${idPI})">
+                                <i class="fas fa-trash-alt"></i>
+                              </button>`;
+              }
+
+              html = html +  `</div>
+                            </div>`;
+
+                            
+            }else{
+              html = `<div class="col-3 col-sm-2 col-md-2 col-lg-1 text-center mb-3 iconos-sig">
+                            <div class="mb-1" data-toggle="tooltip" title="${"V" + i + " " + data.msj[i].observaciones}">`;
+              if (data.msj[i].tipo2 == "rar" || data.msj[i].tipo2 == "zip") {
+                html = html + `<a href="<?php echo($ruta_raiz); ?>${data.msj[i].ruta}" download="${data.msj[i].nombre_sub + "-" + i + "." + data.msj[i].tipo2}">
+                                <i class="${data.msj[i].icono} fa-3x"></i>
+                              </a>`;
+                
+              }else if(data.msj[i].tipo2 == "pdf"){
+                html = html + `<a class="text-decoration-none" onClick="modalDocumentos('<?php echo($ruta_raiz); ?>${data.msj[i].ruta}', 'V${i}')">
+                                <i class="${data.msj[i].icono} fa-3x"></i>
+                              </a>`;
+              }else{
+                html = html + `
+                            <a class="text-decoration-none" onClick="modalDocumentos('https://view.officeapps.live.com/op/embed.aspx?src=http://consumerelectronicsgroup.com/intranet/${data.msj[i].ruta}', 'V${i}')">
+                              <i class="${data.msj[i].icono} fa-3x"></i>
+                            </a>`;
+              }
+
+              html = html + `</div>
+                            <a href="<?php echo($ruta_raiz); ?>${data.msj[i].ruta}" download="${data.msj[i].nombre_sub + "-" + i + "." + data.msj[i].tipo2}"><i class="fas fa-download"></i></a>`;
+
+              if (permiso == 1) {
+                html = html + `<hr>
+                              <button class="btn btn-link text-danger" onClick="eliminarArchivo(${data.msj[i].id}, ${subCat}, ${permiso}, ${idPI})">
+                                <i class="fas fa-trash-alt"></i>
+                              </button>`;
+              }
+
+              html = html + `</div>`;
+            }
+            $('#documento' + subCat).append(html);
+          }
+        }
+        $('[data-toggle="tooltip"]').tooltip();
+      },
+      error: function(data){
+        alertify.error("Error al cargar documentos");
       }
     });
   }
 
-  function mostrarContenido(id, pi){
-    //Cargamos la imagenes según el lote seleccionado
-    cargarImagenes();
-
-    //Mostramos los documentos que estan por cada categoria
-    mostrarDocumentos(id,1);
-    
-    //Enviamos los id al formulario de imagenes
-    $('#idPIImagen').val(id);
-    $('#PIImagen').val(pi);
-    
-    //Enviamos el id y el lote al formulario de archivos
-    $('#idPI').val(id);
-    $('#refPI').val(pi);
-
-    //Mostramos el contenido de los productos
-    $('#documentos').removeClass("d-none");
-  }
-
-  function cargarImagenes(){
-    $('#mostrarImagenes').empty();
+  function cargarCategorias(aplicaPI){
     $.ajax({
       url: 'acciones',
       type: 'POST',
       dataType: 'json',
-      data: {accion: 'mostrarImagenes', idProducto: <?= $_GET['id'] ?>},
+      data: {
+        accion: 'listaCategorias', 
+        pi: aplicaPI
+      },
       success: function(data){
-        if (data.success == true) {
+        let cont_permisos = 0;  
+        $("#categorias").empty();
+        $("#categoria").empty();
+        $("#categoria").append(`
+          <option value="0" data-extensiones="" disabled selected>Seleccione una opción</option>
+        `);
+        
+        if (data.success) {  
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
-            var img = $('');
-            $('#mostrarImagenes').append(`<div class="col-6 col-md-4 col-lg-3 mt-2 mb-2">
-                                            <a class="example-image-link" href="../../${data.msj[i].ruta}" data-lightbox="example-set" data-title=""><img class="img-thumbnail" src="../../${data.msj[i].ruta}"></a>
-                                          </div>`);
+            let permiso = top.validarPermiso(data.msj[i].fk_permiso);
+            //Solo mostramos las que se permite mirar a todas las personas
+            if (data.msj[i].publico == 1) {  
+              $("#categorias").append(`
+                <hr>
+                <h5 class="mb-4">${data.msj[i].nombre}</h5>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row" id='documento${data.msj[i].id}' data-permiso="${permiso}"></div>
+                  </div>
+                </div>
+              `);
+            }
+
+            //Validamos el permiso y llenamos el select y colocamos un catador para contar si tiene algun permiso de esa forma habilitar el boton de agregar archivos, pero adicional validamos si la categoria no esta publica para poder que la visualice
+            if (permiso == 1) {
+              //Si estaba oculto y tiene el permiso para agregar archivos lo puede ver
+              if (data.msj[i].publico == 0) {
+                $("#categorias").append(`
+                  <hr>
+                  <h5>${data.msj[i].nombre}</h5>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row" id='documento${data.msj[i].id}' data-permiso="${permiso}"></div>
+                    </div>
+                  </div>
+                `);
+              }
+
+              //Debe de tener alguna extesion agregada para que aparezca en la lista
+              if (data.msj[i].extensiones != "") {  
+                $("#categoria").append(`
+                  <option data-aplicapi="${data.msj[i].aplica_pi}" data-extensiones="${data.msj[i].extensiones}" value="${data.msj[i].id}">${data.msj[i].nombre}</option>
+                `);
+              }
+              cont_permisos++;
+            }
+
+            if (data.msj[i].aplica_pi == 0) {
+              mostrarDocumentos(data.msj[i].id, permiso);
+            }else{
+              mostrarDocumentos(data.msj[i].id, permiso, $("#selectPi").val());
+            }
           }
+
+          if (cont_permisos > 0) {
+            $("#btnAddArchivos").removeClass("d-none");
+          }
+
+          $("#categoria").on("change", function(){
+            let extensiones = $("#categoria option[value='" + $(this).val() + "']").data("extensiones");
+            let aplicaPI = $("#categoria option[value='" + $(this).val() + "']").data("aplicapi");
+            if (extensiones != "") {
+              $("#aplicaPI").val(aplicaPI);
+              $("#archivos").attr("accept", extensiones);
+              $("#archivosExtensionesSmall").html("Archivos permitidos: " + extensiones);
+              $("#archivos").prop("disabled", false);
+            }else{
+              $("#archivos").prop("disabled", true);
+              $("#archivosExtensionesSmall").html("Archivos permitidos: N/A.");
+              $("#modalAgregarDocumento").modal("hide");
+              console.log("Deben de definirle una extension a esta cargoria.");
+            }
+          });
+        }else{
+          alertify.error(data.msj);
         }
       },
       error: function(){
         alertify.error("Error al enviar datos");
+      },
+      complete: function(){
+        cerrarCargando();
+      }
+    });
+  }
+
+  function eliminarArchivo(id, subCat, permiso, idPI){
+    alertify.confirm(
+      '¿Estas seguro?', 
+      'Deseas eliminar este archivo.', 
+    function(){ 
+      $.ajax({
+        url: 'acciones',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          accion: "eliminarArchivo", 
+          archivo: id
+        },
+        success: function(data){
+          if (data == 1) {
+            mostrarDocumentos(subCat, permiso, idPI);
+            alertify.warning("Se ha eliminado el archivo");
+          }else{
+            alertify.error("Error al eliminar el archivo");
+          }
+        },
+        error: function(){
+          alertify.error('No se han enviado los datos.');
+        }
+      });
+    }, 
+    function(){})
+    .set('labels', {
+      ok:'<i class="far fa-trash-alt"></i> Si', 
+      cancel:'<i class="fa fa-times"></i> No'
+    });
+  }
+
+  function eliminarPI(id, pi){
+    alertify.confirm(
+      '¿Estas seguro?', 
+      'Deseas eliminar este archivo.', 
+    function(){ 
+      $.ajax({
+        url: 'acciones',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          accion: "eliminarPI", 
+          id: id,
+          pi: pi
+        },
+        success: function(data){
+          if (data == 1) {
+            selectPi();
+            alertify.warning("Se ha eliminado la PI " + pi);
+          }else{
+            alertify.error("Error al eliminar la PI" + pi);
+          }
+        },
+        error: function(){
+          alertify.error('No se han enviado los datos.');
+        }
+      });
+    }, 
+    function(){})
+    .set('labels', {
+      ok:'<i class="far fa-trash-alt"></i> Si', 
+      cancel:'<i class="fa fa-times"></i> No'
+    });
+  }
+
+  function modalDocumentos(url, nombreArchivo){
+    top.$('#cargando').modal("show");
+    $('#modalArchivosTitulo').html("Documento " + nombreArchivo);
+    $("#contenidoArchivos").attr("src", url);
+    modalArchivos();
+  }
+
+  function editarPI(id){
+    $.ajax({
+      url: 'acciones',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        accion: "editarPI", 
+        id: id,
+        pi: $("#EditPIPI" + id ).val(),
+        unidades: $("#EditPIUnidades" + id).val(),
+        referencia: <?php echo($_GET['id']); ?>
+      },
+      success: function(data){
+        if (data.success == true) {
+          if (id == $("#selectPi").val()) {
+            selectPi();
+          }
+          alertify.success(data.msj);
+        }else{
+          alertify.error(data.msj);
+        }
+      },
+      error: function(){
+        alertify.error('No se han enviado los datos.');
       }
     });
   }

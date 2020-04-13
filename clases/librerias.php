@@ -270,6 +270,11 @@
             });
           });
 
+          $("#modalArchivos").on("hide.bs.modal", function (e) {
+            $("#modalArchivosTitulo").html("");
+            $("#contenidoArchivos").attr("src", "");
+          });
+
           /*$(".link").on("click", function(event){
             top.$("#cargando").modal("show");
             event.preventDefault();
