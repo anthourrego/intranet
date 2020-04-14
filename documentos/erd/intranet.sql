@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-04-2020 a las 18:10:21
+-- Tiempo de generación: 14-04-2020 a las 19:06:48
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.3
 
@@ -59,16 +59,6 @@ CREATE TABLE `categorias` (
   `fk_creador` int(11) NOT NULL DEFAULT 0,
   `fk_permiso` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `categorias`
---
-
-INSERT INTO `categorias` (`id`, `nombre`, `fecha_creacion`, `aplica_pi`, `activo`, `publico`, `fk_categoria`, `fk_creador`, `fk_permiso`) VALUES
-(1, 'Ficha Técnica', '2020-04-09 18:52:06', 0, 1, 1, 0, 98, 'jobs_cat_ficha_tecnica'),
-(2, 'Fotos en alta', '2020-04-09 18:52:59', 0, 1, 0, 0, 98, 'jobs_cat_fotos_en_alta'),
-(3, 'Fotos Comercial', '2020-04-09 18:53:16', 0, 1, 1, 0, 98, 'jobs_cat_fotos_comercial'),
-(4, 'QA', '2020-04-10 11:07:02', 1, 1, 1, 0, 98, 'jobs_cat_qa');
 
 -- --------------------------------------------------------
 
@@ -126,7 +116,8 @@ CREATE TABLE `referencias` (
   `referencia` varchar(100) NOT NULL,
   `fecha_creacion` datetime NOT NULL,
   `fk_marca` int(11) NOT NULL DEFAULT 0,
-  `fk_creador` int(11) NOT NULL DEFAULT 0
+  `fk_creador` int(11) NOT NULL DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -255,7 +246,10 @@ INSERT INTO `tecnologia_no_compatible` (`id`, `fk_tecnologia`, `fk_tecnologia_co
 (39, 50, 6, '2020-04-12 19:00:39', 1, 98),
 (40, 50, 7, '2020-04-12 19:00:39', 1, 98),
 (41, 50, 8, '2020-04-12 19:00:39', 1, 98),
-(42, 50, 10, '2020-04-12 19:00:39', 1, 98);
+(42, 50, 10, '2020-04-12 19:00:39', 1, 98),
+(43, 33, 1, '2020-04-13 12:27:41', 1, 98),
+(44, 33, 2, '2020-04-13 12:27:41', 1, 98),
+(45, 33, 33, '2020-04-13 12:27:41', 1, 98);
 
 -- --------------------------------------------------------
 
@@ -319,7 +313,9 @@ INSERT INTO `tipo_archivo_categoria` (`id`, `fk_categoria`, `fk_tarchivo`, `esta
 (26, 3, 3, 1, '2020-04-12 18:36:42', 98),
 (27, 4, 5, 1, '2020-04-12 18:37:28', 98),
 (28, 4, 8, 1, '2020-04-12 18:37:55', 98),
-(29, 1, 1, 1, '0000-00-00 00:00:00', 98);
+(29, 1, 1, 1, '0000-00-00 00:00:00', 98),
+(30, 4, 4, 1, '2020-04-13 12:14:21', 98),
+(31, 4, 10, 1, '2020-04-13 12:14:26', 98);
 
 --
 -- Índices para tablas volcadas
@@ -405,7 +401,7 @@ ALTER TABLE `archivos_pi_referencias`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `logs_jobs`
@@ -447,7 +443,7 @@ ALTER TABLE `tecnologias`
 -- AUTO_INCREMENT de la tabla `tecnologia_no_compatible`
 --
 ALTER TABLE `tecnologia_no_compatible`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_archivo`
@@ -459,7 +455,7 @@ ALTER TABLE `tipo_archivo`
 -- AUTO_INCREMENT de la tabla `tipo_archivo_categoria`
 --
 ALTER TABLE `tipo_archivo_categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

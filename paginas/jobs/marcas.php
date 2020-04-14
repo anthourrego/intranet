@@ -229,7 +229,7 @@
                 'Deseas eliminar la marca <b>' + nombre + '</b>', 
               function(){ 
                 $.ajax({
-                  url: 'acciones.php',
+                  url: 'acciones',
                   type: 'POST',
                   dataType: 'json',
                   data: {accion: "eliminarMarca", idMarca: id, nombreMarca: nombre},

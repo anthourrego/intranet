@@ -233,11 +233,15 @@ function crearReferencia(){
   return json_encode($resp);
 }
 
-function validarNombreReferencia($referencia){
+function validarNombreReferencia($referencia, $id=0){
   $db = new Bd();
   $db->conectar();
-
-  $validar = $db->consulta("SELECT * FROM referencias WHERE referencia = :referencia", array(":referencia" => $referencia));
+  
+  if ($id == 0) {
+    $validar = $db->consulta("SELECT * FROM referencias WHERE referencia = :referencia", array(":referencia" => $referencia));
+  }else{
+    $validar = $db->consulta("SELECT * FROM referencias WHERE referencia = :referencia AND id != :id", array(":referencia" => $referencia, ":id" => $id));
+  }
 
   $db->desconectar();
   return json_encode($validar['cantidad_registros']);
@@ -248,7 +252,7 @@ function listaReferencias(){
   $db->conectar();
   $resp = array();
 
-  $referencias = $db->consulta("SELECT r.id, r.referencia FROM referencias_tecnologias AS rt INNER JOIN referencias AS r ON r.id = rt.fk_referencia WHERE r.fk_marca = :fk_marca AND rt.fk_tecnologia = :fk_tecnologia", array(":fk_marca" => $_REQUEST['marca'], ":fk_tecnologia" => $_REQUEST['tecnologia']));
+  $referencias = $db->consulta("SELECT r.id, r.referencia FROM referencias_tecnologias AS rt INNER JOIN referencias AS r ON r.id = rt.fk_referencia WHERE r.fk_marca = :fk_marca AND rt.fk_tecnologia = :fk_tecnologia AND r.estado = 1", array(":fk_marca" => $_REQUEST['marca'], ":fk_tecnologia" => $_REQUEST['tecnologia']));
   
   if ($referencias['cantidad_registros'] > 0) {
     $resp = array("success" => true,
@@ -262,12 +266,12 @@ function listaReferencias(){
   return json_encode($resp);
 }
 
-/* function listaReferenciaTec(){
+function listaReferenciaTec(){
   $db = new Bd();
   $db->conectar();
   $resp = array();
 
-  $sql = $db->consulta("SELECT * FROM referencias_tecnologias WHERE fk_referencia = :fk_referencia", array(":fk_referencia" => $_REQUEST["fk_referencia"]));
+  $sql = $db->consulta("SELECT * FROM referencias_tecnologias WHERE fk_referencia = :fk_referencia AND activo = 1", array(":fk_referencia" => $_REQUEST["fk_referencia"]));
 
   if ($sql["cantidad_registros"] > 0) {
     $resp = array(
@@ -283,7 +287,67 @@ function listaReferencias(){
 
   $db->desconectar();
   return json_encode($resp);
-} */
+}
+
+function editarReferencia(){
+  global $usuario;
+  $db = new Bd();
+  $db->conectar();
+  $resp = array();
+
+  $referencia = trim($_REQUEST["nombre"]);
+  
+  if(validarNombreReferencia($referencia, $_REQUEST['idReferencia']) == 0){
+    $db->sentencia("UPDATE referencias SET referencia = :referencia WHERE id = :id", array(":referencia" => $referencia, ":id" => $_REQUEST['idReferencia']));
+
+    $db->insertLogs("referencias", $_REQUEST['idReferencia'], "Cambio de nombre de Referencia a " . $referencia, $usuario['id']);
+    
+    $ids = '';
+    for ($i=0; $i < count($_REQUEST["tecnologia"]); $i++) { 
+      $ids .= $_REQUEST["tecnologia"][$i] . ", ";
+      if (count($_REQUEST["tecnologia"]) == ($i + 1)) {
+        $ids .= $_REQUEST["tecnologia"][$i];
+      }
+
+      $validarTecnologia = $db->consulta("SELECT * FROM referencias_tecnologias WHERE fk_referencia = :fk_referencia AND fk_tecnologia = :fk_tecnologia", array(":fk_referencia" => $_REQUEST['idReferencia'], ":fk_tecnologia" => $_REQUEST["tecnologia"][$i]));
+
+      if ($validarTecnologia["cantidad_registros"] == 1) {
+        if ($validarTecnologia[0]["activo"] == 0) {
+          $db->sentencia("UPDATE referencias_tecnologias SET activo = 1 WHERE id = :id", array(":id" => $validarTecnologia[0]["id"]));
+          $db->insertLogs("referencias_tecnologias", $validarTecnologia[0]["id"], "Se activa la tecnologia", $usuario['id']);
+        }
+      }else{
+        $idTec = $db->sentencia("INSERT INTO referencias_tecnologias (fk_referencia, fk_tecnologia, fecha_creacion, activo, fk_creador) VALUES (:fk_referencia, :fk_tecnologia, :fecha_creacion, :activo, :fk_creador)", array(":fk_referencia" => $_REQUEST['idReferencia'], ":fk_tecnologia" => $_REQUEST["tecnologia"][$i], ":fecha_creacion" => date('Y-m-d H:i:s'), ":activo" => 1, ":fk_creador" => $usuario['id']));
+
+        $db->insertLogs("referencias_tecnologias", $idTec, "Se crea una nueva tecnologia a " . $referencia, $usuario['id']);
+      }
+
+    }
+
+    $sqlTecnologiasDesactivar = $db->consulta("SELECT * FROM referencias_tecnologias WHERE fk_referencia = :fk_referencia AND fk_tecnologia NOT IN (" . $ids . ")", array(":fk_referencia" => $_REQUEST['idReferencia']));
+
+    for ($i=0; $i < $sqlTecnologiasDesactivar["cantidad_registros"]; $i++) { 
+      if ($sqlTecnologiasDesactivar[$i]['activo'] == 1) {
+        $db->sentencia("UPDATE referencias_tecnologias SET activo = 0 WHERE id = :id", array(":id" => $sqlTecnologiasDesactivar[$i]["id"]));
+          $db->insertLogs("referencias_tecnologias", $sqlTecnologiasDesactivar[0]["id"], "Se desactiva  la tecnologia", $usuario['id']);
+      }
+    }
+
+    $resp = array(
+              "success" => true,
+              "msj" => "Le referencia se ha acutalizado correctamente."
+            );
+
+  }else{
+    $resp = array(
+              "success" => false,
+              "msj" => "El nombre <b>" . $nombre . "</b> ya esta creado."
+            );
+  }
+
+  $db->desconectar();
+  return json_encode($resp);
+}
 
 function crearPI(){
   global $usuario;
@@ -641,6 +705,22 @@ function editarPI(){
 
   return json_encode($resp);
 }
+
+function eliminarReferencia(){
+  global $usuario;
+  $resp = array();
+  $db = new Bd();
+  $db->conectar();
+
+  $db->sentencia("UPDATE referencias SET estado = 0 WHERE id = :id", array(":id" => $_REQUEST["idReferencia"]));
+
+  $db->insertLogs("referencias", $_REQUEST["idReferencia"], "Se elimina la referencia " . $_REQUEST["nombreReferencia"], $usuario['id']);
+
+  $db->desconectar();
+
+  return json_encode(1);
+}
+
 if(@$_REQUEST['accion']){
 	if(function_exists($_REQUEST['accion'])){
 		echo($_REQUEST['accion']());
