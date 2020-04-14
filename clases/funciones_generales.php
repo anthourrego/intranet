@@ -58,6 +58,35 @@
     return $cont;
   }
 
+  function cadena_db_insertar($cadena){
+    $cadena=htmlentities($cadena, ENT_QUOTES, "UTF-8",false);
+    $cadena=htmlspecialchars_decode($cadena,ENT_NOQUOTES);		
+    
+    //$cadena=str_replace("'", "''", $cadena);
+    
+    switch (BDTYPE) {
+      case 1: //mysql
+        
+        break;
+      case 2: //oracle
+        
+        break;
+      case 3: //sqlServer	
+        
+        break;
+      default:
+        break;
+    }
+      
+    return($cadena);		
+  }
+
+
+  function cadena_db_obtener($cadena){
+    $cadena=html_entity_decode($cadena);
+    return($cadena);	
+  }
+
   function iconos($tipo){
     $icono = "";
     if ($tipo == "application/pdf") {

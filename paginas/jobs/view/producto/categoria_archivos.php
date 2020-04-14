@@ -14,6 +14,7 @@
   include_once($ruta_raiz . 'clases/librerias.php');
   include_once($ruta_raiz . 'clases/sessionActiva.php');
   include_once($ruta_raiz . 'paginas/jobs/model/datajobs.php');
+  
 
   $usuario = $session->get("usuario");
   $ruta_documentos = array();
@@ -126,17 +127,28 @@
           </button>
         </div>
         <form id="formCrearCategoria" autocomplete="off">
-          <input type="hidden" name="accion" value="crearCategoria">
+          <input type="hidden" name="accion" value="crearPermisoJobsyCategoria">
+          <input type="hidden" name="fun_fkcrear" value="<?php echo($usuario['id']) ?>">
           <div class="modal-body">
             <div class="form-group">
               <label for="fk_categoria">Miembro de</label>
               <select id="fk_categoria" name="fk_categoria" class="custom-select">
-              
+                <option value="0" selected>Raíz</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="nombreCat">Categoria</label>
-              <input class="form-control" type="text" name="nameCategoria" id="nameCategoria" placeholder="Nombre para la categoria" name="nombreCat" autocomplete="off" required>
+              <label for="nameCategoria">Categoria (Nombre para mostrar)</label>
+              <input class="form-control" type="text" name="nameCategoria" id="nameCategoria" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+              <label for="nombreCatPermiso">Nombre Categoria Permiso</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon3">jobs_</span>
+                </div>
+                <input class="form-control" type="text" name="nombreCatPermiso" id="nombreCatPermiso" autocomplete="off" required>
+              </div>
+              <note>Sin espacios y/o Caracteres especiales</note>
             </div>
             <div class="row">
               <div class="col-md-6 col-sm-12">
@@ -165,6 +177,12 @@
                     </span>
                 </div>
               </div>
+            </div>
+            <div class="form-group">
+              <label for="fk_tparchivos">Tipo de archivos Permitidos</label>
+              <select id="fk_tparchivos" name="fk_tparchivos" class="custom-select">
+              
+              </select>
             </div>
           </div>
           <div class="modal-footer">
@@ -214,6 +232,12 @@
     cargarArbol(0);
     //CARGAR SELECET CATEGORIA
     //cargarSelectMiembros(2);
+
+
+    $("#nombreCatPermiso").keyup(function() {
+      var txt = $("#nombreCatPermiso").val();
+      $("#nombreCatPermiso").val(txt.replace(/ /g, ""));
+    });
     
 
     $("#modalAddCatergorias").on("show.bs.modal", function(e){
@@ -293,34 +317,54 @@
     $("#formCrearCategoria").submit(function(e){
       e.preventDefault();
       if($(this).valid()){
+        var formd=new FormData(this);
         $.ajax({
           type:"POST",
           dataType:"json",
-          url:"../../model/datajobs.php",
+          url:"<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
           cache: false,
           contentType: false,
           processData: false,
           data: new FormData(this),
           success:function(data){
-            if(data.exito){
-              alertify.success(data.alert.msj);
-              $("#modalAddCatergorias").modal("hide");
-              $("#modalAddCatergorias :input[name='fk_categoria']").val(0);
-              $("#modalAddCatergorias :input[name='nameCategoria']").val('');
-              $("#modalAddCatergorias :input[name='nameCategoria']").removeClass('is-valid');
-              $("#modalAddCatergorias :input[name='checkboxaplicaPI']").prop("checked", false);
-              $("#modalAddCatergorias :input[name='checkboxprivacidad']").prop("checked", false);
-              cargarSelectMiembros();
-              cargarArbol();
-            }else{
-              alertify.error(data.alert.msj);
-            }
+            if(data.exito == 1){
+              $.ajax({
+                type:"POST",
+                dataType:"json",
+                url:"../../model/datajobs.php",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formd,
+                success:function(data){
+                  if(data.exito){
+                    alertify.success(data.alert.msj);
+                    $("#modalAddCatergorias").modal("hide");
+                    $("#modalAddCatergorias :input[name='fk_categoria']").val(0);
+                    $("#modalAddCatergorias :input[name='nameCategoria']").val('');
+                    $("#modalAddCatergorias :input[name='nameCategoria']").removeClass('is-valid');
+                    $("#modalAddCatergorias :input[name='checkboxaplicaPI']").prop("checked", false);
+                    $("#modalAddCatergorias :input[name='checkboxprivacidad']").prop("checked", false);
+                    cargarSelectMiembros();
+                    cargarArbol();
+                  }else{
+                    alertify.error(data.alert.msj);
+                  }
 
+                },
+                error:function(){
+                  alertify.error("Error. intenta de Nuevo...");
+                }
+              });
+            }else{
+              alertify.warning("Atencion. El nombre del permiso ya existe...");
+            }
           },
           error:function(){
             alertify.error("Error. intenta de Nuevo...");
           }
         });
+        
       }
     });
 
@@ -403,11 +447,13 @@
         },
         success:function(data){
           if(data.exito){
-
+            console.log("entro 0");
           $inputSelect = "#formEditar :input[name='catPadre'], #formCrearCategoria :input[name='fk_categoria']";
           if (idSelec == 1) {
             $inputSelect = "#formEditar :input[name='catPadre']";
+            console.log("entro 1");
           }else if(idSelec == 2){
+            console.log("entro 2");
             $inputSelect = "#formCrearCategoria :input[name='fk_categoria']";
           }
             $($inputSelect).empty();

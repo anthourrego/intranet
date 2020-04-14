@@ -17,7 +17,7 @@ include_once($ruta_raiz.'clases/Conectar.php');
 include_once($ruta_raiz .'clases/sessionActiva.php');
 $usuario = $session->get("usuario");
 
-function crearCategoria(){
+function crearPermisoJobsyCategoria(){
     global $usuario;
     $db = new Bd();
     $db -> conectar();
@@ -26,12 +26,13 @@ function crearCategoria(){
     $retorno['exito']=0;
 
     $padre=@$_REQUEST['fk_categoria'];
-    $nombreCat =strtolower(trim(@$_REQUEST['nameCategoria']));
+    $nombreCat =strtolower(cadena_db_insertar(trim(@$_REQUEST['nameCategoria'])));
+    $nombreCatPermiso =strtolower(cadena_db_insertar(trim(@$_REQUEST['nombreCatPermiso'])));
     $checkboxprivacidad =@$_REQUEST['checkboxprivacidad'];
     $checkboxaplicaPI = @$_REQUEST['checkboxaplicaPI'];
     
 
-    if($padre != "" && $nombreCat != ""){
+    if($padre != "" && $nombreCat != "" && $nombreCatPermiso != ""){
         $aplicapi=0;
         $publico=0;
 
@@ -53,7 +54,8 @@ function crearCategoria(){
                     activo,
                     publico,
                     fk_categoria,
-                    fk_creador)
+                    fk_creador,
+                    fk_permiso)
                 VALUES
                     (:nombre,
                     :fecha_creacion,
@@ -61,8 +63,9 @@ function crearCategoria(){
                     1,
                     :publico,
                     :fk_categoria,
-                    :fk_creador)",
-                    array(":nombre" => strtolower($nombreCat),":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'])
+                    :fk_creador,
+                    :fk_permiso)",
+                    array(":nombre" => $nombreCat,":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'],":fk_permiso" => "jobs_".$nombreCatPermiso)
             );
 
             $db->insertLogs("categorias", $getlastId, "Creacion de categoria " . $nombreCat, $usuario['id']);
@@ -114,13 +117,14 @@ function editarCategoria(){
     global $usuario;
     $db = new Bd();
     $db->conectar();
-    $nombreCat = strtolower(trim(@$_REQUEST["nombre"]));
+
+    $nombreCat = strtolower(cadena_db_insertar(trim(@$_REQUEST["nombre"])));
 
     if (validarNameCategoria($nombreCat)== 0) {
     
         $db->sentencia("UPDATE categorias SET nombre = :nombre, fk_categoria = :fk_categoria WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":nombre" => $nombreCat, ":fk_categoria" => $_REQUEST["catPadre"]));
   
-        $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado la categoria nombre " . $_REQUEST["nombre"] . " y categoria padre " . $_REQUEST["catPadre"], $usuario['id']);
+        $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado la categoria nombre " .$nombreCat . " y categoria padre " . $_REQUEST["catPadre"], $usuario['id']);
 
     
 
@@ -138,7 +142,7 @@ function editarCategoria(){
 
                 $db->sentencia("UPDATE categorias SET fk_categoria = :fk_categoria WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":fk_categoria" => $_REQUEST["catPadre"]));
   
-                $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado el padre a la categoria " . $_REQUEST["nombre"] . " y la nueva categoria padre es" . $_REQUEST["catPadre"], $usuario['id']);
+                $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado el padre a la categoria " . $nombreCat. " y la nueva categoria padre es" . $_REQUEST["catPadre"], $usuario['id']);
 
                 $resp = array(
                     "success" => true,
@@ -179,14 +183,14 @@ function arbolCategorias($cat = 0){
                   "idCategoria" => $categorias[$i]["id"],
                   "fechaCreacion" => $categorias[$i]["fecha_creacion"], 
                   "fk_categoria" => $categorias[$i]["fk_categoria"],
-                  "text" => ucwords($categorias[$i]["nombre"]),
+                  "text" => ucwords(cadena_db_obtener($categorias[$i]["nombre"])),
                   "tags" => [$hijos['cantidad_registros']],
                   "nodes" => arbolCategorias($categorias[$i]["id"])
                 );
       }else {
         $arbol[] = array(
                   "idCategoria" => $categorias[$i]["id"],
-                  "text" => ucwords($categorias[$i]["nombre"]),
+                  "text" => ucwords(cadena_db_obtener($categorias[$i]["nombre"])),
                   "fechaCreacion" => $categorias[$i]["fecha_creacion"],
                   "fk_categoria" => $categorias[$i]["fk_categoria"]
                 );
@@ -201,7 +205,24 @@ function arbolCategorias($cat = 0){
       return $arbol;
     }
     
-  }
+}
+
+function dataSelectTipoArchivo(){
+    $db = new Bd();
+    $db -> conectar();
+
+    $db -> desconectar();
+
+    $retorno =array();
+
+
+    $retorno['exito']=0;
+
+
+    $sql_tipoarchivos= $db->consulta("");
+
+    return json_encode($retorno);
+}
 
 function dataSelectCategoria(){
     $db = new Bd();
@@ -248,7 +269,7 @@ function validarNameCategoria($namecategoria){
         FROM
             categorias
         WHERE
-            nombre = '".$namecategoria."'
+            nombre = '".cadena_db_insertar($namecategoria)."'
             AND activo=1
         ");
 
