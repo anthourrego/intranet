@@ -66,7 +66,7 @@ function crearPermisoJobsyCategoria(){
                     :fk_categoria,
                     :fk_creador,
                     :fk_permiso)",
-                    array(":nombre" => $nombreCat,":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'],":fk_permiso" => "jobs_".$nombreCatPermiso)
+                    array(":nombre" => $nombreCat,":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'],":fk_permiso" => "jobs_cat".$nombreCatPermiso)
             );
 
             $db->insertLogs("categorias", $getlastId, "Creacion de categoria " . $nombreCat, $usuario['id']);

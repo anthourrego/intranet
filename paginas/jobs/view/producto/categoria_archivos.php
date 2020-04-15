@@ -180,12 +180,14 @@
               <label for="nombreCatPermiso">Nombre Categoria Permiso</label>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon3">jobs_</span>
+                  <span class="input-group-text" id="basic-addon3">jobs_cat</span>
                 </div>
                 <input class="form-control" type="text" name="nombreCatPermiso" id="nombreCatPermiso" autocomplete="off" required>
               </div>
-              <note>Sin espacios y/o Caracteres especiales</note>
+              <note class="text-danger"><small><b>Sin espacios y/o Caracteres especiales</b></small></note>
             </div>
+            <br>
+            <hr>
             <div class="row">
               <div class="col-md-6 col-sm-12">
                 <label>Aplica PI</label> 
@@ -385,10 +387,13 @@
                     alertify.success(data.alert.msj);
                     $("#modalAddCatergorias").modal("hide");
                     $("#modalAddCatergorias :input[name='fk_categoria']").val(0);
+                    $("#modalAddCatergorias :input[name='nombreCatPermiso']").val('');
+                    $("#modalAddCatergorias :input[name='nombreCatPermiso']").removeClass('is-valid');
                     $("#modalAddCatergorias :input[name='nameCategoria']").val('');
                     $("#modalAddCatergorias :input[name='nameCategoria']").removeClass('is-valid');
                     $("#modalAddCatergorias :input[name='checkboxaplicaPI']").prop("checked", false);
                     $("#modalAddCatergorias :input[name='checkboxprivacidad']").prop("checked", false);
+                    $("#modalAddCatergorias :input[name='fk_tparchivos']").val(0);
                     cargarSelectMiembros();
                     cargarArbol();
                   }else{
@@ -665,7 +670,7 @@
               //Cargamos el select
               cargarSelectMiembros(0, node.fk_categoria, node.idCategoria);
 
-              console.log(node.aplicaPI);
+              console.log(node.aplicaPI + " - " + node.publico);
               //Motramos todos los campos del selece en editar si hemos ocultado alguno
               $("#formEditar :input[name='catPadre'] option").show();
           
@@ -691,10 +696,14 @@
 
               if(node.aplicaPI == 1){
                 $("#formEditar :input[name='checkboxaplicaPIedit']").prop("checked", true);
+              }else{
+                $("#formEditar :input[name='checkboxaplicaPIedit']").prop("checked", false);
               }
 
               if(node.publico == 1){
                 $("#formEditar :input[name='checkboxprivacidadedit']").prop("checked", true);
+              }else{
+                $("#formEditar :input[name='checkboxprivacidadedit']").prop("checked", false);
               }
 
 
