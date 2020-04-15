@@ -451,26 +451,38 @@
           $("#formEditar :input[name='checkboxaplicaPIedit']").attr("disabled", true);
           $("#formEditar :input[name='checkboxprivacidadedit']").attr("disabled", true);
 
-          /* $.ajax({
+          var nombreCat =data.msj;
+
+          var nombreMod="";
+          for (let i = 0; i < nombreCat.length; i++) {
+            
+            nombreMod+= "'"+ nombreCat[i]+"',";
+          }
+
+          console.log("eliminando enviando a dunamcs "+nombreMod);
+
+          $.ajax({
             url:"<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
             type: "POST",
             dataType: "json",
             data: {
               accion: 'inactivar_modulo',
-              nombreCat: idCategoria,
-              nombre: nombre
+              nombreMod: nombreMod
+              
             },
             success:function(data){
               if(data.exito){
-                alertify.warning("Se ha eliminado correctamente");
+                alertify.success("Se ha eliminado correctamente");
+              }else{
+                alertify.error("No ha podido eliminar la Categoria de Dynamics <b>" + nombre + "</b>")
               }
              
             },
             error:function(){
-              alertify.error("No ha podido eliminar la Categoria de Dynamics <b>" + nombre + "</b>")
+              alertify.error("Error. Intenta de nuevo");
             }
           });
- */
+ 
           
         }else{
           alertify.error("No ha podido eliminar la Categoria <b>" + nombre + "</b>");
@@ -523,7 +535,7 @@
         },
         success:function(data){
           if(data.exito){
-            console.log("entro 0");
+            
           $inputSelect = "#formEditar :input[name='catPadre'], #formCrearCategoria :input[name='fk_categoria']";
           if (idSelec == 1) {
             $inputSelect = "#formEditar :input[name='catPadre']";
