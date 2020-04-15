@@ -96,6 +96,42 @@
               </div>
             </div>
             <div class="form-group row">
+              <label class="col-12 col-md-4 align-self-center" for="fk_tparchivos">Tipo de archivos Permitidos</label>
+              <div class="col-12 col-md-8">
+                <select id="fk_tparchivos" name="fk_tparchivos" class="custom-select" disabled>
+                
+                </select>
+              </div>              
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-4 align-self-center">
+                <label>Aplica PI</label> 
+              </div>
+              <div class="col-md-8 col-sm-12">
+                <div class="form-group">
+                    <!-- sm switch -->
+                    <span class="switch switch-sm">
+                      <input type="checkbox" name="checkboxaplicaPIedit" class="switch" id="checkboxaplicaPIedit" disabled>
+                      <label for="checkboxaplicaPIedit"></label>
+                    </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-4 align-self-center">
+                <label>Publico</label> 
+              </div>
+              <div class="col-md-8 col-sm-12">
+                <div class="form-group">
+                    <!-- sm switch -->
+                    <span class="switch switch-sm">
+                      <input type="checkbox" name="checkboxprivacidadedit" class="switch" id="checkboxprivacidadedit" disabled>
+                      <label for="checkboxprivacidadedit"></label>
+                    </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
               <label class="col-12 col-md-4 align-self-center" for="fechaCreacion">Fecha creación:</label>
               <div class="col-12 col-md-8">
                 <input class="form-control" type="text" name="fechaCreacion" placeholder="N/A" disabled="">
@@ -180,7 +216,7 @@
             </div>
             <div class="form-group">
               <label for="fk_tparchivos">Tipo de archivos Permitidos</label>
-              <select id="fk_tparchivos" name="fk_tparchivos" class="custom-select">
+              <select id="fk_tparchivos" name="fk_tparchivos" class="custom-select" required> 
               
               </select>
             </div>
@@ -230,9 +266,11 @@
 
     //CARGAR ARBOL
     cargarArbol(0);
-    //CARGAR SELECET CATEGORIA
-    //cargarSelectMiembros(2);
 
+   //CARGAR SELECT TIPO ARCHIVOS PERMITIDOS
+   getTipoArchivos(); 
+
+    
 
     $("#nombreCatPermiso").keyup(function() {
       var txt = $("#nombreCatPermiso").val();
@@ -293,6 +331,9 @@
               $("#formEditar :input[name='catPadre']").attr("disabled", true);
               $("#formEditar :input[name='nombre']").attr("disabled", true);
               $("#formEditar :input[name='btnGuardar']").attr("disabled", true);
+              $("#formEditar :input[name='fk_tparchivos']").attr("disabled", true);
+              $("#formEditar :input[name='checkboxaplicaPIedit']").attr("disabled", true);
+              $("#formEditar :input[name='checkboxprivacidadedit']").attr("disabled", true);
               alertify.success(data.msj);
             } else {
               alertify.error(data.msj);
@@ -311,6 +352,9 @@
       $("#formEditar :input[name='catPadre']").attr("disabled", false);
       $("#formEditar :input[name='nombre']").attr("disabled", false);
       $("#formEditar :input[name='btnGuardar']").attr("disabled", false);
+      $("#formEditar :input[name='fk_tparchivos']").attr("disabled", false);
+      $("#formEditar :input[name='checkboxaplicaPIedit']").attr("disabled", false);
+      $("#formEditar :input[name='checkboxprivacidadedit']").attr("disabled", false);
     });
 
     //ACCION BTN GUARDAR EN CREAR CATEGORIA
@@ -388,7 +432,7 @@
           $("#formEditar :input[name='catPadre']").val(0);
           $("#formEditar :input[name='nombre']").val('N/A');
           $("#formEditar :input[name='fechaCreacion']").val('N/A');
-
+          $("#formEditar :input[name='fk_tparchivos']").val(0);
           $("#datos-check").empty();
           
           
@@ -396,6 +440,9 @@
           $("#formEditar :input[name='catPadre']").attr("disabled", true);
           $("#formEditar :input[name='nombre']").attr("disabled", true);
           $("#formEditar :input[name='btnGuardar']").attr("disabled", true);
+          $("#formEditar :input[name='fk_tparchivos']").attr("disabled", true);
+          $("#formEditar :input[name='checkboxaplicaPIedit']").attr("disabled", true);
+          $("#formEditar :input[name='checkboxprivacidadedit']").attr("disabled", true);
 
           alertify.warning("Se ha eliminado correctamente");
         }else{
@@ -508,6 +555,34 @@
 
     });
   }
+
+  function getTipoArchivos(){
+    var inputSelectType = "#formEditar :input[name='fk_tparchivos'], #formCrearCategoria :input[name='fk_tparchivos']";
+    $.ajax({      
+      url: '../../model/datajobs.php',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        accion: "dataSelectTipoArchivo"
+      },
+      success:function(data){
+        if(data.exito){
+          $(inputSelectType).empty();
+          $(inputSelectType).append(`<option selected="" disabled="" value="0">Debe selecciona una opcion</option>`)
+          for (let i = 0; i < data.tipo_archivos.length; i++) {
+            $(inputSelectType).append(`
+            <option value="${data.tipo_archivos[i]}">${data.tipo_archivos[i].toUpperCase()}</option>
+            `);            
+          }
+
+          console.log(data.tipo_archivos.length);
+        }
+      },
+      error:function(){
+
+      }
+    })
+  }
   
   //OBTENER LAS EXTENCIONES ACTIVAS POR TIPO DOCUMETO(IMAGENES,DOCUMENTOS,ARCHIVOS)
   function getTypeExt(){
@@ -590,8 +665,7 @@
               //Cargamos el select
               cargarSelectMiembros(0, node.fk_categoria, node.idCategoria);
 
-              
-              console.log(node.idCategoria);
+              console.log(node.aplicaPI);
               //Motramos todos los campos del selece en editar si hemos ocultado alguno
               $("#formEditar :input[name='catPadre'] option").show();
           
@@ -604,12 +678,24 @@
               $("#formEditar :input[name='catPadre']").attr("disabled", true);
               $("#formEditar :input[name='nombre']").attr("disabled", true);
               $("#formEditar :input[name='btnGuardar']").attr("disabled", true);
+              $("#formEditar :input[name='fk_tparchivos']").attr("disabled", true);
+              $("#formEditar :input[name='checkboxaplicaPIedit']").attr("disabled", true);
+              $("#formEditar :input[name='checkboxprivacidadedit']").attr("disabled", true);
 
               //Datos para editar
               $("#formEditar :input[name='idCategoria']").val(node.idCategoria);
               $("#formEditar :input[name='catPadre']").val(node.fk_categoria);
               $("#formEditar :input[name='nombre']").val(node.text);
               $("#formEditar :input[name='fechaCreacion']").val(node.fechaCreacion);
+              $("#formEditar :input[name='fk_tparchivos']").val(node.tipoDoc);
+
+              if(node.aplicaPI == 1){
+                $("#formEditar :input[name='checkboxaplicaPIedit']").prop("checked", true);
+              }
+
+              if(node.publico == 1){
+                $("#formEditar :input[name='checkboxprivacidadedit']").prop("checked", true);
+              }
 
 
               //Ocultamos la tecnólogia seleccionada en el select

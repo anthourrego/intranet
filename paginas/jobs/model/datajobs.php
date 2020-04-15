@@ -26,16 +26,17 @@ function crearPermisoJobsyCategoria(){
     $retorno['exito']=0;
 
     $padre=@$_REQUEST['fk_categoria'];
+    $fk_tparchivos =@$_REQUEST['fk_tparchivos'];
     $nombreCat =strtolower(cadena_db_insertar(trim(@$_REQUEST['nameCategoria'])));
     $nombreCatPermiso =strtolower(cadena_db_insertar(trim(@$_REQUEST['nombreCatPermiso'])));
     $checkboxprivacidad =@$_REQUEST['checkboxprivacidad'];
     $checkboxaplicaPI = @$_REQUEST['checkboxaplicaPI'];
-    
-
-    if($padre != "" && $nombreCat != "" && $nombreCatPermiso != ""){
+   
+    if($padre != "" && $nombreCat != "" && $nombreCatPermiso != "" && $fk_tparchivos != "0"){
         $aplicapi=0;
         $publico=0;
 
+        
         if($checkboxaplicaPI == "on"){
             $aplicapi=1;
         }
@@ -69,10 +70,18 @@ function crearPermisoJobsyCategoria(){
             );
 
             $db->insertLogs("categorias", $getlastId, "Creacion de categoria " . $nombreCat, $usuario['id']);
+            if(asignarTipoArchivos($fk_tparchivos,$getlastId)){
+                $retorno['exito']=1;
+                $msj=array("success" => true,
+                        "msj" => "Categoria <b>".$nombreCat."</b> Creada");
+            }else{
+                $msj=array("success" => false,
+                            "msj" => "Error asignando extensionesa a la categoria <b>".$nombreCat."</b>");
+            }
 
-            $retorno['exito']=1;
-            $msj=array("success" => true,
-                       "msj" => "Categoria <b>".$nombreCat."</b> Creada");
+           
+
+            
         }else{
             $msj = array("success" => false,
                          "msj" => "La categoria <b>".$nombreCat."</b> ya existe");
@@ -81,6 +90,99 @@ function crearPermisoJobsyCategoria(){
     }
     $retorno['alert']=$msj;
     $db->desconectar();
+    return json_encode($retorno);
+}
+
+function actualizarTipoArchivos($cat,$nuevotipo){
+    global $usuario;
+    $db = new Bd();
+    $db -> conectar();
+
+    $retorno=0;
+    // buscamos el tipo de documento asignado para saber si es diferente al que envian en la actualizacion
+    $buscartipoArchivo =$db->consulta("SELECT b.nombre,a.id FROM tipo_archivo_categoria a LEFT JOIN tipo_archivo b ON a.fk_tarchivo = b.id WHERE a.estado = 1  AND a.fk_categoria =".$cat."");
+
+    if($buscartipoArchivo['cantidad_registros']){
+        //validamos si son diferentes
+        if($buscartipoArchivo[0]['nombre'] != $nuevotipo){
+            //cambiamos a estado 0 el tipo actualmente asignado
+            $estadoex=$db->sentencia("
+            UPDATE
+                tipo_archivo_categoria
+            SET
+                estado=0
+            WHERE
+                fk_categoria = ".$cat."
+            ");
+
+            for ($i=0; $i < $buscartipoArchivo['cantidad_registros'] ; $i++) { 
+                $db->insertLogs("tipo_archivo_categoria", $buscartipoArchivo[$i]['id'], "secambio de estado a 0 el tipo de archivo para la categoria ".$cat, $usuario['id']);
+            }    
+            if(asignarTipoArchivos($nuevotipo,$cat)){
+                $retorno=1;
+            }
+            
+        }
+    }
+    
+    $db ->desconectar();
+    return json_encode($retorno);
+}
+
+function asignarTipoArchivos($nombretipo,$idcategoria){
+    global $usuario;
+    $db = new Bd();
+    $db -> conectar();
+
+    $retorno=0;
+
+    //OBTENEMOS LAS EXTENSIONES HABILITADAS POR NOMBRE
+    $AsignarTipoArchivos = $db -> consulta("
+    SELECT
+        id,
+        nombre,
+        extensiones
+    FROM
+        tipo_archivo
+    WHERE
+        estado =1 
+        AND nombre = '".$nombretipo."'
+    ");
+
+    if($AsignarTipoArchivos['cantidad_registros']){
+
+        for ($i=0; $i < $AsignarTipoArchivos['cantidad_registros'] ; $i++) { 
+            
+            
+            $extensiones =$db->sentencia("
+            INSERT INTO
+                tipo_archivo_categoria
+                    (fk_categoria,
+                    fk_tarchivo,
+                    estado,
+                    fecha_creacion,
+                    fk_creador)
+                VALUES
+                    (:fk_categoria,
+                    :fk_tarchivo,
+                    1,
+                    :fecha_creacion,
+                    :fk_creador)",
+                array(
+                    ":fk_categoria" => $idcategoria,
+                    ":fk_tarchivo" => $AsignarTipoArchivos[$i]['id'],
+                    ":fecha_creacion" => date('Y-m-d H:i:s'),
+                    ":fk_creador" => $usuario['id']
+                )
+            );
+            
+            $db->insertLogs("tipo_archivo_categoria", $extensiones, "se asigna extencion ".$AsignarTipoArchivos[$i]['extensiones']." a la categoria " . $idcategoria, $usuario['id']);
+
+        }
+        $retorno=1;
+    }
+
+    $db ->desconectar();
     return json_encode($retorno);
 }
 
@@ -120,13 +222,30 @@ function editarCategoria(){
 
     $nombreCat = strtolower(cadena_db_insertar(trim(@$_REQUEST["nombre"])));
 
-    if (validarNameCategoria($nombreCat)== 0) {
-    
-        $db->sentencia("UPDATE categorias SET nombre = :nombre, fk_categoria = :fk_categoria WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":nombre" => $nombreCat, ":fk_categoria" => $_REQUEST["catPadre"]));
-  
-        $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado la categoria nombre " .$nombreCat . " y categoria padre " . $_REQUEST["catPadre"], $usuario['id']);
+    $checkboxprivacidadedit =@$_REQUEST['checkboxprivacidadedit'];
+    $checkboxaplicaPIedit = @$_REQUEST['checkboxaplicaPIedit'];
+
+    $aplicapi=0;
+    $publico=0;
 
     
+    if($checkboxaplicaPIedit == "on"){
+        $aplicapi=1;
+    }
+
+    if($checkboxprivacidadedit =="on"){
+        $publico=1;
+    }
+
+    if (validarNameCategoria($nombreCat)== 0) {
+
+       
+    
+        $db->sentencia("UPDATE categorias SET nombre = :nombre, fk_categoria = :fk_categoria, aplica_pi=:aplicaPI, publico=:publico WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":nombre" => $nombreCat, ":fk_categoria" => $_REQUEST["catPadre"], ":aplicaPI" => $aplicapi, ":publico" => $publico));
+  
+        $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado la categoria al nombre " .$nombreCat . " y categoria padre " . $_REQUEST["catPadre"]."publico es ".$publico."aplica pi es".$aplicapi, $usuario['id']);
+
+        actualizarTipoArchivos($_REQUEST["idCategoria"],$_REQUEST['fk_tparchivos']);
 
         $resp = array(
                   "success" => true,
@@ -136,19 +255,33 @@ function editarCategoria(){
 
     } else { 
         //se realiza consulta para determinar si el nombre siendo igual a uno existente. solo quieren cambiar el padre
-        $cambiarPadre =$db->consulta("SELECT fk_categoria FROM categorias WHERE id=:id",array(":id" => @$_REQUEST['idCategoria']));
+        $cambiarPadre =$db->consulta("SELECT * FROM categorias WHERE id=:id",array(":id" => @$_REQUEST['idCategoria']));
         if($cambiarPadre['cantidad_registros']){
-            if($cambiarPadre[0]['fk_categoria'] != $_REQUEST['catPadre']){
+            if($cambiarPadre[0]['fk_categoria'] != $_REQUEST['catPadre'] || $cambiarPadre[0]['aplica_pi'] != $aplicapi || $cambiarPadre[0]['publico'] != $publico){
 
-                $db->sentencia("UPDATE categorias SET fk_categoria = :fk_categoria WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":fk_categoria" => $_REQUEST["catPadre"]));
+                $db->sentencia("UPDATE categorias SET fk_categoria = :fk_categoria, aplica_pi=:aplicaPI, publico=:publico WHERE id = :id", array(":id" => $_REQUEST["idCategoria"], ":fk_categoria" => $_REQUEST["catPadre"],":aplicaPI" => $aplicapi, ":publico" => $publico));
   
-                $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado el padre a la categoria " . $nombreCat. " y la nueva categoria padre es" . $_REQUEST["catPadre"], $usuario['id']);
+                $db->insertLogs("categoria", $_REQUEST["idCategoria"], "Se ha actualizado el padre a la categoria " . $nombreCat. " y la nueva categoria padre es" . $_REQUEST["catPadre"]."aplica pi es".$aplicapi."publico es".$publico, $usuario['id']);
 
                 $resp = array(
                     "success" => true,
                     "msj" => "Se ha actualizado correctamente"
                   );
 
+            
+            }else if($_REQUEST['fk_tparchivos']){
+                if(actualizarTipoArchivos($_REQUEST["idCategoria"],$_REQUEST['fk_tparchivos'])){
+                    
+                $resp = array(
+                    "success" => true,
+                    "msj" => "Se ha actualizado correctamente"
+                  );
+                }else{
+                    $resp = array(
+                        "success" => false,
+                        "msj" => "Realize algun cambio antes de guardar"
+                      );
+                }
             }else{
                 $resp = array(
                     "success" => false,
@@ -178,8 +311,13 @@ function arbolCategorias($cat = 0){
       
       $hijos = $db->consulta("SELECT * FROM categorias WHERE fk_categoria = :fk_categoria AND activo = 1", array(":fk_categoria" => $categorias[$i]["id"]));
 
+      $tipo_archivocat= $db->consulta("SELECT b.nombre FROM tipo_archivo_categoria a LEFT JOIN tipo_archivo b ON a.fk_tarchivo = b.id WHERE a.estado = 1  AND fk_categoria =".$categorias[$i]["id"]."");
+
       if ($hijos["cantidad_registros"] > 0) {
         $arbol[] = array(
+                  "publico" => $categorias[$i]['publico'],
+                  "aplicaPI" => $categorias[$i]['aplica_pi'],
+                  "tipoDoc" => $tipo_archivocat[0]['nombre'],
                   "idCategoria" => $categorias[$i]["id"],
                   "fechaCreacion" => $categorias[$i]["fecha_creacion"], 
                   "fk_categoria" => $categorias[$i]["fk_categoria"],
@@ -189,6 +327,9 @@ function arbolCategorias($cat = 0){
                 );
       }else {
         $arbol[] = array(
+                  "publico" => $categorias[$i]['publico'],
+                  "aplicaPI" => $categorias[$i]['aplica_pi'],
+                  "tipoDoc" => $tipo_archivocat[0]['nombre'],
                   "idCategoria" => $categorias[$i]["id"],
                   "text" => ucwords(cadena_db_obtener($categorias[$i]["nombre"])),
                   "fechaCreacion" => $categorias[$i]["fecha_creacion"],
@@ -211,7 +352,7 @@ function dataSelectTipoArchivo(){
     $db = new Bd();
     $db -> conectar();
 
-    $db -> desconectar();
+
 
     $retorno =array();
 
@@ -219,7 +360,26 @@ function dataSelectTipoArchivo(){
     $retorno['exito']=0;
 
 
-    $sql_tipoarchivos= $db->consulta("");
+    $sql_tipoarchivos= $db->consulta("
+    SELECT
+        nombre
+    FROM
+        tipo_archivo
+    WHERE
+        estado = 1
+    GROUP BY
+        nombre
+    
+    ");
+
+    if($sql_tipoarchivos['cantidad_registros']){
+        $retorno['exito']=1;
+        for ($i=0; $i < $sql_tipoarchivos['cantidad_registros'] ; $i++) { 
+            $retorno['tipo_archivos'][]=$sql_tipoarchivos[$i]['nombre'];
+        }
+    }
+
+    $db -> desconectar();
 
     return json_encode($retorno);
 }
