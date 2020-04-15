@@ -559,6 +559,12 @@
               $("#formEditar :input[name='catPadre']").val(fkCat);
             }
 
+            let selectPadre = $("#formEditar :input[name='catPadre']").val();
+      
+            if (selectPadre != null) {
+              $("#fk_categoria").val(selectPadre);
+            }
+
           }else{
             console.log(data.lista.msj)
           }

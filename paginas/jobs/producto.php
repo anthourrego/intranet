@@ -265,8 +265,8 @@
               xhr.upload.addEventListener("progress", function(evt) {
                   if (evt.lengthComputable) {
                       var percentComplete = ((evt.loaded / evt.total) * 100);
-                      $(".progress-bar").width(percentComplete + '%');
-                      $(".progress-bar").html(percentComplete+'%');
+                      $(".progress-bar").width(Math.round(percentComplete) + '%');
+                      $(".progress-bar").html(Math.round(percentComplete)+'%');
                   }
               }, false);
               return xhr;
@@ -295,6 +295,7 @@
               $("#archivosExtensionesSmall").html("Archivos permitidos: N/A.");
               $('#archivos').val('');
               $("#archivos").prop("disabled", true);
+              $("#archivoObservaciones").html("");
               alertify.success("Se han agregado correctamente");
             }else{
               alertify.error(data.msj);
