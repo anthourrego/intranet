@@ -492,7 +492,7 @@
             if (data.msj[i].publico == 1) {  
               $("#categorias").append(`
                 <hr>
-                <h5 class="mb-4">${data.msj[i].nombre}</h5>
+                <h5 class="mb-4">${capitalize(data.msj[i].nombre)}</h5>
                 <div class="row">
                   <div class="col-12">
                     <div class="row" id='documento${data.msj[i].id}' data-permiso="${permiso}"></div>
@@ -507,7 +507,7 @@
               if (data.msj[i].publico == 0) {
                 $("#categorias").append(`
                   <hr>
-                  <h5>${data.msj[i].nombre}</h5>
+                  <h5>${capitalize(data.msj[i].nombre)}</h5>
                   <div class="row">
                     <div class="col-12">
                       <div class="row" id='documento${data.msj[i].id}' data-permiso="${permiso}"></div>
@@ -664,6 +664,10 @@
         alertify.error('No se han enviado los datos.');
       }
     });
+  }
+
+  function capitalize(word) {
+    return word[0].toUpperCase() + word.slice(1);
   }
 </script>
 </html>
