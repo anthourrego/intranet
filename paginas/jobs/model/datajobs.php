@@ -186,43 +186,55 @@ function asignarTipoArchivos($nombretipo,$idcategoria){
     return json_encode($retorno);
 }
 
-function eliminarCategoria($id = 0, $nombre = ''){
+function eliminarCategoria($id = 0, $nombre = '', $idPrincipal = 0){
     if ($id == 0) {
       $id = $_REQUEST["idCat"];
       $nombre =  $_REQUEST["nombre"];
+      $idPrincipal = $_REQUEST["idCat"];
     }
-    
     
     global $usuario;
     $db = new Bd();
     $db->conectar();
 
-    $retorno=array();
-    $retorno['exito']=0;
+    $retorno=array();  
+    if ($id == $idPrincipal) {
+        $retorno["exito"] = 0; 
+    }
     
-
     $db->sentencia("UPDATE categorias SET activo = 0 WHERE id = :id", array(":id" => $id));
 
     $db->insertLogs("categorias", $id, "Elimina la categoria " . $nombre, $usuario['id']);
 
     $sql = $db->consulta("SELECT * FROM categorias WHERE fk_categoria = :fk_categoria AND activo = 1", array(":fk_categoria" => $id));
 
-    $obtenerfk_permiso = $db->consulta("SELECT fk_permiso FROM categorias WHERE fk_categoria = :fk_categoria", array(":fk_categoria" =>$id));
+    $obtenerfk_permiso = $db->consulta("SELECT fk_permiso FROM categorias WHERE id = :id", array(":id" =>$id));
+    
+
     if($obtenerfk_permiso['cantidad_registros']){
-        $retorno['fk_permiso'][]=$obtenerfk_permiso[0]['fk_permiso'];
+        if ($id == $idPrincipal) {
+            $retorno["msj"][]=$obtenerfk_permiso[0]['fk_permiso'];
+        }else{
+            $retorno = $obtenerfk_permiso[0]['fk_permiso'];
+        }
     }
 
     for ($i=0; $i < $sql["cantidad_registros"]; $i++) { 
-      
-      eliminarCategoria($sql[$i]['id'], $sql[$i]['nombre']);
-
+        if ($id == $idPrincipal) {
+            $retorno["msj"][] = eliminarCategoria($sql[$i]['id'], $sql[$i]['nombre'], $idPrincipal);
+        }else{
+            $retorno = eliminarCategoria($sql[$i]['id'], $sql[$i]['nombre'], $idPrincipal);
+        }
     }
-
-    $retorno['exito']=1;
 
     $db->desconectar();
     
-    return json_encode($retorno);
+    if ($id == $idPrincipal) {
+        $retorno["exito"] = 1; 
+        return json_encode($retorno);
+    }else{
+        return $retorno;
+    }
   }
 
 function editarCategoria(){
