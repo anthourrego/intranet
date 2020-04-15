@@ -432,7 +432,7 @@
       success: function(data){
         if (data.exito == 1) {
 
-          console.log(data);
+          //console.log(data);
           cargarArbol();
           cargarSelectMiembros();
           $("#formEditar :input[name='idCategoria']").val(0);
@@ -459,7 +459,7 @@
             nombreMod+= "'"+ nombreCat[i]+"',";
           }
 
-          console.log("eliminando enviando a dunamcs "+nombreMod);
+          //console.log("eliminando enviando a dunamcs "+nombreMod);
 
           $.ajax({
             url:"<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
@@ -539,9 +539,9 @@
           $inputSelect = "#formEditar :input[name='catPadre'], #formCrearCategoria :input[name='fk_categoria']";
           if (idSelec == 1) {
             $inputSelect = "#formEditar :input[name='catPadre']";
-            console.log("entro 1");
+            //console.log("entro 1");
           }else if(idSelec == 2){
-            console.log("entro 2");
+            //console.log("entro 2");
             $inputSelect = "#formCrearCategoria :input[name='fk_categoria']";
           }
             $($inputSelect).empty();
@@ -616,7 +616,7 @@
             `);            
           }
 
-          console.log(data.tipo_archivos.length);
+          //console.log(data.tipo_archivos.length);
         }
       },
       error:function(){
@@ -637,14 +637,14 @@
         success: function(data){
             if(data.exito){
               $(".contenedor_extensiones").html("");
-              console.log(data.extensiones);
+              //console.log(data.extensiones);
                 var categorias = Object.keys(data.extensiones);
                 
-                for (let i = 0; i < categorias.length; i++) {
+                /* for (let i = 0; i < categorias.length; i++) {
                   for (let j = 0; j < data.extensiones[categorias[i]].length; j++){
                     console.log(data.extensiones[categorias[i]][j]);
                   }
-                }
+                } */
 
                 for (let i = 0; i < categorias.length; i++) {
                   
@@ -706,7 +706,7 @@
               //Cargamos el select
               cargarSelectMiembros(0, node.fk_categoria, node.idCategoria);
 
-              console.log(node.aplicaPI + " - " + node.publico);
+              //console.log(node.aplicaPI + " - " + node.publico);
               //Motramos todos los campos del selece en editar si hemos ocultado alguno
               $("#formEditar :input[name='catPadre'] option").show();
           
