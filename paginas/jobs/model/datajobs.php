@@ -66,7 +66,7 @@ function crearPermisoJobsyCategoria(){
                     :fk_categoria,
                     :fk_creador,
                     :fk_permiso)",
-                    array(":nombre" => $nombreCat,":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'],":fk_permiso" => "jobs_cat".$nombreCatPermiso)
+                    array(":nombre" => $nombreCat,":fecha_creacion" => date('Y-m-d H:i:s'), ":aplica_pi" => $aplicapi,":publico"=>$publico,":fk_categoria" => $padre, ":fk_creador" => $usuario['id'],":fk_permiso" => "jobs_cat_".$nombreCatPermiso)
             );
 
             $db->insertLogs("categorias", $getlastId, "Creacion de categoria " . $nombreCat, $usuario['id']);
@@ -197,11 +197,20 @@ function eliminarCategoria($id = 0, $nombre = ''){
     $db = new Bd();
     $db->conectar();
 
+    $retorno=array();
+    $retorno['exito']=0;
+    
+
     $db->sentencia("UPDATE categorias SET activo = 0 WHERE id = :id", array(":id" => $id));
 
     $db->insertLogs("categorias", $id, "Elimina la categoria " . $nombre, $usuario['id']);
 
     $sql = $db->consulta("SELECT * FROM categorias WHERE fk_categoria = :fk_categoria AND activo = 1", array(":fk_categoria" => $id));
+
+    $obtenerfk_permiso = $db->consulta("SELECT fk_permiso FROM categorias WHERE fk_categoria = :fk_categoria", array(":fk_categoria" =>$id));
+    if($obtenerfk_permiso['cantidad_registros']){
+        $retorno['fk_permiso'][]=$obtenerfk_permiso[0]['fk_permiso'];
+    }
 
     for ($i=0; $i < $sql["cantidad_registros"]; $i++) { 
       
@@ -209,9 +218,11 @@ function eliminarCategoria($id = 0, $nombre = ''){
 
     }
 
+    $retorno['exito']=1;
+
     $db->desconectar();
     
-    return json_encode(1);
+    return json_encode($retorno);
   }
 
 function editarCategoria(){

@@ -180,7 +180,7 @@
               <label for="nombreCatPermiso">Nombre Categoria Permiso</label>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon3">jobs_cat</span>
+                  <span class="input-group-text" id="basic-addon3">jobs_cat_</span>
                 </div>
                 <input class="form-control" type="text" name="nombreCatPermiso" id="nombreCatPermiso" autocomplete="off" required>
               </div>
@@ -430,7 +430,9 @@
         nombre: nombre
       },
       success: function(data){
-        if (data == 1) {
+        if (data.exito == 1) {
+
+          console.log(data);
           cargarArbol();
           cargarSelectMiembros();
           $("#formEditar :input[name='idCategoria']").val(0);
@@ -449,10 +451,32 @@
           $("#formEditar :input[name='checkboxaplicaPIedit']").attr("disabled", true);
           $("#formEditar :input[name='checkboxprivacidadedit']").attr("disabled", true);
 
-          alertify.warning("Se ha eliminado correctamente");
+          /* $.ajax({
+            url:"<?php echo(RUTA_CONSULTAS); ?>paginas/jobs/funJobs.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+              accion: 'inactivar_modulo',
+              nombreCat: idCategoria,
+              nombre: nombre
+            },
+            success:function(data){
+              if(data.exito){
+                alertify.warning("Se ha eliminado correctamente");
+              }
+             
+            },
+            error:function(){
+              alertify.error("No ha podido eliminar la Categoria de Dynamics <b>" + nombre + "</b>")
+            }
+          });
+ */
+          
         }else{
-          alertify.error("No ha podido eliminar la Categoria <b>" + nombre + "</b>")
+          alertify.error("No ha podido eliminar la Categoria <b>" + nombre + "</b>");
         }
+
+        
       },
       error: function(data){
         alertify.error("No se han encontrado datos...");
