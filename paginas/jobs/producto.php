@@ -177,7 +177,7 @@
 <script>
   $(function(){
     $permiso = top.validarPermiso('jobs_pi');
-    $permiso_categorias = top.validarPermiso('categoria_tipo_archivos');
+    $permiso_categorias = top.validarPermiso('jobs_categorias');
     selectPi();
 
     $(".archivos").on("click", function(event){
