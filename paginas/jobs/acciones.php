@@ -621,7 +621,7 @@ function listaCategorias(){
     //Recorremos los archivos para buscar las extensiones relacionadas
     for ($i=0; $i < $categorias["cantidad_registros"]; $i++) { 
       //Enviamso el id y buscamos las extensiones
-      $archivos = $db->consulta("SELECT ta.extensiones AS extension FROM tipo_archivo_categoria AS tac INNER JOIN tipo_archivo AS ta ON ta.id = tac.fk_tarchivo WHERE fk_categoria = :fk_categoria", array(":fk_categoria" => $categorias[$i]["id"]));
+      $archivos = $db->consulta("SELECT ta.extensiones AS extension FROM tipo_archivo_categoria AS tac INNER JOIN tipo_archivo AS ta ON ta.id = tac.fk_tarchivo WHERE fk_categoria = :fk_categoria AND ta.estado = 1 AND tac.estado = 1", array(":fk_categoria" => $categorias[$i]["id"]));
       //Metemos en la consulta principal las extensiones de la categoria
       $extensiones = "";
       for ($j=0; $j < $archivos["cantidad_registros"]; $j++) { 
