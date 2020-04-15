@@ -117,6 +117,35 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modalEditarReferencia" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Referencia</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formEditarReferencia">
+          <input type="hidden" name="idReferencia" value="">
+          <input type="hidden" name="accion" value="editarReferencia" required>
+          <div class="modal-body">              
+            <div class="form-group">
+              <label for="marca">Referencia</label>
+              <input type="text" class="form-control" name="nombre" autofocus required>
+            </div>
+            <label for="tecnologia">Tecnología:</label>
+            <div class="form-row" id="check-tecnologia1"></div>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
+            <button type="submit" class="btn btn-success"><i class="far fa-save"></i> Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 <?php 
   echo $lib->cambioPantalla();
@@ -230,6 +259,37 @@
         alertify.error("No tienes el permiso para hacer esto.");
       }
     });
+
+    $("#formEditarReferencia").submit(function(event){
+      event.preventDefault();
+      if ($permiso == 1) {
+        if ($(this).valid()) {
+          $.ajax({
+            url: "acciones",
+            type: "POST",
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: new FormData(this),
+            success: function(data){
+              if (data.success == true) {
+                listaReferencias($("#selectTecnologias").val());
+                $("#modalEditarReferencia").modal("hide");
+                alertify.success(data.msj);
+              }else{
+                alertify.error(data.msj);
+              }
+            },
+            error: function(){
+              alertify.error("No se han enviado datos...");
+            }
+          });
+        }
+      }else{
+        alertify.error("No tienes el permiso para hacer esto.");
+      }
+    });
   });
 
 
@@ -261,21 +321,21 @@
     });
   }
 
-  function checkBoxTecnologia(tec = 0){
+  function checkBoxTecnologia(tec = 0, id=''){
     $.ajax({
       url: 'acciones',
       type: 'POST',
       dataType: 'json',
       data: {accion: "selectTecnologia", tecnologia: tec},
       success: function(data){
-        $("#check-tecnologia").empty();
+        $("#check-tecnologia" + id).empty();
         if (data.success == true) {
           for (let i = 0; i < data.msj.cantidad_registros; i++) {
-            $("#check-tecnologia").append(`
+            $("#check-tecnologia" + id).append(`
               <div class="form-group col-6">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" name="tecnologia[]" class="custom-control-input chekcTec" id="tec${data.msj[i].id}" value="${data.msj[i].id}" required>
-                  <label class="custom-control-label" for="tec${data.msj[i].id}" >${data.msj[i].nombre}</label>
+                  <input type="checkbox" name="tecnologia[]" class="custom-control-input chekcTec" id="tec${data.msj[i].id + id}" value="${data.msj[i].id}" required>
+                  <label class="custom-control-label" for="tec${data.msj[i].id + id}" >${data.msj[i].nombre}</label>
                 </div>
               </div>
             `); 
@@ -292,8 +352,17 @@
             }
           }
           $(".chekcTec").attr("disabled", false);
-          listaTecnologiaNoCompatible(tecs)
+          if(id == 1){  
+            listaTecnologiaNoCompatible(tecs, 1)
+          }else{
+            listaTecnologiaNoCompatible(tecs)
+          }
         });
+
+        //Si le envio un 1 es por que es la parte de editar
+        if(id == 1){  
+          selectCheckEditar();
+        }
       },
       error: function(){
         alertify.error('No se han encontrado datos.');
@@ -306,18 +375,43 @@
       url: 'acciones',
       type: 'POST',
       dataType: 'json',
-      data: {accion: "listaReferencias", tecnologia: tec, marca: <?php echo($_GET['marca']); ?>},
+      data: {
+        accion: "listaReferencias", 
+        tecnologia: tec, 
+        marca: <?php echo($_GET['marca']); ?>
+      },
       success: function(data){
         $('[data-toggle="tooltip"]').tooltip('hide');
         $("#referencia-tabla").dataTable().fnDestroy();
         $("#referencia-tabla-tbody").empty();
         if (data.success == true) {
-          for (let i = 0; i < data.msj.cantidad_registros; i++) {
-            $("#referencia-tabla-tbody").append(`
-              <tr onClick="window.location.href='producto?id=${data.msj[i].id}&referencia=${data.msj[i].referencia}';">
-                <td>${data.msj[i].referencia}</td>
+          if ($permiso == 1) {
+            $("#referencia-tabla-thead").html(`
+              <tr>
+                <th>Referencia</th>
+                <th>Acciones</th>
               </tr>
             `);
+            for (let i = 0; i < data.msj.cantidad_registros; i++) {
+              $("#referencia-tabla-tbody").append(`
+                <tr>
+                  <td>${data.msj[i].referencia}</td>
+                  <td class="text-center">
+                    <button class='btn btn-primary' data-toggle="tooltip" data-placement="top" title="Editar" onclick="modalEditarReferencia(${data.msj[i].id} , '${data.msj[i].referencia}', ${$("#selectCategorias").val()})"><i class="fas fa-edit"></i></button>
+                    <button class='btn btn-danger' data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="eliminarReferencia(${data.msj[i].id} , '${data.msj[i].referencia}')"><i class="far fa-trash-alt"></i></button>
+                    <a class="btn btn-success" href="producto?id=${data.msj[i].id}&referencia=${data.msj[i].referencia}" data-toggle="tooltip" data-placement="top" title="Ingresar"><i class="fas fa-sign-in-alt"></i></a>
+                  </td>
+                </tr>
+              `);
+            }
+          }else{
+            for (let i = 0; i < data.msj.cantidad_registros; i++) {
+              $("#referencia-tabla-tbody").append(`
+                <tr onClick="window.location.href='producto?id=${data.msj[i].id}&referencia=${data.msj[i].referencia}';">
+                  <td>${data.msj[i].referencia}</td>
+                </tr>
+              `);
+            }
           }
         }else{
           alertify.error(data.msj);
@@ -331,7 +425,7 @@
     });
   }
 
-  function listaTecnologiaNoCompatible(idTec){
+  function listaTecnologiaNoCompatible(idTec, id=''){
     $.ajax({
       url: 'acciones',
       type: 'POST',
@@ -343,7 +437,7 @@
       success: function(data){
         if (data.success) {
           for (let i = 0; i < data.msj.length; i++) {
-            $("#tec" + data.msj[i]).attr("disabled", true);
+            $("#tec" + data.msj[i] + id).attr("disabled", true);
           }
         }
       },
@@ -351,6 +445,76 @@
         alertify.error('No se han encontrado datos.');
       }
     });
+  }
+
+  function selectCheckEditar(){
+    $.ajax({
+      url: 'acciones',
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        accion: "listaReferenciaTec", 
+        fk_referencia: $("#formEditarReferencia :input[name='idReferencia']").val()
+      },
+      success: function(data){
+        console.log(data);
+        if (data.success == true) {
+          for (let i = 0; i < data.msj.cantidad_registros; i++) {
+            $("#tec" + data.msj[i].fk_tecnologia + "1").click();
+            $("#tec" + data.msj[i].fk_tecnologia + "1").prop('checked', true);
+          }
+        }
+      },
+      error: function(){
+        alertify.error('No se han encontrado datos.');
+      }
+    });
+  }
+
+  function eliminarReferencia(id, nombre){
+    //Acción al click botón eliminar
+    if (id != 0) {
+      alertify.confirm(
+                '¿Estas seguro?', 
+                'Deseas eliminar la referencia <b>' + nombre + '</b>', 
+              function(){ 
+                $.ajax({
+                  url: 'acciones',
+                  type: 'POST',
+                  dataType: 'json',
+                  data: {
+                    accion: "eliminarReferencia", 
+                    idReferencia: id, 
+                    nombreReferencia: nombre},
+                  success: function(data){
+                    if (data == 1) {
+                      alertify.success("Se ha aliminado la referencia <b>" + nombre + "</b>");
+                      listaReferencias($("#selectTecnologias").val());
+                    }else{
+                      alertify.error("No se ha podido eliminar la referencia <b>" + nombre + "</b>")
+                    }
+                  },
+                  error: function(data){
+                    console.log(data);
+                    alertify.error('No se han encontrado datos.');
+                  }
+                });
+              }, 
+              function(){})
+              .set('labels', {
+                ok:'<i class="far fa-trash-alt"></i> Si', 
+                cancel:'<i class="fa fa-times"></i> No'
+              });
+    }else{
+      alerify.error("No ha seleccionado ninguna marca.");
+    }
+  }
+
+  function modalEditarReferencia(id, nombre, tecPadre){
+    $("#formEditarReferencia :input[name='idReferencia']").val(id);
+    $("#formEditarReferencia :input[name='nombre']").val(nombre);
+    $("#modalEditarReferencia").modal("show");
+    checkBoxTecnologia(tecPadre, 1);
   }
 </script>
 </html>
