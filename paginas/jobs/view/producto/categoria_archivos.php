@@ -565,6 +565,9 @@
               $("#fk_categoria").val(selectPadre);
             }
 
+            //Ocultamos la categoria padre seleccionada en el select
+            $("#formEditar :input[name='catPadre'] option[value='" +idCat + "']").hide();
+
           }else{
             console.log(data.lista.msj)
           }
@@ -749,7 +752,7 @@
               }
 
 
-              //Ocultamos la tecnólogia seleccionada en el select
+              //Ocultamos la categoria padre seleccionada en el select
               $("#formEditar :input[name='catPadre'] option[value='" + node.idCategoria + "']").hide();
 
               $("#formEditar :input[name='catPadre']").removeClass('is-valid')
