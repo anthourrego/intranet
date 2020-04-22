@@ -41,7 +41,7 @@
     define("RUTA_DROPBOX","http://192.168.1.141/"); */
   }else{
     define("RUTA_BASE","http://201.236.254.67:141/" . RUTA_SERVER ); 
-    define("RUTA_DROPBOX","http://201.236.254.67:6060/"); 
+    define("RUTA_DROPBOX","http://201.236.254.67:198/"); 
   }
 
   //Se define el resto de las rutas
